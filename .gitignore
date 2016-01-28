@@ -1,0 +1,6 @@
+#ignore config files
+
+#ignore any images
+
+#ignore node modules
+node_modules

@@ -1,0 +1,28 @@
+{
+  "name": "meet-up_event_planner",
+  "version": "1.0.0",
+  "description": "Project 1 of Udacity SWD Nano degree.  Demonstrats forms and user access.",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianemcallister/Meet-up_Event_Planner.git"
+  },
+  "keywords": [
+    "forms"
+  ],
+  "author": "Ian E McAllister <ianmcallistersubscriptions@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ianemcallister/Meet-up_Event_Planner/issues"
+  },
+  "homepage": "https://github.com/ianemcallister/Meet-up_Event_Planner#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  },
+  "dependencies": {
+    "gulp-sass": "^2.1.1"
+  }
+}
