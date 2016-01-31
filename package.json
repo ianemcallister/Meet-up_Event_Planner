@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "browser-sync": "^2.11.1",
-    "gulp-sass": "^2.1.1",    
+    "express": "^4.13.4",
+    "firebase": "^2.4.0",
     "gulp-eslint": "^1.1.1",
+    "gulp-sass": "^2.1.1"
   }
 }
