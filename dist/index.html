@@ -31,23 +31,47 @@
 
 </head>
 
-  <body ng-controller='landingController'>
+  <body ng-controller='homeController'>
 
     <!--header-->
-    <header>
-      <nav class="navbar navbar-default">
-        <div class="container">
-          <div class="navbar-header">
-            <a href="/" class="navbar-brand">Meet-Up Event Planner</a>
-          </div>
-          <ul class="nav navbar-nav navbar-right">
-            <li><input class="fa fa-home" id="navUName" type="text" placeholder="Username"></li>
-            <li><input class="fa fa-home" id="navPword" type="password" placeholder="Password"></li>
-            <li><a href="#"><i class="fa fa-home">Login</i></a></li>
-          </ul>
-        </div>
-      </nav>
-    </header>
+    <HEADER>
+    <nav class="navbar navbar-default">
+    <div class="container">
+    <div class="navbar-header">
+
+    <a class="navbar-brand" href="#/" data-target="#" id="">
+      <span><strong>Meet-Up Event Planner</strong></span>
+    </a>
+
+    <!--The Collapsable Hamburger Menu-->
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="sr-only">Toggle Navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    </button>
+    </div>
+    <!--Finish the Collapsable Hamburger Menu-->
+
+    <!--Collapseable Menu Content-->
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <input class="fa fa-home" id="navUName" type="text" placeholder="Username">
+        </li>
+        <li>
+          <input class="fa fa-home" id="navPword" type="password" placeholder="Password">
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-home">Login</i></a>
+        </li>
+      </ul>
+    </div>
+    <!--Finish the Collapseable Menu Content-->
+
+    </div>
+    </nav>
+    </HEADER>
   
   <!--body page-->
   <div class="container">
@@ -56,5 +80,11 @@
 
   </div>
 
+  <!-- Bigger Scripts to load later -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui/0.4.0/angular-ui.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
   </body>
 </html>
