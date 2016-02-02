@@ -28,7 +28,7 @@ meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$fireba
 	$scope.activeEvent = $routeParams.userEvent || 'Randome Event';
 
 	//build firebase object reference
-	var ref = new Firebase('https://torrid-inferno-6968.firebaseio.com/Events/20160301-0001');
+	var ref = new Firebase('https://meetupplanner.firebaseio.com/Events/20160301-0001');
 
 	//assign retrieved value to local object
 	var obj = $firebase(ref).$asObject();
