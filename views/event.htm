@@ -1,5 +1,13 @@
 <h3>{{ activeEvent }}</h3>
 
-<p>this is an active event</p>
-
-<p>{{ data }}</p>
+<p>
+	<ul>
+		<li><strong>Name: </strong>{{ data.eventName }}</li>
+		<li><strong>Host: </strong>{{ data.eventHost }}</li>
+		<li><strong>Type: </strong>{{ data.eventType }}</li>
+		<li><strong>Location: </strong>{{ data.eventLocation }}</li>
+		<li><strong>Start: </strong>{{ data.eventStart }}</li>
+		<li><strong>End: </strong>{{ data.eventEnd }}</li>
+		<li><strong>Message: </strong>{{ data.eventMessage }}</li>
+	</ul>
+</p>

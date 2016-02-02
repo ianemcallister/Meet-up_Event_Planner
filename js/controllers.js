@@ -21,22 +21,21 @@ meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', funct
 
 }]);
 
-meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$firebaseObject', function ($scope, $routeParams, $firebaseObject) {
+meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$firebase', function ($scope, $routeParams, $firebase) {
 
 	console.log('events page loaded');
 
 	$scope.activeEvent = $routeParams.userEvent || 'Randome Event';
 
-	//connect to firebase
-	var ref = new Firebase('https://torrid-inferno-6968.firebaseio.com/');
+	//build firebase object reference
+	var ref = new Firebase('https://torrid-inferno-6968.firebaseio.com/Events/20160301-0001');
 
-	// download the data into a local object
-	var syncObject = $firebaseObject(ref);
+	//assign retrieved value to local object
+	var obj = $firebase(ref).$asObject();
 
-	// synchronize the object with a three-way data binding
-  	// click on `index.html` above to see it used in the DOM!
-  	if(syncObject.$bindTo($scope, "data")) console.log(JSON.stringify($scope.data, null, 4));
-  	else console.log('No Sync');
+	//bind local object to scope variable
+	obj.$bindTo($scope, "data");
 
+    console.log('through the events');
 
 }]);
