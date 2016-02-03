@@ -1,13 +1,43 @@
-<h3>{{ activeEvent }}</h3>
+<h3 id="eventTitle">{{ data.eventName }}</h3>
+<!--If they are the event host give them the option to edit the event-->
+<button id="" ng-click="" ng-hide="" class="btn btn-primary"><strong>Edit Event</strong></button>
+<button id="" ng-click="" ng=hide="" class="btn btn-success"><strong>Save Event</strong></button>
 
-<p>
-	<ul>
-		<li><strong>Name: </strong>{{ data.eventName }}</li>
-		<li><strong>Host: </strong>{{ data.eventHost }}</li>
-		<li><strong>Type: </strong>{{ data.eventType }}</li>
-		<li><strong>Location: </strong>{{ data.eventLocation }}</li>
-		<li><strong>Start: </strong>{{ data.eventStart }}</li>
-		<li><strong>End: </strong>{{ data.eventEnd }}</li>
-		<li><strong>Message: </strong>{{ data.eventMessage }}</li>
-	</ul>
+<!--Attending information -->
+<p id="eventAttendanceInfo">
+	(<a id="confirmedAttending" href="#">{{ totalAttending() }} attending </a>, 
+	<a id="pendingResponses" href="#"> {{ pendingResponses() }} responses pending </a>)
 </p>
+
+<!--Event Type and host information-->
+<p>A <span id="eventType">{{ data.eventType }}</span>, hosted by <a id="eventHost" href="#">{{ data.eventHost }}</a></p>
+
+<!--OPTIONAL event message-->
+<p>{{ data.eventMessage }}</p>
+
+<!--Starting, ending and duration information-->
+<p><strong>Starting: </strong> 
+	<span ng-hide="">{{ convertToDate( data.eventStart ) | date: dateFormat }}</span>
+	<span ng-hide="">
+		<label for="eventStart">Event Start
+			<input type="datetime">
+		</label>
+	</span>
+	<span ng-hide="">( {{ eventDuration({ eventStart: data.eventStart, eventEnd: data.eventEnd }) }} )</span>
+	<span ng-hide="">
+		<label for="eventEnd">Event Ending
+			<input type="datetime">
+		</label>
+	</span>
+</p>
+
+<!--Location information-->
+<p><strong>Location: </strong> {{ data.eventLocation }}</p>
+
+<!--List of attendees-->
+<p><strong>Attending: </strong>
+<!-- add the attending directive here-->
+
+<!--List of Pending Responses-->
+<p><strong>Pending Response: </strong>
+<!-- add the response pending directive here-->

@@ -23,12 +23,10 @@ meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', funct
 
 meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$firebase', function ($scope, $routeParams, $firebase) {
 
-	console.log('events page loaded');
-
 	$scope.activeEvent = $routeParams.userEvent || 'Randome Event';
 
 	//build firebase object reference
-	var ref = new Firebase('https://meetupplanner.firebaseio.com/Events/20160301-0001');
+	var ref = new Firebase('https://torrid-inferno-6968.firebaseio.com/Events/20160301-0001');
 
 	//assign retrieved value to local object
 	var obj = $firebase(ref).$asObject();
@@ -36,6 +34,24 @@ meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$fireba
 	//bind local object to scope variable
 	obj.$bindTo($scope, "data");
 
-    console.log('through the events');
+    //convert the date to readable
+	$scope.convertToDate = function(dt) {
+		return new Date(dt * 1000);
+	}
+
+	//calculate event duration
+	$scope.eventDuration = function(eventStart, eventEnd) {
+		return new Date(eventEnd - eventStart);
+	}
+
+	//calculate total event attendees
+	#scope.totalAttending = function() {
+		return "There are 7 people attending";
+	}
+
+	//calculate total pending attendees
+	#scope.pendingResponses = function() {
+		return "There are 19 responses pending";
+	}
 
 }]);
