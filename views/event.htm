@@ -1,38 +1,55 @@
 <h3 id="eventTitle">{{ data.eventName }}</h3>
 <!--If they are the event host give them the option to edit the event-->
-<button id="" ng-click="" ng-hide="" class="btn btn-primary"><strong>Edit Event</strong></button>
+<button id="" ng-click="editMode = !editMode" ng-hide="" class="btn btn-primary"><strong>Edit Event</strong></button>
 <button id="" ng-click="" ng=hide="" class="btn btn-success"><strong>Save Event</strong></button>
+<p>{{ editMode }}</p>
 
 <!--Attending information -->
 <p id="eventAttendanceInfo">
 	(<a id="confirmedAttending" href="#">{{ totalAttending() }} attending </a>, 
-	<a id="pendingResponses" href="#"> {{ pendingResponses() }} responses pending </a>)
+	<a id="pendingResponses" href="#"> {{ pendingResponses() }} pending </a>)
 </p>
 
 <!--Event Type and host information-->
 <p>A <span id="eventType">{{ data.eventType }}</span>, hosted by <a id="eventHost" href="#">{{ data.eventHost }}</a></p>
 
 <!--OPTIONAL event message-->
-<p>{{ data.eventMessage }}</p>
+<p>
+	<span ng-hide="editMode">{{ data.eventMessage }}</span>
+	<span ng-hide="!editMode">
+		<label for="eventMessage">Event Message (Optional):
+			<input type="text" value="{{ data.eventMessage }}">
+		</label>
+	</span>
+</p>
 
 <!--Starting, ending and duration information-->
 <p><strong>Starting: </strong> 
-	<span ng-hide="">{{ convertToDate( data.eventStart ) | date: dateFormat }}</span>
-	<span ng-hide="">
+	<span ng-hide="editMode">{{ convertToDate( data.eventStart ) | date: dateFormat }}</span>
+	<span ng-hide="!editMode">
 		<label for="eventStart">Event Start
-			<input type="datetime">
+			<input type="datetime" value="{{ data.eventStart }}">
 		</label>
 	</span>
-	<span ng-hide="">( {{ eventDuration({ eventStart: data.eventStart, eventEnd: data.eventEnd }) }} )</span>
-	<span ng-hide="">
+	<span ng-hide="editMode">( {{ eventDuration({ eventStart: data.eventStart, eventEnd: data.eventEnd }) }} )</span>
+	<span ng-hide="!editMode">
 		<label for="eventEnd">Event Ending
-			<input type="datetime">
+			<input type="datetime" value="{{ data.eventEnd }}">
 		</label>
 	</span>
 </p>
 
 <!--Location information-->
-<p><strong>Location: </strong> {{ data.eventLocation }}</p>
+<p><strong>Location: </strong> 
+	<span ng-hide="editMode">{{ data.eventLocation }}</span>
+	<span ng-hide="!editMode">
+		<label for="eventLocation">
+			<input type="text">
+			<input type="text">
+			<input type="text">
+		</label>
+	</span>
+</p>
 
 <!--List of attendees-->
 <p><strong>Attending: </strong>

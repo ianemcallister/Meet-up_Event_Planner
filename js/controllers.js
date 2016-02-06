@@ -23,6 +23,9 @@ meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', funct
 
 meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$firebase', function ($scope, $routeParams, $firebase) {
 
+	$scope.editMode = false;
+	console.log($scope.editMode);
+
 	$scope.activeEvent = $routeParams.userEvent || 'Randome Event';
 
 	//build firebase object reference
@@ -45,13 +48,14 @@ meetUpEventApp.controller('eventController', ['$scope', '$routeParams', '$fireba
 	}
 
 	//calculate total event attendees
-	#scope.totalAttending = function() {
-		return "There are 7 people attending";
+	$scope.totalAttending = function() {
+		return "There are 7 people";
 	}
 
 	//calculate total pending attendees
-	#scope.pendingResponses = function() {
-		return "There are 19 responses pending";
+	$scope.pendingResponses = function() {
+		return "There are 19";
 	}
+
 
 }]);
