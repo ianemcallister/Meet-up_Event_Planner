@@ -17,7 +17,7 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location'
 	$scope.newPassword = '';
 	$scope.username = '';
 	$scope.password = '';
-	$scope.uid = ''
+	$scope.uid = '';
 
 	$scope.userLogin = function() {
 		console.log('logging in a user');
@@ -31,6 +31,9 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location'
 		    console.log("Login Failed!", error);
 		  } else {
 		    console.log("Authenticated successfully with payload:", authData);
+
+		    $location.path('/Users/' + authData.uid);
+		    $scope.$apply();
 		  }
 		});
 	}
@@ -74,11 +77,24 @@ meetUpEventApp.controller('userProfileController', ['$scope', '$routeParams', fu
 
 }]);
 
-meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', function ($scope, $routeParams) {
+meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$firebase', function ($scope, $routeParams, $firebase) {
 
-	$scope.title = 'User Dashboard';
+	//use the uid to extract the user information
+	var ref = new Firebase("https://meetupplanner.firebaseio.com/Users/"+$routeParams.user);
 
-	$scope.activeUser = $routeParams.user || 'Anonymous';
+	// Attach an asynchronous callback to read the data of the user
+	ref.on("value", function(snapshot) {
+		  console.log(snapshot.val());
+		  //if successful
+		  var ref = new Firebase("https://meetupplanner.firebaseio.com/Contacts/"+snapshot.val());
+
+		  var obj = $firebase(ref).$asObject();
+
+		  obj.$bindTo($scope, "activeUser");
+
+		}, function (errorObject) {
+		  console.log("The read failed: " + errorObject.code);
+	});
 
 	console.log('user Dash is working');
 
