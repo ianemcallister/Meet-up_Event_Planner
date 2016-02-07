@@ -15,17 +15,30 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location'
 	
 	$scope.newUsername = '';
 	$scope.newPassword = '';
+	$scope.username = '';
+	$scope.password = '';
 	$scope.uid = ''
 
 	$scope.userLogin = function() {
 		console.log('logging in a user');
 
+		var ref = new Firebase("https://meetupplanner.firebaseio.com");
+		ref.authWithPassword({
+		  email    : $scope.username,
+		  password : $scope.password
+		}, function(error, authData) {
+		  if (error) {
+		    console.log("Login Failed!", error);
+		  } else {
+		    console.log("Authenticated successfully with payload:", authData);
+		  }
+		});
 	}
 
 	$scope.newUserLogin = function() {
 		console.log('creating a new user account');
 
-		var ref = new Firebase("https://meetupplanner.firebaseio.com/Users");
+		var ref = new Firebase("https://meetupplanner.firebaseio.com");
 		ref.createUser({
 		  email    : $scope.newUsername,
 		  password : $scope.newPassword
