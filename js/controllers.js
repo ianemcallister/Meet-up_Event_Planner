@@ -11,10 +11,11 @@ meetUpEventApp.controller('landingController', ['$scope', function ($scope) {
 	console.log('app.js is working!');
 }]);
 
-meetUpEventApp.controller('loginController', ['$scope', '$firebase', function ($scope, $firebase) {
+meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location', function ($scope, $firebase, $location) {
 	
 	$scope.newUsername = '';
 	$scope.newPassword = '';
+	$scope.uid = ''
 
 	$scope.userLogin = function() {
 		console.log('logging in a user');
@@ -33,10 +34,30 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', function ($
 		    console.log("Error creating user:", error);
 		  } else {
 		    console.log("Successfully created user account with uid:", userData.uid);
+
+
+		    //if we don't have user information for them launch that page
+		    $location.path('/userProfile/' + userData.uid);
+		    //launch the new page
+		    $scope.$apply();
+
 		  }
 		});
 	}
 
+}]);
+
+meetUpEventApp.controller('userProfileController', ['$scope', '$routeParams', function ($scope, $routeParams) {
+
+	$scope.title = "user Controllers";
+	$scope.bio = {
+		firstname: '',
+		lastname: ''
+	};
+
+	$scope.activeUser = $routeParams.uid;
+
+	console.log($scope.activeUser);
 
 }]);
 

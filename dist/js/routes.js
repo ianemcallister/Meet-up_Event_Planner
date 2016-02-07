@@ -13,6 +13,11 @@ meetUpEventApp.config(function ($routeProvider) {
 		controller: 'loginController'
 	})
 
+	.when('/userProfile/:uid', {
+		templateUrl: 'views/userProfile.htm',
+		controller: 'userProfileController'
+	})
+
 	.when('/Users/:user', {
 		templateUrl: 'views/userDash.htm',
 		controller: 'userDashController'
