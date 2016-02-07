@@ -84,19 +84,30 @@ meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$fir
 
 	// Attach an asynchronous callback to read the data of the user
 	ref.on("value", function(snapshot) {
-		  console.log(snapshot.val());
+		  console.log(snapshot.val().contact);
 		  //if successful
-		  var ref = new Firebase("https://meetupplanner.firebaseio.com/Contacts/"+snapshot.val());
+		  var ref = new Firebase("https://meetupplanner.firebaseio.com/Contacts/"+snapshot.val().contact);
 
 		  var obj = $firebase(ref).$asObject();
 
 		  obj.$bindTo($scope, "activeUser");
 
+		  var events = new Firebase("https://meetupplanner.firebaseio.com/Events/"+snapshot.val().hosting[1]);
+
+		  var eventTitle = $firebase(events).$asObject();
+
+		  eventTitle.$bindTo($scope, "eventInfo");
+
 		}, function (errorObject) {
 		  console.log("The read failed: " + errorObject.code);
 	});
 
-	console.log('user Dash is working');
+	//var events = new Firebase("https://meetupplanner.firebaseio.com/Events/"+$scope.data.hosting);
+
+	//var hostingEvents = $firebase(ref).$asObject();
+
+	//hostingEvents.$bindTo($scope, "hostedEvents");
+
 
 }]);
 
