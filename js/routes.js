@@ -8,6 +8,11 @@ meetUpEventApp.config(function ($routeProvider) {
 		controller: 'landingController'
 	})
 
+	.when('/login', {
+		templateUrl: 'views/login.htm',
+		controller: 'loginController'
+	})
+
 	.when('/Users/:user', {
 		templateUrl: 'views/userDash.htm',
 		controller: 'userDashController'

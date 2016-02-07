@@ -1,0 +1,26 @@
+<div>
+	<h3>User Login</h3>
+	<label for="username">Username
+		<input type="text" placeholder="username">
+	</label>
+	<label for="password">Password
+		<input type="text" placeholder="password">
+	</label>
+	<label for="userLogin">
+		<input type="submit" class="btn btn-success" value="Login" ng-click="userLogin()">
+	</label>
+</div>
+
+<div>
+	<h3>Create A New User Account</h3>
+	<label for="newUsername">Username
+		<input type="text" id="newUsername" ng-model="newUsername" placeholder="Your username goes here..." /> 
+	</label>
+
+	<label for="newPassword">Password
+		<input type="text" id="newPassword" ng-model="newPassword" placeholder="Your password goes here...">
+	</label>
+	<label for="newUser">
+		<input type="submit" class="btn btn-primary" value="Create Account" ng-click="newUserLogin()">
+	</label>
+</div>
