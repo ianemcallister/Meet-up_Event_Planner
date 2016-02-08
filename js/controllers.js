@@ -11,7 +11,7 @@ meetUpEventApp.controller('landingController', ['$scope', function ($scope) {
 	console.log('app.js is working!');
 }]);
 
-meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location', function ($scope, $firebase, $location) {
+meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location', 'userLogin', function ($scope, $firebase, $location, userLogin) {
 	
 	$scope.newUsername = '';
 	$scope.newPassword = '';
@@ -32,6 +32,9 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location'
 		    console.log("Login Failed!", error);
 		  } else {
 		    console.log("Authenticated successfully with payload:", authData);
+		    console.log(authData);
+
+		    userLogin.saveToken(authData.token);
 
 		    $location.path('/Users/' + authData.uid);
 		    $scope.$apply();
@@ -80,8 +83,11 @@ meetUpEventApp.controller('userProfileController', ['$scope', '$routeParams', fu
 
 }]);
 
-meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$firebase', function ($scope, $routeParams, $firebase) {
-
+meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$firebase', 'userLogin', function ($scope, $routeParams, $firebase, userLogin) {
+	//check authorization
+	if(userLogin.isAuthed()) { console.log ('authorized, proceeding'); }
+	else { console.log('not logged in'); }
+	
 	//use the uid to extract the user information
 	var rootRef = new Firebase("https://meetupplanner.firebaseio.com");
 	var currentUser = rootRef.child("/Users/" + $routeParams.user);
