@@ -20,14 +20,18 @@ meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location'
 	$scope.password = '';
 
 	$scope.userLogin = function() {
-		var authData = databaseQueries.userLogin($scope.username, $scope.password);
+		//log the user in with the username and password
+		databaseQueries.userLogin($scope.username, $scope.password).success(function(authData) {
+			console.log(authData);
+		});
+
 		//save the token
-		userLogin.saveToken(authData.token);
+		//userLogin.saveToken(authData.token);
 		//save user data for use
 		//userData.initializeUser(authData.uid);
 		//redirect to user Dashboard
-		$location.path('/Users/' + authData.uid);
-		$scope.$apply();
+		//$location.path('/Users/' + authData.uid);
+		//$scope.$apply();
 	}
 
 	$scope.createNewUser = function() {
@@ -59,44 +63,16 @@ meetUpEventApp.controller('userProfileController', ['$scope', '$routeParams', fu
 
 }]);
 
-meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$firebase', 'userLogin', function ($scope, $routeParams, $firebase, userLogin) {
+meetUpEventApp.controller('userDashController', ['$scope', '$routeParams', '$firebase', 'userLogin', 'databaseQueries', function ($scope, $routeParams, $firebase, userLogin, databaseQueries) {
 	//check authorization
 	if(userLogin.isAuthed()) { console.log ('authorized, proceeding'); }
 	else { console.log('not logged in'); }
 	
-	//use the uid to extract the user information
-	var rootRef = new Firebase("https://meetupplanner.firebaseio.com");
-	var currentUser = rootRef.child("/Users/" + $routeParams.user);
+	//load the user's biographical information
+	$scope.activeUser = databaseQueries.getUserBio($routeParams.user);
 
-	// Attach an asynchronous callback to read the data of the user
-	currentUser.on("value", function(snapshot) {
-	//display the current user contact if found
-	console.log(snapshot.val().contact);
-	//if found
-	var userContacts = rootRef.child("/Contacts/" + snapshot.val().contact);
-
-	var userContact = $firebase(userContacts).$asObject();
-
-	userContact.$bindTo($scope, "activeUser");
-
-	var events = rootRef.child("/Events/" + snapshot.val().hosting[1]);
-
-	var eventTitle = $firebase(events).$asObject();
-
-	eventTitle.$bindTo($scope, "eventInfo");
-
-	}, function (errorObject) {
-	
-	console.log("The read failed: " + errorObject.code);
-
-	});
-
-	//var events = new Firebase("https://meetupplanner.firebaseio.com/Events/"+$scope.data.hosting);
-
-	//var hostingEvents = $firebase(ref).$asObject();
-
-	//hostingEvents.$bindTo($scope, "hostedEvents");
-
+	//load event object
+	$scope.allevents = databaseQueries.getUserEvents($routeParams.user);
 
 }]);
 

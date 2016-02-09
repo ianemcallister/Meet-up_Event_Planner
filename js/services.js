@@ -1,5 +1,5 @@
 //services
-meetUpEventApp.service('userData', function(data) {
+meetUpEventApp.service('userData', function() {
 	var self = this;
 	self.uid='';
 	self.eventsHosting={};
@@ -29,12 +29,12 @@ meetUpEventApp.service('databaseQueries', function() {
 		    console.log("Login Failed!", error);
 		  } else {
 		    console.log("Authenticated successfully with payload:", authData);
-		    console.log(authData);
-
 		    //return the token to be handled by userLogin
-		    return authData;
-
 		  }
+		  console.log("log completed");
+
+
+		  return authData;
 		});
 
 	}
@@ -55,6 +55,50 @@ meetUpEventApp.service('databaseQueries', function() {
 		    return userData;
 
 		  }
+		});
+
+	}
+
+	self.getUserBio = function(uid) {
+		//collect the contact id from the uid
+		var currentUser = rootRef.child("/Users/" + uid);
+
+		// Attach an asynchronous callback to read the data of the user
+		currentUser.on("value", function(snapshot) {
+			//display the current user contact if found
+			console.log(snapshot.val().contact);
+			//if found
+			var userContacts = rootRef.child("/Contacts/" + snapshot.val().contact);
+
+			var userContact = $firebase(userContacts).$asObject();
+
+			return userContact;
+
+		}, function (errorObject) {
+		
+			console.log("The read failed: " + errorObject.code);
+
+		});
+	}
+
+	self.getUserEvents = function(uid) {
+		//collect the contact id from the uid
+		var currentUser = rootRef.child("/Users/" + uid);
+
+		// Attach an asynchronous callback to read the data of the user's events
+		currentUser.on("value", function(snapshot) {
+			//if found, collect event details
+			//var eventsHosting = rootRef.child("/Events/" + snapshot.val().hosting);
+			//var eventsAttending = rootRef.child("/Events/" + snapshot.val().attending);
+			//var eventInvitations = rootRef.child("/Events/" + snapshot.val().invitations);
+			//var allEvents = { eventsHosting, eventsAttending, eventInvitations };
+			//var eventTitle = $firebase(events).$asObject();
+			//return allEvents;
+
+		}, function (errorObject) {
+		
+			console.log("The read failed: " + errorObject.code);
+
 		});
 
 	}
