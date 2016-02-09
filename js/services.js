@@ -1,11 +1,64 @@
 //services
 meetUpEventApp.service('userData', function(data) {
 	var self = this;
-	//declaring owned properties
 	self.uid='';
 	self.eventsHosting={};
 	self.eventsAttending={};
 	self.eventInvitations={};
+	//declaring owned properties
+	self.initializeUser = function(data) {
+
+	}
+
+});
+
+meetUpEventApp.service('databaseQueries', function() {
+	//declare local variables
+	var rootRef = new Firebase("https://meetupplanner.firebaseio.com");
+	var self = this;
+
+	self.userLogin = function(username, userPassword) {
+
+		console.log('logging in a user');
+
+		rootRef.authWithPassword({
+		  email    : username,
+		  password : userPassword
+		}, function(error, authData) {
+		  if (error) {
+		    console.log("Login Failed!", error);
+		  } else {
+		    console.log("Authenticated successfully with payload:", authData);
+		    console.log(authData);
+
+		    //return the token to be handled by userLogin
+		    return authData;
+
+		  }
+		});
+
+	}
+
+	self.createNewUser = function(username, userPassword) {
+
+		console.log('creating a new user account');
+
+		rootRef.createUser({
+		  email    : username,
+		  password : userPassword
+		}, function(error, userData) {
+		  if (error) {
+		    console.log("Error creating user:", error);
+		  } else {
+		    console.log("Successfully created user account with uid:", userData.uid);
+
+		    return userData;
+
+		  }
+		});
+
+	}
+
 });
 
 meetUpEventApp.service('userLogin', function() {

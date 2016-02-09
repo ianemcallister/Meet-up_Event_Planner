@@ -11,57 +11,33 @@ meetUpEventApp.controller('landingController', ['$scope', function ($scope) {
 	console.log('app.js is working!');
 }]);
 
-meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location', 'userLogin', function ($scope, $firebase, $location, userLogin) {
+meetUpEventApp.controller('loginController', ['$scope', '$firebase', '$location', 'databaseQueries', 'userLogin', 'userData', function ($scope, $firebase, $location, databaseQueries, userLogin, userData) {
 	
+	//do I need to declare these?
 	$scope.newUsername = '';
 	$scope.newPassword = '';
 	$scope.username = '';
 	$scope.password = '';
-	$scope.uid = '';
-
-	var rootRef = new Firebase("https://meetupplanner.firebaseio.com");
 
 	$scope.userLogin = function() {
-		console.log('logging in a user');
-
-		rootRef.authWithPassword({
-		  email    : $scope.username,
-		  password : $scope.password
-		}, function(error, authData) {
-		  if (error) {
-		    console.log("Login Failed!", error);
-		  } else {
-		    console.log("Authenticated successfully with payload:", authData);
-		    console.log(authData);
-
-		    userLogin.saveToken(authData.token);
-
-		    $location.path('/Users/' + authData.uid);
-		    $scope.$apply();
-		  }
-		});
+		var authData = databaseQueries.userLogin($scope.username, $scope.password);
+		//save the token
+		userLogin.saveToken(authData.token);
+		//save user data for use
+		//userData.initializeUser(authData.uid);
+		//redirect to user Dashboard
+		$location.path('/Users/' + authData.uid);
+		$scope.$apply();
 	}
 
-	$scope.newUserLogin = function() {
-		console.log('creating a new user account');
-
-		rootRef.createUser({
-		  email    : $scope.newUsername,
-		  password : $scope.newPassword
-		}, function(error, userData) {
-		  if (error) {
-		    console.log("Error creating user:", error);
-		  } else {
-		    console.log("Successfully created user account with uid:", userData.uid);
-
-
-		    //if we don't have user information for them launch that page
-		    $location.path('/userProfile/' + userData.uid);
-		    //launch the new page
-		    $scope.$apply();
-
-		  }
-		});
+	$scope.createNewUser = function() {
+		var userData = databaseQueries.createNewUser($scope.newUsername, $scope.newPassword);
+		//save the token
+		userLogin.saveToken(userData.token);
+		//because this is a new user, create a user profile before going to dashboard
+		$location.path('/userProfile/' + userData.uid);
+		//launch the new page
+		$scope.$apply();
 	}
 
 }]);
