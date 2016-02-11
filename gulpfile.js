@@ -1,4 +1,4 @@
-/*eslint-env node */
+/*eslint-env node, jasmine, phantomjs, es6 */
 
 var gulp = require('gulp');
 var sass = require('gulp-sass');
@@ -6,6 +6,13 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint'); 
 var jasmine = require('gulp-jasmine-phantom'); 
+//var karma = require('karma').server;
+
+var testFiles = [
+	'plugins/angular.js',
+	'plugins/angular-mocks.js',
+	'tests/spec/extraSpec.js'
+];
 
 gulp.task('default', ['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist'], function() {
 	gulp.watch('sass/**/*.scss', ['styles']);
@@ -77,7 +84,7 @@ gulp.task('lint', function () {
 
 //testings file
 gulp.task('tests', function() {
-	gulp.src('tests/spec/extraSpec.js')
+	gulp.src(testFiles)
 		.pipe(jasmine({
 			integration: true,
 			vendor: 'js/**/*.js'

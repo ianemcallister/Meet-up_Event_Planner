@@ -1,8 +1,10 @@
-//controllers
-meetUpEventApp.controller('homeController', ['$scope', function ($scope) {
+angular
+	.module('meetUpEventApp', [])
+	.controller('HomeController', HomeController);
 
-	$scope.title = 'home';
-}]);
+function HomeController() {
+	this.name = "home";
+}
 
 meetUpEventApp.controller('landingController', ['$scope', function ($scope) {
 

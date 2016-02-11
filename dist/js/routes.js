@@ -1,31 +1,32 @@
-//routes
-meetUpEventApp.config(function ($routeProvider) {
+angular
+	.module('meetUpEventApp')
+	.config(['RoutesController']);
 
+function RoutesController($routeParams) {
 	$routeProvider
-
 	.when('/', {
 		templateUrl: 'views/landingPage.htm',
-		controller: 'landingController'
+		controller: 'landingController',
+		controllerAs: 'landingPage'
 	})
-
 	.when('/login', {
 		templateUrl: 'views/login.htm',
-		controller: 'loginController'
+		controller: 'loginController',
+		controllerAs: 'login'
 	})
-
 	.when('/userProfile/:uid', {
 		templateUrl: 'views/userProfile.htm',
-		controller: 'userProfileController'
+		controller: 'userProfileController',
+		controllerAs: 'userProfile'
 	})
-
 	.when('/Users/:user', {
 		templateUrl: 'views/userDash.htm',
-		controller: 'userDashController'
+		controller: 'userDashController',
+		controllerAs: 'userDash'
 	})
-
 	.when('/Events/:userEvent', {
 		templateUrl: 'views/event.htm',
-		controller: 'eventController'
+		controller: 'eventController',
+		controllerAs: 'event'
 	});
-
-});
+}
