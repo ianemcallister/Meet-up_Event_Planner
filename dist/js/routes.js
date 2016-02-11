@@ -1,32 +1,29 @@
-angular
-	.module('meetUpEventApp')
-	.config(['RoutesController']);
-
-function RoutesController($routeParams) {
-	$routeProvider
-	.when('/', {
-		templateUrl: 'views/landingPage.htm',
-		controller: 'landingController',
-		controllerAs: 'landingPage'
-	})
-	.when('/login', {
-		templateUrl: 'views/login.htm',
-		controller: 'loginController',
-		controllerAs: 'login'
-	})
-	.when('/userProfile/:uid', {
-		templateUrl: 'views/userProfile.htm',
-		controller: 'userProfileController',
-		controllerAs: 'userProfile'
-	})
-	.when('/Users/:user', {
-		templateUrl: 'views/userDash.htm',
-		controller: 'userDashController',
-		controllerAs: 'userDash'
-	})
-	.when('/Events/:userEvent', {
-		templateUrl: 'views/event.htm',
-		controller: 'eventController',
-		controllerAs: 'event'
+angular.module('meetUpEventApp', [])
+	.config(function($routeProvider) {
+		$routeProvider
+		.when('/', {
+			templateUrl: 'views/landingPage.htm',
+			controller: 'LandingController',
+			controllerAs: 'ctl'
+		})
+		.when('/login', {
+			templateUrl: 'views/login.htm',
+			controller: 'LoginController',
+			controllerAs: 'ctl'
+		})
+		.when('/userProfile/:uid', {
+			templateUrl: 'views/userProfile.htm',
+			controller: 'UserProfileController',
+			controllerAs: 'ctl'
+		})
+		.when('/Users/:user', {
+			templateUrl: 'views/userDash.htm',
+			controller: 'UserDashController',
+			controllerAs: 'ctl'
+		})
+		.when('/Events/:userEvent', {
+			templateUrl: 'views/event.htm',
+			controller: 'EventController',
+			controllerAs: 'ctl'
+		});
 	});
-}

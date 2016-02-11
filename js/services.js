@@ -1,4 +1,5 @@
 //services
+/*
 meetUpEventApp.service('userData', function() {
 	var self = this;
 	self.uid='';
@@ -134,4 +135,4 @@ meetUpEventApp.service('userLogin', function() {
 			return false;
 		}
 	}
-});
+});*/
