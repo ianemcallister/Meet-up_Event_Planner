@@ -1,4 +1,4 @@
-/*eslint-env node, jasmine, phantomjs, es6 */
+/*eslint-env node, jasmine, phantomjs, es6, angular/di: [2,"array"] */
 
 var gulp = require('gulp');
 var sass = require('gulp-sass');

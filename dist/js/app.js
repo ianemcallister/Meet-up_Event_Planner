@@ -1,5 +1,9 @@
 angular.module('meetUpEventApp', [
 	'ngRoute',
 	'ngResource',
-	'firebase',
-]);
+	'firebase'
+])
+
+.config(function($logProvider){
+	$logProvider.debugEnabled(true);
+});

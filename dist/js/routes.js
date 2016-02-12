@@ -1,4 +1,4 @@
-angular.module('meetUpEventApp', [])
+angular.module('meetUpEventApp', ['ngRoute'])
 	.config(function($routeProvider) {
 		$routeProvider
 		.when('/', {
@@ -6,6 +6,7 @@ angular.module('meetUpEventApp', [])
 			controller: 'LandingController',
 			controllerAs: 'ctl'
 		})
+		
 		.when('/login', {
 			templateUrl: 'views/login.htm',
 			controller: 'LoginController',
