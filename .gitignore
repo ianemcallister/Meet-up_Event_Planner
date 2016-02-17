@@ -8,5 +8,8 @@ node_modules
 #ignore any logs
 *.log
 
+#ignore the library files
+lib
+
 #ignore specific files
 js/OLD_Controllers.js

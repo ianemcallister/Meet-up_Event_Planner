@@ -1,4 +1,25 @@
-angular.module('meetUpEventApp', ['ngRoute'])
+angular
+	.module('meetUpEventApp')
+	.config(config);
+
+function config($routeProvider) {
+	$routeProvider
+		.when('/', {
+			templateUrl: 'views/landingPage.htm',
+			controller: 'LandingController',
+			controllerAs: 'ctl'
+		})
+		.when('/login', {
+			templateUrl: 'views/loginPage.htm',
+			controller: 'LoginController',
+			controllerAs: 'ctl'
+		})
+		.otherwise({
+			redirectTo: '/'
+		});
+}
+
+/*angular.module('meetUpEventApp', ['ngRoute'])
 	.config(function($routeProvider) {
 		$routeProvider
 		.when('/', {
@@ -27,4 +48,4 @@ angular.module('meetUpEventApp', ['ngRoute'])
 			controller: 'EventController',
 			controllerAs: 'ctl'
 		});
-	});
+	});*/

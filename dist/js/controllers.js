@@ -1,12 +1,22 @@
 angular.module('meetUpEventApp', [])
+	.controller('LandingController', LandingController);
+
+function LandingController($log) {
+	var ctl = this;
+	$log.log('LandingController launched');
+};
+
+
+/*
+angular.module('meetUpEventApp', [])
 	.controller('LandingController', function() {
 		ctl.name = 'Landing Page';
 	});
 
-angular.module('meetUpEventApp', ['$log'])
-	.controller('LoginController', ['$log', function($log) {
+angular.module('meetUpEventApp', [])
+	.controller('LoginController', function($log) {
 		$log.log('test test');
-	}]);
+	});
 
 angular.module('meetUpEventApp', [])
 	.controller('UserProfileController', function($scope, $routeParams) {
@@ -36,3 +46,4 @@ angular.module('meetUpEventApp', [])
 		ctl.name = 'Event Controller Page';
 		log('Event Controller Page');
 	});
+*/
