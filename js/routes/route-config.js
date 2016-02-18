@@ -2,36 +2,41 @@ angular
     .module('meetUpEventApp')
     .config(config);
 
-function config($routeProvider) {
+function config($routeProvider) {   
     $routeProvider
     .when('/login', {
-        templateUrl: 'Login.html',
+        templateUrl: 'views/Login.htm',
         controller: 'LoginsController',
         controllerAs: 'vm'
     })
     .when('/accountsettings/:uid', {
-        templateUrl: 'AccountSettings.html',
+        templateUrl: 'views/AccountSettings.htm',
         controller: 'AccountSettingsController',
         controllerAs: 'vm'
     })
     .when('/user/:uid', {
-            templateUrl: 'UserEvents.html',
-            controller: 'UserEventsController',
-            controllerAs: 'vm'
-        })
-        .when('/event/:eventid', {
-            templateUrl: 'SelectedEvent.html',
-            controller: 'SelectedEventsController',
-            controllerAs: 'vm'
-        })
-        .when('/usercontacts/:uid', {
-            templateUrl: 'UserContacts.html',
-            controller: 'UsersContactsController',
-            controllerAs: 'vm'
-        })
-        .otherwise('/', {
-            templateUrl: 'NewVisitorConverter.html',
-            controller: 'NewVisitorConversionsController',
-            controllerAs: 'vm'
-        });
+        templateUrl: 'views/UserEvents.htm',
+        controller: 'UserEventsController',
+        controllerAs: 'vm'
+    })
+    .when('/event/:eventid', {
+        templateUrl: 'views/SelectedEvent.htm',
+        controller: 'SelectedEventsController',
+        controllerAs: 'vm'
+    })
+    .when('/usercontacts/:uid', {
+        templateUrl: 'views/UserContacts.htm',
+        controller: 'UsersContactsController',
+        controllerAs: 'vm'
+    })
+    .when('/', {
+        templateUrl: 'views/NewVisitorConverter.htm',
+        controller: 'NewVisitorConversionsController',
+        controllerAs: 'vm'
+    })
+    .otherwise('/', {
+        templateUrl: 'views/NewVisitorConverter.htm',
+        controller: 'NewVisitorConversionsController',
+        controllerAs: 'vm'
+    });
 }
