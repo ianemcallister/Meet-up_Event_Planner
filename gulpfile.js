@@ -11,6 +11,8 @@ var jasmine = require('gulp-jasmine-phantom');
 var testFiles = [
 	'plugins/angular.js',
 	'plugins/angular-mocks.js',
+	'js/controllers/AccontSettings.controller.spec/js',
+	'js/controllers/Login.controller.spec/js',
 	'tests/spec/extraSpec.js'
 ];
 
