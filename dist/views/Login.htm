@@ -1,0 +1,23 @@
+<div ng-controller="LoginsController as aLogin">
+    {{ aLogin.name }}
+
+    <!--
+    <div>
+		<registered-user-login-form></registered-user-login-form>
+	</div>-->
+
+	<div>
+		<h3>Create A New User Account</h3>
+		<label for="newUsername">E-mail
+			<input type="text" id="newUsername" ng-model="newUsername" placeholder="Your username goes here..." /> 
+		</label>
+
+		<label for="newPassword">Password
+			<input type="text" id="newPassword" ng-model="newPassword" placeholder="Your password goes here...">
+		</label>
+		<label for="newUser">
+			<input type="submit" class="btn btn-primary" value="Create Account" ng-click="createNewUser()">
+		</label>
+		
+	</div>
+</div>
