@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$injector = ['$location', 'dataservice', 'Auth'];
+UserEventsController.$injector = ['$log', '$location', 'dataservice', 'Auth', 'userData'];
 
-function UserEventsController($location, dataservice, Auth) {
+function UserEventsController($log, $location, dataservice, Auth, userData) {
 	var vm = this;
 	vm.name = 'User Events Controller';
 
@@ -17,6 +17,10 @@ function UserEventsController($location, dataservice, Auth) {
 	}
 
 	vm.currentUser = dataservice.getUserProfile('0841e1bc-91b8-4033-a868-5a9a85a08380');
+
+	//userData.initialize;
+
+	$log.info(userData.getEventsAttending());
 
 	/*
 	vm.add = function() {
