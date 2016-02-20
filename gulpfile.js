@@ -9,15 +9,13 @@ var jasmine = require('gulp-jasmine-phantom');
 //var karma = require('karma').server;
 
 var testFiles = [
-	'plugins/angular.js',
-	'plugins/angular-mocks.js',
 	'js/controllers/AccontSettings.controller.spec.js',
 	'js/controllers/Login.controller.spec.js',
 	'js/controllers/NewVisitorConversions.controller.spec.js',
 	'js/controllers/SelectedEvents.controller.spec.js',
 	'js/controllers/UserEvents.controller.spec.js',
 	'js/controllers/UsersContacts.controller.spec.js',
-	'js/controllers/Firebase.factory.spec.js'
+	//'js/controllers/Firebase.factory.spec.js'
 ];
 
 gulp.task('default', ['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist'], function() {
@@ -93,8 +91,10 @@ gulp.task('tests', function() {
 	gulp.src(testFiles)
 		.pipe(jasmine({
 			integration: true,
-			vendor: ['lib/angular.js',
-			'js/**/*.js'
+			vendor: [
+				'plugins/angular.js',
+				'plugins/angular-mocks.js',
+				'js/**/*.js'
 			]
 		}));
 });

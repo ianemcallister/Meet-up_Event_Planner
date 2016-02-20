@@ -1,4 +1,7 @@
 describe('UserEvents.controller', function() {
+
+	beforeEach(module('meetUpEventApp'));
+	
 	it('collect the users events from firebase', function() {
 		var foo = 0; foo += 1; expect(foo).toEqual(1);
 	});

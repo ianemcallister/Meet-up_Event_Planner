@@ -1,13 +1,23 @@
 angular
     .module('meetUpEventApp')
-    .factory('FirebaseFactory', FirebaseFactory);
+    .value('fbURL', 'https://meetupplanner.firebaseio.com')
+    .factory('dataservice', dataservice);
 
-FirebaseFactory.$inject = [$firebaseObject];
+function dataservice(fbURL, $firebaseObject) {
+	
+	var database = {};
 
-function FirebaseFactory() {
-	var ref = new Firebase("https://meetupplanner.firebaseio.com");
-	var model = this;
+	database.getEvents = function() {
+		var message = 'it worked';
+		return message;
+	}
 
-	// download the data into a local object
-  	model.data = $firebaseObject(ref);	
+	database.getUserProfile = function(uid) {
+		var contactId = $firebaseObject(new Firebase(fbURL + '/Users/' + uid + '/contact'));
+
+		//var userObject = $firebaseObject(new Firebase(fbURL + '/Contacts/' + contactId));
+		return contactId;
+	}	
+
+	return database;
 }
