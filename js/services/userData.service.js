@@ -2,41 +2,50 @@ angular
     .module('meetUpEventApp')
     .factory('userData', userData);
 
-function userData() {
+LoginsController.$inject = ['dataservice'];
+
+function userData(dataservice) {
 	var user = this;
+	var userObject = {};
 
-	user.eventsAttending = { 'testing':'that' };
-
-	var initialize = function() {
+	userObject.initialize = function(uid) {
+		//clean the local variables
 		user.uid = {};
 		user.eventsAttending = [];
 		user.eventsHosting = [];
 		user.eventsInvitedTo = [];
-
+		//load databse values
+		//user.uid = dataservice.loadUID();
+		user.eventsAttending.push(dataservice.loadAttendingEvents(uid));
+		//user.eventsHosting = loadHostingEvents();
+		//user.eventsInvitedTo = loadEventInvitations();
 	}
 
-	function getUID() {
+	userObject.getUID = function() {
 		return user.uid;
 	}
-	function getAllEventsAttending() {
+	userObject.getAllEventsAttending = function() {
 		return user.eventsAttending;
 	}
-	function getAllEventsHosting() {
+	userObject.getAllEventsHosting = function() {
 		return user.eventsHosting;
 	}
-	function getAllEventsInvitedTo() {
+	userObject.getAllEventsInvitedTo = function() {
 		return user.eventsInvitedTo;
 	}
-	function createAHostedEvent(newEvent) {
+	userObject.createAHostedEvent = function(newEvent) {
 		//add error checking
 		user.eventsHosting.push(newEvent);
+		//add to database
 	}
-	function acceptAnEventInvitation(newEvent, inviteIDRemoving) {
+	userObject.acceptAnEventInvitation = function(newEvent, inviteIDRemoving) {
 		user.eventsAttending.push(newEvent);
 		//loop through the invite array to remove the invite
+		//update databse
 	}
-	function deleteAHostedEvent(eventIDRemoving) {
+	userObject.deleteAHostedEvent = function(eventIDRemoving) {
 
 	}
 	
+	return userObject;
 }

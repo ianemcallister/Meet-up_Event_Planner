@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .run(runBlock);
 
-runBlock.$inject = ['Auth', '$location'];
+runBlock.$inject = ['$location', 'Auth', 'userData'];
 
-function runBlock(Auth, $location) {
+function runBlock($location, Auth, userData) {
 
 	if(!Auth.isLoggedIn()) {
 		//alert('Denied');
@@ -13,4 +13,6 @@ function runBlock(Auth, $location) {
 		//alert('congrats!');
 		$location.path('/user');
 	}
+
+	userData.initialize('0841e1bc-91b8-4033-a868-5a9a85a08380');
 }
