@@ -9,23 +9,34 @@ function userData() {
 
 	var initialize = function() {
 		user.uid = {};
-		user.eventsAttending = { 'testing':'that' };
-		user.eventsHosting = {};
-		user.eventsInvitedTo = {};
+		user.eventsAttending = [];
+		user.eventsHosting = [];
+		user.eventsInvitedTo = [];
 
 	}
 
-	var getUID = function() {
+	function getUID() {
 		return user.uid;
 	}
-	function getEventsAttending() {
+	function getAllEventsAttending() {
 		return user.eventsAttending;
 	}
-	var getEventsHosting = function() {
+	function getAllEventsHosting() {
 		return user.eventsHosting;
 	}
-	var getEventsInvitedTo = function() {
+	function getAllEventsInvitedTo() {
 		return user.eventsInvitedTo;
+	}
+	function createAHostedEvent(newEvent) {
+		//add error checking
+		user.eventsHosting.push(newEvent);
+	}
+	function acceptAnEventInvitation(newEvent, inviteIDRemoving) {
+		user.eventsAttending.push(newEvent);
+		//loop through the invite array to remove the invite
+	}
+	function deleteAHostedEvent(eventIDRemoving) {
+
 	}
 	
 }
