@@ -1,4 +1,4 @@
-<div ng-controller="UserEventsController as userEvents">
+<div ng-controller='UserEventsController as userEvents' ng-init='init(1)'>
 	
 	<p>testing {{ userEvents.name }} testing</p>
 	
@@ -8,6 +8,10 @@
 
 	<div>
 		<h4>Pending Invitations:</h4>
+		<div ng-repeat="invitation in pendingInvitations">
+			<pending-invitations></pending-invitations>
+		</div>
+		
 	</div>
 	<div>
 		<h4>Events You're Hosting:</h4>
@@ -21,12 +25,5 @@
 	<div>
 		<h4>Completed Events:</h4>
 	</div>
-	
-	//testing framework
-	<input ng-model="x" type="number">
-    <input ng-model="y" type="number">
-    <strong>{{z}}</strong>
-    <!-- the value for ngClick maps to the sum function within the controller body -->
-    <input type="button" ng-click="sum()" value="+">
 
 </div>

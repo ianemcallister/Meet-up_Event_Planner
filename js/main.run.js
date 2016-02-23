@@ -14,5 +14,5 @@ function runBlock($location, Auth, userData) {
 		$location.path('/user');
 	}
 
-	userData.initialize('0841e1bc-91b8-4033-a868-5a9a85a08380');
+	//userData.initialize('0841e1bc-91b8-4033-a868-5a9a85a08380');
 }

@@ -2,42 +2,26 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$injector = ['$log', '$location', 'dataservice', 'Auth', 'userData'];
+UserEventsController.$injector = ['$log', '$location', '$firebase','dataservice', 'Auth', 'userData'];
 
-function UserEventsController($log, $location, dataservice, Auth, userData) {
+function UserEventsController($log, $location, $firebase, dataservice, Auth, userData) {
+	//declare local variables
 	var vm = this;
+	var fbURL = 'https://meetupplanner.firebaseio.com/0841e1bc-91b8-4033-a868-5a9a85a08380/hosting/20160301-0001';
 	vm.name = 'User Events Controller';
 
-	if(!Auth.isLoggedIn()) {
-		alert('Denied');
-		$location.path('/');
-	} else {
-		alert('congrats!');
-		$location.path('/user');
+	//load user events
+	vm.init = function(invitation) {
+		vm.invitation = invitation;
+
+		alert('running init');
+		vm.data = $firebase(new Firebase(fbURL));
+		
+		//vm.data.$on('loaded', checkInvites);
+		//vm.data.$on('change', checkInvites);
 	}
 
-	vm.currentUser = dataservice.getUserProfile('0841e1bc-91b8-4033-a868-5a9a85a08380');
 
-	//userData.initialize;
+	
 
-	$log.info(userData.getEventsAttending());
-
-	/*
-	vm.add = function() {
-		var save = dataservice.$add({
-			firstName: vm.firstName,
-			lastName: vm.lastName
-		});
-
-		vm.firstName = '';
-		vm.lastName = '';
-
-		if(save) {
-			alert('saved successfully');
-		} else {
-			alert('something went wrong');
-		}
-	}
-	*/
-	vm.sendMessage = function() { };
 }
