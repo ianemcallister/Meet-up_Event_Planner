@@ -2,12 +2,12 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$injector = ['$log', '$location', '$firebase','dataservice', 'Auth', 'userData'];
+UserEventsController.$injector = ['$log', '$location', '$firebaseArray','dataservice', 'Auth', 'userData'];
 
-function UserEventsController($log, $location, $firebase, dataservice, Auth, userData) {
+function UserEventsController($log, $location, $firebaseArray, dataservice, Auth, userData) {
 	//declare local variables
 	var vm = this;
-	var fbURL = 'https://meetupplanner.firebaseio.com/0841e1bc-91b8-4033-a868-5a9a85a08380/hosting/20160301-0001';
+	var fbURL = new Firebase('https://meetupplanner.firebaseio.com/users/0841e1bc-91b8-4033-a868-5a9a85a08380/messages');
 	vm.name = 'User Events Controller';
 
 	//load user events
@@ -21,6 +21,7 @@ function UserEventsController($log, $location, $firebase, dataservice, Auth, use
 		//vm.data.$on('change', checkInvites);
 	}
 
+	vm.userObjects = $firebaseArray(fbURL);
 
 	
 
