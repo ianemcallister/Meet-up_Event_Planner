@@ -2,12 +2,15 @@ angular
     .module('meetUpEventApp')
     .controller('MainController', MainController);
 
-MainController.$inject = ['$scope','$location', '$log', 'Auth'];
+MainController.$inject = ['$scope','$location', '$log', 'Auth', 'userData2'];
 
-function MainController($scope, $location, $log, Auth) {
+function MainController($scope, $location, $log, Auth, userData2) {
 	var vm = this;
+	var pendingInvitations = userData2;
 
-	$log.info('testing');
+	$log.info('main testing');
+	
+	pendingInvitations.loadDatabaseValues();
 
 	//force login if necessary
 	$scope.$watch(Auth.isLoggedIn, function(value, oldvalue) {

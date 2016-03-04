@@ -1,8 +1,11 @@
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">{{ date }}</h3>
-	</div>
-	<div class="panel-body">
-		Host: {{ host }}
-	</div>
+<div class='row' ng-swipe-left='showDecline = true' ng-swipe-right='showDecline = false'>
+	<div ng-show='!showDecline' class="col-xs-2 col-sm-2 eventDate"><span>{{vm.anEvent.startTime | date:'d'}}</span><br>{{vm.anEvent.startTime | date:'MMM'}}</div>
+		<div class='col-xs-7 col-sm-7 eventTitle'>
+			<a href=''>
+				<span>{{ vm.anEvent.title }}</span>
+			</a><br>
+			{{ vm.anEvent.message }}
+		</div>
+	<div ng-click='addition()' class='col-xs-3 col-sm-3 btn btn-success eventAction'>Accept</div>
+	<div ng-show='showDecline' class='col-xs-2 col-sm-2 btn btn-danger eventAction'>Decline</div>
 </div>
