@@ -12,7 +12,9 @@ function UserEventsController($scope, $log, $location, $firebaseArray, dataservi
 	var pendingInvitations = userData2;
 
 	$log.info(pendingInvitations.getPendingInvitations());
-	
+	$log.info(pendingInvitations.getEventsAttending());
+	$log.info(pendingInvitations.getEventsHosting());
+
 	vm.pendingInvitations = { 'list':[
 		{'title':'Lacy\'s Awesome Party','message':'We\'ll have a grand old time!', 'id':'0092', 'startTime':'1288323623006'},
 		{'title':'Shelby\'s Pool Party','message':'We\'ll make memories.', 'id':'19381', 'startTime':'1282324623006'},
