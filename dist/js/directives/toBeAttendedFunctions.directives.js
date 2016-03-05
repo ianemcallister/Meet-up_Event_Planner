@@ -1,11 +1,11 @@
 angular
     .module('meetUpEventApp')
-    .directive('pendingInvitations', pendingInvitations);
+    .directive('toBeAttendedFunctions', toBeAttendedFunctions);
 
-function pendingInvitations() {
+function toBeAttendedFunctions() {
 	var directive = {
 		restrict: 'E',
-		templateUrl: '../views/directives/pendingInvitations.htm',
+		templateUrl: '../views/directives/toBeAttendedFunctions.htm',
 		replace: true,
 		scope: {
 			anEvent: '='

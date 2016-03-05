@@ -3,15 +3,17 @@ angular
     .directive('pendingInvitations', pendingInvitations);
 
 function pendingInvitations() {
-	return {
+	var directive = {
 		restrict: 'E',
 		templateUrl: '../views/directives/pendingInvitations.htm',
 		replace: true,
 		scope: {
-			date: "=",
-			startTime: "=",
-			host: "=",
-			type: "="
-		}
-	}
+			anEvent: '='
+		},
+		controller: UserEventsController,
+		controllerAs: 'vm',
+		bindToController: true
+	};
+
+	return directive;
 }
