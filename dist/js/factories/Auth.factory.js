@@ -1,16 +1,32 @@
 angular
     .module('meetUpEventApp')
-    .factory('Auth', Auth);
+    .factory('userAuthentication', userAuthentication);
 
-function Auth() {
-	var user;
+userAuthentication.$inject = [];
 
+function userAuthentication() {
 	return {
-		setUser : function(aUser) {
+		createNewUser: createNewUser,
+		loginExistingUser: loginExistingUser
+	};
 
-		},
-		isLoggedIn: function() {
-			return(user)? user : false;
-		}
+	function createNewUser(newUserEmail, newUserPassword) {
+
+	}
+
+	function loginExistingUser(existingUserEmail, existingUserPassword) {
+		var ref = new Firebase('https://meetupplanner.firebaseio.com');
+
+		return ref.authWithPassword({
+			email    : existingUserEmail,
+			password : existingUserPassword
+		}, function(error, authData) {
+			if (error) {
+			    alert("Login Failed!" + error);
+			} else {
+			  alert("Authenticated successfully with payload:" + authData);
+			}
+
+		});
 	}
 }

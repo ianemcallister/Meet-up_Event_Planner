@@ -14,7 +14,7 @@ function config($routeProvider) {
         controller: 'AccountSettingsController',
         controllerAs: 'vm'
     })
-    .when('/user/:uid', {
+    .when('/user/', {
         templateUrl: 'views/UserEvents.htm',
         controller: 'UserEventsController',
         controllerAs: 'vm'

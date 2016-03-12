@@ -1,28 +1,41 @@
 <div ng-controller="NewVisitorConversionsController as pitchDeck">
-	This is the {{ pitchDeck.name }} page
 
 	<!--section 1: Header & Hero Image -->
-	<h3>This is the landing Page {{ pitchDeck.name }}</h3>
+	<h3>Host Your Events With Us!</h3>
 
 	<!--section 2: Call To action - Login or Create an Account -->
 	<div>
-		<h3>Login or Create an Account</h3>
-		<form action="post">
-			<label for="userEmail">Username
-				<input type="text" id="userEmail">
+		<h3>Create an Account</h3>
+			<label for="newUserEmail">
+				<input type="text" id="newUserEmail" placeholder='e.g. JohnSmith@gmail.com' ng-model='pitchDeck.newUserEmail'><br>
+				Username
 			</label>
-			<label for="userPassword">Password
-				<input type="password" id="userPassword">
+			<label for="newUserPassword">
+				<input type="password" id="newUserPassword" placeholder='**********' ng-model='pitchDeck.newUserPassword'><br>
+				Password
 			</label>
-			<label for="submit">
-				<input type="submit">
+			<label for="submit" class='btn btn-success'>
+				<input type="submit" id='newUserSubmit' ng-click='pitchDeck.createNewUser()'>
 			</label>
-		</form>
+	</div>
+	<div>
+		<h3>User Login</h3>
+		<label for="userEmail">
+			<input type="text" id="userEmail" placeholder='e.g. JohnSmith@gmail.com' ng-model='pitchDeck.userEmail'><br>
+			Username
+		</label>
+		<label for="userPassword">
+			<input type="password" id="userPassword" placeholder='**********' ng-model='pitchDeck.userPassword'><br>
+			Password
+		</label>
+		<label for="submit" class='btn btn-success'>
+			<input type="submit" id='userSubmit' ng-click='pitchDeck.authenticateUser()'>
+		</label>
 	</div>
 	<!--section 3: Events / Active and Passed -->
 
-	<!--section 4: Footer -->
+	<!--section 4: Footer 
 	<button type="button" class="btn btn-success">Events</button>
-	<button type="button" class="btn btn-primary">User</button>
+	<button type="button" class="btn btn-primary">User</button>-->
 
 </div>

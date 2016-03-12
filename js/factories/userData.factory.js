@@ -1,10 +1,10 @@
 angular
     .module('meetUpEventApp')
-    .factory('userData2', userData2);
+    .factory('userData2', userData);
 
-userData2.$inject = ['$log'];
+userData.$inject = ['$log'];
 
-function userData2($log) {
+function userData($log) {
 	var userBio = {
 		'firstname': '',
 		'lastname': '',

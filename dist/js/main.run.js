@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .run(runBlock);
 
-runBlock.$inject = ['$location', 'Auth', 'userData'];
+runBlock.$inject = ['$location', 'userData'];
 
-function runBlock($location, Auth, userData) {
+function runBlock($location, userData) {
 
 	/*
 	if(!Auth.isLoggedIn()) {

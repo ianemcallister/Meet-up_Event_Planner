@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('LoginsController', LoginsController);
 
-LoginsController.$inject = ['Auth'];
+LoginsController.$inject = [];
 
-function LoginsController(Auth) {
+function LoginsController() {
 	var vm = this;
 	vm.name = 'Login Controller';
 	vm.login = function() {

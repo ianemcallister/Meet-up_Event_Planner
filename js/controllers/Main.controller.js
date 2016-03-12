@@ -2,28 +2,24 @@ angular
     .module('meetUpEventApp')
     .controller('MainController', MainController);
 
-MainController.$inject = ['$scope','$location', '$log', 'Auth', 'userData2'];
+MainController.$inject = [];
 
-function MainController($scope, $location, $log, Auth, userData2) {
+function MainController() {
+	//declare local variables
 	var vm = this;
-	var pendingInvitations = userData2;
+	//var ref = new Firebase('https://meetupplanner.firebaseio.com');
 
-	$log.info('main testing');
-	
-	pendingInvitations.loadDatabaseValues();
-
-	//force login if necessary
-	$scope.$watch(Auth.isLoggedIn, function(value, oldvalue) {
-
-		if(!value && oldvalue) {
-			$location.path('/login');
+	//define methods
+	/*
+	vm.authDataCallback = function(authData) {
+		if(authData) {
+			$log.info('User ' + authData.uid + ' is logged in with ' + authData.provider);
+			//$location.path('/user/' + authData.uid);
+		} else {
+			$log.info('User is logged out');
 		}
+	}
 
-		if(value) {
-			//do something when the user is connected
-			alert('you\'re still logged in');
-		}
-
-	}, true);
-
+	//define callbacks
+	ref.onAuth(vm.authDataCallback);*/
 }
