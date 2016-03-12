@@ -13,6 +13,10 @@ function LandingPageController($log, $location) {
 	vm.validNewEmail = {'valid':false, 'style':{color:''}};
 	vm.securePassword = {'secure':false, 'style':{color:''}};
 	vm.unlockCreateUserBtn = {'usable':false, 'class':'btn btn-warning'};
+	
+	vm.validUserEmail = {'valid':false, 'style':{color:''}};
+	vm.validUserPassword = {'valid':false, 'style':{color:''}};
+	vm.unclockUserLoginBtn = {'usable':false, 'class':'btn btn-warning'};
 	vm.passwordRequirnments = {
 		0:{'constraint':'Is at least 16 characters long', 'style':{color:'red'}, 'met':false},
 		1:{'constraint':'Is no longer than 100 characters', 'style':{color:'red'}, 'met':false},
@@ -57,6 +61,21 @@ function LandingPageController($log, $location) {
 		}
 		
 		vm.openCreateUserButton();
+	}
+
+	vm.checkUserEmail = function() {
+		//check validity
+		var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
+
+		if(constraint.test(vm.userEmail)) {
+			vm.validUserEmail.valid = true;
+			vm.validUserEmail.style = {color:'green'};
+		} else {
+			vm.validUserEmail.valid = false;
+			vm.validUserEmail.style = {color:'red'};
+		}
+		
+		vm.openUserLoginBtn();
 	}
 
 	vm.checkNewPasswords = function() {
@@ -138,15 +157,41 @@ function LandingPageController($log, $location) {
  		vm.openCreateUserButton();
 	}
 
+	vm.checkUserPasswords = function() {
+		if(vm.userPassword) {
+			if(vm.userPassword.length > 15) {
+				vm.validUserPassword.style = {color:'green'};
+				vm.validUserPassword.valid = true;
+			} else {
+				vm.validUserPassword.style = {color:'red'};
+				vm.validUserPassword.valid = false;
+			}
+			
+		}
+		
+		$log.info(vm.validUserPassword.valid);
+		vm.openUserLoginBtn();
+	}
+
 	vm.openCreateUserButton = function() {
 		if(vm.validNewName.valid && vm.validNewEmail.valid && vm.securePassword.secure) {
-			vm.unlockCreateUserBtn.class = 'btn btn-primary';
+			vm.unlockCreateUserBtn.class = 'btn btn-success';
 			vm.unlockCreateUserBtn.usable = true;
 		} else {
 			vm.unlockCreateUserBtn.class = 'btn btn-warning';
 			vm.unlockCreateUserBtn.usable = false;	
 		}
-		
+
+	}
+
+	vm.openUserLoginBtn = function() {
+		if(vm.validUserEmail.valid && vm.validUserPassword.valid) {
+			vm.unclockUserLoginBtn.class = 'btn btn-success';
+			vm.unclockUserLoginBtn.usable = true;
+		} else {
+			vm.unclockUserLoginBtn.class = 'btn btn-warning';
+			vm.unclockUserLoginBtn.usable = false;	
+		}
 	}
 
 	vm.createNewUser = function() {
@@ -155,4 +200,9 @@ function LandingPageController($log, $location) {
 		}
 	}
 
+	vm.loginRegisteredUser = function() {
+		if(vm.unclockUserLoginBtn.usable) {
+			$location.path('/user');
+		}
+	}
 }

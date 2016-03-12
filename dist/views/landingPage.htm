@@ -28,9 +28,9 @@
 				
 		<div class="col-xs-12 col-sm-12">
 			<h4>Login</h4>
-			<label for="userNameOrEmail">Email: <input type="text" id='userNameOrEmail' placeholder='e.g. MileyCyrus@gmail.com'></label>
-			<label for="userPassword">Password:<input type="password" placeholder='**********'></label>
-			<label for="userSubmit"><input class='btn btn-primary' type="submit" value='Login' ng-click=''></label>
+			<label for="userNameOrEmail" ng-style='recruitUsers.validUserEmail.style'>Email: <input type="text" id='userEmail' ng-model='recruitUsers.userEmail' ng-keyup='recruitUsers.checkUserEmail()' placeholder='e.g. MileyCyrus@gmail.com'></label>
+			<label for="userPassword" ng-style='recruitUsers.validUserPassword.style'>Password:<input type="password" id='userPassword' ng-model='recruitUsers.userPassword' ng-keyup='recruitUsers.checkUserPasswords()'placeholder='**********' ></label>
+			<label for="userSubmit"><input ng-class='recruitUsers.unclockUserLoginBtn.class' type="submit" value='Login' ng-click='recruitUsers.loginRegisteredUser()'></label>
 		</div>	
 	</div>
 
