@@ -1,0 +1,37 @@
+<div class="container-fluid" ng-controller='LandingPageController as recruitUsers'>
+	<!--Greet users-->
+	<div class="row" id=''>
+		<div class="col-xs-12 col-sm-12">
+			<h3>Have Fun. Schedule Your Events. Make Memories.</h3>
+		</div>
+	</div>
+	<!--Create a New User account-->
+	<div class="row" id=''>
+		<div class="col-xs-12 col-sm-12">
+			<h4>Create an Account</h4>
+			<p>It's easy, just sign up here!</p>
+			<label for='newName'>Username:<input type="text" id='newName' ng-model='recruitUsers.newName' placeholder='e.g. HughJackman'></label>
+			<label for='newEmail'>Email:<input type="text" id='newEmail' ng-model='recruitUsers.newEmail' placeholder='e.g. hugh.jackman@gmail.com'></label>
+			<label for='newPassword'>Password:<input type="password" id='newPassword' ng-model='recruitUsers.newPassword' ng-focus='recruitUsers.displayPassReqs()' ng-keyup='recruitUsers.checkNewPasswords()' placeholder='**********'></label>
+			<div ng-if='recruitUsers.showReuirnments' id="passReqs">
+				<strong>PASSWORD REQUIRNMENTS</strong>
+				<ul>
+					<li ng-repeat="requirnment in recruitUsers.passwordRequirnments" value='{{ requirnment.constraint }}' ng-style='requirnment.style'>{{ requirnment.constraint }}</li>
+				</ul>
+			</div>
+			<label for='newSubmit'><input class='btn btn-info' id='newSubmit' type="submit" value='Create User Account' ng-click=''></label>
+		</div>
+	</div>
+
+	<!--Login an Existing user-->
+	<div class="row">
+				
+		<div class="col-xs-12 col-sm-12">
+			<h4>Login</h4>
+			<label for="userNameOrEmail">Username or Email: <input type="text" id='userNameOrEmail' placeholder='e.g. MileyCyrus'></label>
+			<label for="userPassword">Password:<input type="password" placeholder='**********'></label>
+			<label for="userSubmit"><input class='btn btn-primary' type="submit" value='Login' ng-click=''></label>
+		</div>	
+	</div>
+
+</div>
