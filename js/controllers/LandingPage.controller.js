@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('LandingPageController', LandingPageController);
 
-LandingPageController.$inject = ['$log', '$location'];
+LandingPageController.$inject = ['$log', '$location', '$document'];
 
-function LandingPageController($log, $location) {
+function LandingPageController($log, $location, $document) {
 	var vm = this;
 
 	//define local variables
@@ -37,44 +37,51 @@ function LandingPageController($log, $location) {
 	}
 
 	vm.checkNewName = function() {
-		if(vm.newName.length > 0) {
-			vm.validNewName.valid = true;
-			vm.validNewName.style = {color:'green'};
-		} else {
-			vm.validNewName.valid = false;
-			vm.validNewName.style = {color:'red'};
+		
+		if(vm.newName) {
+			if(vm.newName.length > 0) {
+				vm.validNewName.valid = true;
+				vm.validNewName.style = {color:'green'};
+			} else {
+				vm.validNewName.valid = false;
+				vm.validNewName.style = {color:'red'};
+			}
 		}
 
 		vm.openCreateUserButton();
 	}
 
 	vm.checkNewEmail = function () {
-		//check validity
-		var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
+		if(vm.newEmail) {
+			//check validity
+			var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
 
-		if(constraint.test(vm.newEmail)) {
-			vm.validNewEmail.valid = true;
-			vm.validNewEmail.style = {color:'green'};
-		} else {
-			vm.validNewEmail.valid = false;
-			vm.validNewEmail.style = {color:'red'};
+			if(constraint.test(vm.newEmail)) {
+				vm.validNewEmail.valid = true;
+				vm.validNewEmail.style = {color:'green'};
+			} else {
+				vm.validNewEmail.valid = false;
+				vm.validNewEmail.style = {color:'red'};
+			}			
 		}
 		
 		vm.openCreateUserButton();
 	}
 
 	vm.checkUserEmail = function() {
-		//check validity
-		var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
+		if(vm.userEmail) {
+			//check validity
+			var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
 
-		if(constraint.test(vm.userEmail)) {
-			vm.validUserEmail.valid = true;
-			vm.validUserEmail.style = {color:'green'};
-		} else {
-			vm.validUserEmail.valid = false;
-			vm.validUserEmail.style = {color:'red'};
+			if(constraint.test(vm.userEmail)) {
+				vm.validUserEmail.valid = true;
+				vm.validUserEmail.style = {color:'green'};
+			} else {
+				vm.validUserEmail.valid = false;
+				vm.validUserEmail.style = {color:'red'};
+			}
 		}
-		
+
 		vm.openUserLoginBtn();
 	}
 
@@ -203,5 +210,16 @@ function LandingPageController($log, $location) {
 		if(vm.unclockUserLoginBtn.usable) {
 			$location.path('/user');
 		}
+	}
+
+	vm.update = function() {
+		//set values
+		vm.newName = $document.find('#newName')[0].value;
+		vm.newEmail = $document.find('#newEmail')[0].value;
+		vm.userEmail = $document.find('#userEmail')[0].value;
+		
+		vm.checkNewName();
+		vm.checkNewEmail();
+		vm.checkUserEmail();
 	}
 }
