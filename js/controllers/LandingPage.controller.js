@@ -6,6 +6,8 @@ LandingPageController.$inject = ['$log', '$location', '$document'];
 
 function LandingPageController($log, $location, $document) {
 	var vm = this;
+	var fbURL = 'https://meetupplanner.firebaseio.com/';
+	var authData = {};
 
 	//define local variables
 	vm.showRequirnments = false;
@@ -200,18 +202,6 @@ function LandingPageController($log, $location, $document) {
 		}
 	}
 
-	vm.createNewUser = function() {
-		if(vm.unlockCreateUserBtn.usable) {
-			$location.path('/newUser');
-		}
-	}
-
-	vm.loginRegisteredUser = function() {
-		if(vm.unclockUserLoginBtn.usable) {
-			$location.path('/user');
-		}
-	}
-
 	vm.update = function() {
 		//set values
 		vm.newName = $document.find('#newName')[0].value;
@@ -222,4 +212,77 @@ function LandingPageController($log, $location, $document) {
 		vm.checkNewEmail();
 		vm.checkUserEmail();
 	}
+
+	vm.createNewUser = function() {
+		if(vm.unlockCreateUserBtn.usable) {
+			//define local variable
+			var ref = new Firebase(fbURL);
+
+			ref.createUser({
+				email:vm.newEmail,
+				password:vm.newPassword
+			},function(error, userData) {
+				if(error) {
+					$log.info('Error creating user: ' + error);
+				} else {
+					//log results
+					$log.info(userData);
+
+					//generate the user record
+					var usersRef = ref.child('Users/' + userData.uid);
+					var userID = userData.uid;
+
+					//write new user to the database with bio info
+					usersRef.set({ 
+						'bio': {
+							'name': vm.newName,
+							'email': vm.newEmail
+						}
+					}, function(error) {
+						if(error) {
+							$log.info('Data could not be saved: ' + error);
+						} else {
+							$log.info('Data saved successfully.');
+						}
+					});
+					//out of the databse call
+				}
+			});
+
+			$location.path('/userInformation');
+		}
+	}
+
+	vm.authDataCallback = function(authData) {
+		if(authData) {
+			$log.info("User " + authData.uid + " is logged in with " + authData.provider);
+			$location.path('/user/' + authData.uid + '/' + authData.token);
+		} else {
+			$log.info("User is logged out");
+		}
+	}
+
+	vm.loginRegisteredUser = function() {
+		if(vm.unclockUserLoginBtn.usable) {
+			//define local variable
+			var ref = new Firebase(fbURL);
+
+			ref.authWithPassword({
+				email: vm.userEmail,
+				password: vm.userPassword
+			}, function(error, authData) {
+				if(error) {
+					$log.info('Error Logging In: ' + error);
+				} else {
+					$log.info('Logged In successfully: ' + authData.uid);
+					$log.info(authData.token);
+					$log.info(authData.expires);
+				}
+			});
+
+			ref.onAuth(vm.authDataCallback);
+
+		}
+	}
+
 }
