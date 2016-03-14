@@ -215,7 +215,6 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 
 	vm.redirect = function(path, userData) {
 		var fullPath = path + '/' + userData.uid + '/' + userData.token;
-		$log.info(fullPath);
 		//redirect
 		$location.path(fullPath);
 		$scope.$apply();
@@ -259,7 +258,7 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					//out of the databse call
 
 					//redirect to UserInformation
-					//vm.redirect('/userInformation', userData);
+					vm.redirect('/userInformation', userData);
 				}
 			});
 
@@ -272,6 +271,7 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 			var ref = new Firebase(fbURL);
 			var saveUserData = userData;
 
+			//authenticate the user
 			ref.authWithPassword({
 				email: vm.userEmail,
 				password: vm.userPassword
@@ -284,6 +284,8 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					//save all the data
 					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
 
+					//load user bio
+					
 					//load user events
 
 					//redirect

@@ -9,14 +9,14 @@ function config($routeProvider) {
         controller: 'LandingPageController',
         controllerAs: 'vm'
     })
-    .when('/userInformation', {
+    .when('/userInformation/:uid?/:token?', {
         templateUrl: 'views/userInformation.htm',
         controller: 'UserInformationController',
         controllerAs: 'vm'
     })
-    .when('/userInformation/:uid?/:token?', {
-        templateUrl: 'views/userInformation.htm',
-        controller: 'UserInformationController',
+    .when('/userEvents/:uid?/:token?', {
+        templateUrl: 'views/userEvents.htm',
+        controller: 'UserEventsController',
         controllerAs: 'vm'
     });
 }

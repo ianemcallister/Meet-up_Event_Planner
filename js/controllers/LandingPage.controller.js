@@ -215,7 +215,6 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 
 	vm.redirect = function(path, userData) {
 		var fullPath = path + '/' + userData.uid + '/' + userData.token;
-		$log.info(fullPath);
 		//redirect
 		$location.path(fullPath);
 		$scope.$apply();
@@ -285,6 +284,8 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					//save all the data
 					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
 
+					//load user bio
+					
 					//load user events
 
 					//redirect
