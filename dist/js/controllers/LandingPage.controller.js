@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('LandingPageController', LandingPageController);
 
-LandingPageController.$inject = ['$log', '$location', '$document', 'userData'];
+LandingPageController.$inject = ['$log', '$location', '$document', '$scope', 'userData'];
 
-function LandingPageController($log, $location, $document, userData) {
+function LandingPageController($log, $location, $document, $scope, userData) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var authData = {};
@@ -213,6 +213,14 @@ function LandingPageController($log, $location, $document, userData) {
 		vm.checkUserEmail();
 	}
 
+	vm.redirect = function(path, userData) {
+		var fullPath = path + '/' + userData.uid + '/' + userData.token;
+		$log.info(fullPath);
+		//redirect
+		$location.path(fullPath);
+		$scope.$apply();
+	}
+
 	vm.createNewUser = function() {
 		if(vm.unlockCreateUserBtn.usable) {
 			//define local variable
@@ -230,7 +238,7 @@ function LandingPageController($log, $location, $document, userData) {
 					$log.info(userData);
 
 					//save all the data
-					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
+					saveUserData.init(userData.uid, userData.provider, userData.token, userData.expires);
 
 					//generate the user record
 					var usersRef = ref.child('Users/' + userData.uid);
@@ -249,10 +257,12 @@ function LandingPageController($log, $location, $document, userData) {
 						}
 					});
 					//out of the databse call
+
+					//redirect to UserInformation
+					//vm.redirect('/userInformation', userData);
 				}
 			});
 
-			$location.path('/userInformation');
 		}
 	}
 
@@ -276,12 +286,14 @@ function LandingPageController($log, $location, $document, userData) {
 
 					//load user events
 
+					//redirect
+					vm.redirect('/userInformation', authData);
+
 				}
 			});
 
 		}
 
-		$location.path('/userInformation');
 	}
 
 }

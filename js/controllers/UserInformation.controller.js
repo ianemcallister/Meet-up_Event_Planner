@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('UserInformationController', UserInformationController);
 
-UserInformationController.$inject = ['$log', '$location', 'userData'];
+UserInformationController.$inject = ['$log', '$location', '$routeParams', 'userData'];
 
-function UserInformationController($log, $location, userData) {
+function UserInformationController($log, $location, $routeParams, userData) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL); 
@@ -16,6 +16,8 @@ function UserInformationController($log, $location, userData) {
 	vm.btnMssg = 'Move On...';
 	vm.isData = false;
 	vm.user = { 'name': 'tempName', 'email': 'tempEmail' };
+
+	$log.info($routeParams.uid + " " + $routeParams.token);
 
 	//load user data
 	ref.onAuth(function(authData) {

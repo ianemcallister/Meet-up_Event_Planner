@@ -13,5 +13,10 @@ function config($routeProvider) {
         templateUrl: 'views/userInformation.htm',
         controller: 'UserInformationController',
         controllerAs: 'vm'
+    })
+    .when('/userInformation/:uid?/:token?', {
+        templateUrl: 'views/userInformation.htm',
+        controller: 'UserInformationController',
+        controllerAs: 'vm'
     });
 }
