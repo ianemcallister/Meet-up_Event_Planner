@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('MainController', MainController);
 
-MainController.$inject = [];
+MainController.$inject = ['$location'];
 
-function MainController() {
+function MainController($location) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL); 
@@ -12,5 +12,6 @@ function MainController() {
 	vm.logout = function() {
 		alert('logging you out!');
 		ref.unauth();
+		$location.path('/');
 	};
 }

@@ -28,6 +28,8 @@ function UserInformationController($log, $location, userData) {
 				vm.isData = true;
 			});
 
+			saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
+
 		} else {
 			$log.info('Client unauthenticated.')
 		}
@@ -54,12 +56,24 @@ function UserInformationController($log, $location, userData) {
 	}
 
 	vm.saveAndMoveOn = function() {
-		if(vm.dataToSave) {
-			var usersRef = ref.child('Users/' + saveUserData.getUID());
+		
+		if(vm.dataToSave && angular.isDefined(saveUserData.getUID())) {
+			//save the date the user added
+			ref.child('Users/' + saveUserData.getUID() + '/bio/').update({
+				'employer': vm.employerName,
+				'jobTitle': vm.jobTitle,
+				'birthday': vm.birthday
+			}, function(error) {
+				if(error) {
+					$log.info("Optional Data could not be saved." + error);
+				} else {
+					$log.info("Optional Data saved successfully to " + saveUserData.getUID() + '/bio/');
+				}
+			});
 
 			$location.path('/userEvents/dataSaved/' + saveUserData.getUID());
 		} else {
-			$location.path('/userEvents/noData' + saveUserData.getUID());
+			$location.path('/userEvents/noData/' + saveUserData.getUID());
 		}
 	}
 
