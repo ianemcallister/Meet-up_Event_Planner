@@ -9,6 +9,18 @@
 			<p>If you'd like to tell us a little more about yourself please do, if not just move on with the link at the bottom!</p>
 		</div>
 	</div>
+	<!--Required Data: Name & email-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Required</h4>
+			<label for="name">Name:
+				<input type="text" id='name' ng-change='userInformation.update()' ng-model='userInformation.user.name'>
+			</label>
+			<label for="email">E-mail:
+				<input type="email" id='email' ng-change='userInformation.update()' ng-model='userInformation.user.email'>
+			</label>
+		</div>
+	</div>
 	<!--Gather Optional Data: Work-->
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">

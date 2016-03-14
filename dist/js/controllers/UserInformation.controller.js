@@ -14,26 +14,34 @@ function UserInformationController($log, $location, userData) {
 	vm.proceedBtn = 'btn btn-primary';
 	vm.dataToSave = false;
 	vm.btnMssg = 'Move On...';
-	vm.userName = 'Ian';
 	vm.isData = false;
+	vm.user = { 'name': 'tempName', 'email': 'tempEmail' };
 
 	//load user data
 	ref.onAuth(function(authData) {
 		if(authData) {
 			$log.info('Authenticated with uid:', authData.uid);
 
-			ref.child('Users/' + authData.uid + '/bio/name').on('value', function(snapshot) {
-				$log.info(snapshot.val());
-				vm.userName = snapshot.val();
+			//get user data
+			ref.child('Users/' + authData.uid + '/bio').on('value', function(snapshot) {
+				$log.info('Retrieved user name: ' + snapshot.val().name);
+				$log.info('Retrieved user email: ' + snapshot.val().email);
+				vm.user = snapshot.val();
 				vm.isData = true;
+				vm.update();
 			});
 
+			//save auth data
 			saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
 
 		} else {
 			$log.info('Client unauthenticated.')
 		}
 	});
+
+	vm.update = function() {
+		$log.info(vm.user.name + ' ' + vm.user.email);
+	}
 
 	vm.dataLoaded = function() {
 		return vm.isData;
