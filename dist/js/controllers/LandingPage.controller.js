@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('LandingPageController', LandingPageController);
 
-LandingPageController.$inject = ['$log', '$location', '$document'];
+LandingPageController.$inject = ['$log', '$location', '$document', 'userData'];
 
-function LandingPageController($log, $location, $document) {
+function LandingPageController($log, $location, $document, userData) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var authData = {};
@@ -217,6 +217,7 @@ function LandingPageController($log, $location, $document) {
 		if(vm.unlockCreateUserBtn.usable) {
 			//define local variable
 			var ref = new Firebase(fbURL);
+			
 
 			ref.createUser({
 				email:vm.newEmail,
@@ -230,7 +231,6 @@ function LandingPageController($log, $location, $document) {
 
 					//generate the user record
 					var usersRef = ref.child('Users/' + userData.uid);
-					var userID = userData.uid;
 
 					//write new user to the database with bio info
 					usersRef.set({ 
@@ -253,19 +253,11 @@ function LandingPageController($log, $location, $document) {
 		}
 	}
 
-	vm.authDataCallback = function(authData) {
-		if(authData) {
-			$log.info("User " + authData.uid + " is logged in with " + authData.provider);
-			$location.path('/user/' + authData.uid + '/' + authData.token);
-		} else {
-			$log.info("User is logged out");
-		}
-	}
-
 	vm.loginRegisteredUser = function() {
 		if(vm.unclockUserLoginBtn.usable) {
 			//define local variable
 			var ref = new Firebase(fbURL);
+			var saveUserData = userData;
 
 			ref.authWithPassword({
 				email: vm.userEmail,
@@ -275,14 +267,21 @@ function LandingPageController($log, $location, $document) {
 					$log.info('Error Logging In: ' + error);
 				} else {
 					$log.info('Logged In successfully: ' + authData.uid);
-					$log.info(authData.token);
-					$log.info(authData.expires);
+
+					//save all the data
+					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
+
+					$log.info(saveUserData.getUID());
+					$log.info(saveUserData.getProvider());
+					$log.info(saveUserData.getToken());
+					$log.info(saveUserData.getExpiration());
+
 				}
 			});
 
-			ref.onAuth(vm.authDataCallback);
-
 		}
+
+		$location.path('/userEvents');
 	}
 
 }

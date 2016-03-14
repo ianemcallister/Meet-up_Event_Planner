@@ -5,4 +5,5 @@ angular
 MainController.$inject = [];
 
 function MainController() {
+	var vm = this;
 }
