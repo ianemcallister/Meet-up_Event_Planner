@@ -217,7 +217,7 @@ function LandingPageController($log, $location, $document, userData) {
 		if(vm.unlockCreateUserBtn.usable) {
 			//define local variable
 			var ref = new Firebase(fbURL);
-			
+			var saveUserData = userData;
 
 			ref.createUser({
 				email:vm.newEmail,
@@ -228,6 +228,9 @@ function LandingPageController($log, $location, $document, userData) {
 				} else {
 					//log results
 					$log.info(userData);
+
+					//save all the data
+					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
 
 					//generate the user record
 					var usersRef = ref.child('Users/' + userData.uid);
@@ -270,6 +273,8 @@ function LandingPageController($log, $location, $document, userData) {
 
 					//save all the data
 					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
+
+					//load user events
 
 				}
 			});

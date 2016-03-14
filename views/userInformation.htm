@@ -1,3 +1,32 @@
 <div class="container-fluid" ng-controller='UserInformationController as userInformation'>
-This is user information
+	<!--Page Explained-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h3>Optional Biographical Information</h3>
+			<p>If you'd like to tell us a little more about yourself please do, if not just move on with the link at the bottom!</p>
+		</div>
+	</div>
+	<!--Gather Optional Data: Work-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Work</h4>
+			<label for="employerName">Employer:
+				<input type="text" id='employerName' ng-model='userInformation.employerName' ng-change='userInformation.checkValues()' placeholder='e.g. Google, Facebook, etc'>
+			</label>
+			<label for="jobTitle">Job Title:
+				<input type="text" id='jobTitle' ng-model='userInformation.jobTitle' ng-change='userInformation.checkValues()' placeholder='e.g. Desk Jocky, Dental Hygenist'>
+			</label>
+		</div>
+	</div>
+	<!--Gather Optional Data: Personal-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Personal</h4>
+			<label for="birthday">Birhtday:
+				<input type="date" id='birthday' ng-model='userInformation.birthday' ng-change='userInformation.checkValues()' placeholder='Sep. 19, 1983'>
+			</label>
+		</div>
+	</div>
+	<!--Move On to user Events-->
+	<div class="row col-xs-12 col-sm-12" ng-class='userInformation.proceedBtn' ng-click='userInformation.saveAndMoveOn()'>{{ userInformation.btnMssg }}</div>
 </div>
