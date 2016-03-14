@@ -281,7 +281,7 @@ function LandingPageController($log, $location, $document, userData) {
 
 		}
 
-		$location.path('/userEvents');
+		$location.path('/userInformation');
 	}
 
 }
