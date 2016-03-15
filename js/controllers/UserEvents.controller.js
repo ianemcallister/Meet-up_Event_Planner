@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$inject = ['$log', '$location', 'userData'];
+UserEventsController.$inject = ['$log', '$location', '$routeParams', 'userData'];
 
-function UserEventsController($log, $location, userData) {
+function UserEventsController($log, $location, $routeParams, userData) {
 	var vm = this;
 	var currentUserData = userData;
 
@@ -14,7 +14,7 @@ function UserEventsController($log, $location, userData) {
 	$log.info('into the user Events controller');
 
 	vm.eventRedirect = function(path, eventID, credentials) {
-		var fullPath = path + '/' + eventID + '/' + userData.uid + '/' + userData.token;
+		var fullPath = path + '/' + eventID + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);

@@ -2,14 +2,15 @@ angular
     .module('meetUpEventApp')
     .controller('AnEventController', AnEventController);
 
-AnEventController.$inject = ['$log', '$location', 'userData'];
+AnEventController.$inject = ['$log', '$location', '$routeParams', '$firebaseObject', 'userData'];
 
-function AnEventController($log, $location, userData) {
+function AnEventController($log, $location, $routeParams, $firebaseObject, userData) {
 	var vm = this;
-
+	var fbURL = 'https://meetupplanner.firebaseio.com/';
+	var ref = new Firebase(fbURL);
+	
 	//declare and initialize local variables
 	vm.event = {
-		id: 0,
 		name: '',
 		type: '',
 		host: '',
@@ -25,6 +26,11 @@ function AnEventController($log, $location, userData) {
 		2: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}},
 		3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
 	};
+
+	$log.info($routeParams.uid);
+	$log.info($routeParams.eventId);
+	//binding to the event
+	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
 
 	vm.submit = function() {
 		$log.info('submitting the form now!');
