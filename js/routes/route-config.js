@@ -18,5 +18,10 @@ function config($routeProvider) {
         templateUrl: 'views/userEvents.htm',
         controller: 'UserEventsController',
         controllerAs: 'vm'
+    })
+    .when('/event/:eventId?/:uid?/:token?', {
+        templateUrl: 'views/anEvent.htm',
+        controller: 'AnEventController',
+        controllerAs: 'vm'
     });
 }

@@ -1,1 +1,25 @@
-these are the user events
+<div class="container-fluid" ng-controller='UserEventsController as theUserEvents'>
+<!--Allow them to create a new event-->
+<div class="row">
+	<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='theUserEvents.createNewEvent()'>Create A New Event</div>
+</div>
+<!--If they have been invited to an event, but haven't RSVPed: show pending invitions-->
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		<h4>Pending Invitations</h4>
+		<p>Swipe left to decline the invitation.</p>
+	</div>
+</div>
+<!--If they have been invited to an event & have RSVPed: show events they're attending-->
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		<h4>Events You're Attending</h4>
+	</div>
+</div>
+<!--If they are hosting events, show the events they're hosting-->
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		<h4>Events You're hosting</h4>
+	</div>
+</div>
+</div>
