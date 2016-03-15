@@ -1,3 +1,123 @@
 <div class="container-fluid" ng-controller='AnEventController as anEvent'>
-	This is an event
+	<!--If this is an existing event show the tracking tool bar-->
+	<!--Name of the event-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventName">Event Name:
+				<input type="text" id='eventName' placeholder='My Cool Event'>
+			</label>
+		</div>
+	</div>
+	<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventTypePicker">Type of Event:
+				<select name="eventTypePicker" id="eventTypePicker">
+					<option value="Birthday Party">Birthday Party</option>
+					<option value="Conference/Tak">Conference/Talk</option>
+					<option value="Wedding">Wedding</option>
+				</select>
+			</label>
+		</div>
+	</div>
+	<!--Event host (could be an individual’s name or an organization)-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventHost">Event Host:
+				<input type="text" id='eventHost' placeholder="e.g. Will Smith">
+			</label>
+		</div>
+	</div>
+	<!--Event start date and time-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventStart">Start Time:
+				<input type="datetime-local" id='eventStart'>
+			</label>
+		</div>
+	</div>
+	<!--Event end date and time-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventEnd">Ends At:
+				<input type="datetime-local" id='eventEnd'>
+			</label>
+		</div>
+	</div>
+	<!--Optional message to the guests with additional information about the event-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="eventMessage"><i>(Optional)</i> Event Message:
+				<input type="text" id='eventMessage' placeholder="This'll be the best event!">
+			</label>
+		</div>
+	</div>
+	<!--Guest list-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Guest List</h4>
+			<div>
+				<strong>Invite a Guest</strong>
+				<label for="inviteeName">Name:
+					<input type="text" id='inviteeName' placeholder='F. Scott Fitzgerald'>
+				</label>
+				<label for="inviteeEmail">Email:
+					<input type="email" placeholder='f.scott@fitzgerald.com'>
+				</label>
+			</div>
+			<div>
+				<strong>Guests Invited</strong>
+				<div class="row">
+					<div class="col-xs-2 col-sm-12 ">
+						<i>RSVP?</i><br>
+					</div>
+					<div class="col-xs-5 col-sm-5">
+						<i>Name</i><br>
+					</div>
+					<div class="col-xs-5 col-sm-5">
+						<i>Email</i><br>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-2 col-sm-12">
+						Yes
+					</div>
+					<div class="col-xs-5 col-sm-5">
+						Margert Thatcher
+					</div>
+					<div class="col-xs-5 col-sm-5">
+						Margert@thatcher.uk
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Location-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Location</h4>
+			<label for="eventStreet01">Street:
+				<input type="text" id='eventStreet01' placeholder="e.g. 4928 Bronx Ave.">
+			</label>
+			<label for="eventStreet02">Street:
+				<input type="text" id='eventStreet02' placeholder="3rd Floor">
+			</label>
+			<label for="eventStreet03">Street:
+				<input type="text" id='eventStreet03' placeholder="Unit 11">
+			</label>
+			<label for="eventCity">City:
+				<input type="text" id='eventCity' placeholder="New York">
+			</label>
+			<label for="eventState">State:
+				<input type="text" id='eventState' placeholder='NY'>
+			</label>
+			<label for="eventZip">Zip:
+				<input type="text" id='eventZip' placeholder="012345">
+			</label>
+		</div>
+	</div>
+	<!--Save & return to userEvents-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.submit()'>Save & Submit</div>
+	</div>
 </div>
