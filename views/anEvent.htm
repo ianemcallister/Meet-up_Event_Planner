@@ -13,6 +13,7 @@
 	</div>
 	<!--Section 1: When-->
 	<div ng-if='anEvent.manageSections[1].active'>
+		<h4>What & When</h4>
 		<!--Name of the event-->
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
@@ -93,6 +94,10 @@
 				</label>
 			</div>
 		</div>
+		<!--Map Goes Here-->
+		<div class="row">
+			This will be the map
+		</div>
 	</div>
 
 	<!--Section 3: Who-->
@@ -141,6 +146,6 @@
 		
 	<!--Save & return to userEvents-->
 	<div class="row">
-		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.submit()'>Save & Submit</div>
+		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.submit()'>Save & Move To Where</div>
 	</div>
 </div>

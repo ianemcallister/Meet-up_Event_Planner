@@ -20,14 +20,11 @@ function AnEventController($log, $location, userData) {
 		address: {}
 	};
 
-	vm.currentSection = 1;
 	vm.manageSections = {
 		1: {active: true, complete: false, style:{color:'black', 'background-color':'yellow'}},
 		2: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}},
 		3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
 	};
-
-	$log.info('into a single event controller');
 
 	vm.submit = function() {
 		$log.info('submitting the form now!');
