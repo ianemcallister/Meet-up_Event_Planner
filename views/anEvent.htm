@@ -1,121 +1,144 @@
 <div class="container-fluid" ng-controller='AnEventController as anEvent'>
 	<!--If this is an existing event show the tracking tool bar-->
-	<!--Name of the event-->
+	<!--Progress Bar-->
 	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventName">Event Name:
-				<input type="text" id='eventName' placeholder='My Cool Event'>
-			</label>
-		</div>
+		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[1].style' ng-click='anEvent.changeSection(1)'><strong>When?</strong></div>
+		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[2].style' ng-click='anEvent.changeSection(2)'>Where?</div>
+		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[3].style' ng-click='anEvent.changeSection(3)'>Who?</div>
+		<!-- play with this more later
+		<svg height="100" width="250">
+		  <polygon points="0,0 200,00 250,50 200,100 00,100 50,50" style="fill:lime;stroke:purple;stroke-width:1" />
+		</svg>
+		-->
 	</div>
-	<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventTypePicker">Type of Event:
-				<select name="eventTypePicker" id="eventTypePicker">
-					<option value="Birthday Party">Birthday Party</option>
-					<option value="Conference/Tak">Conference/Talk</option>
-					<option value="Wedding">Wedding</option>
-				</select>
-			</label>
-		</div>
-	</div>
-	<!--Event host (could be an individual’s name or an organization)-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventHost">Event Host:
-				<input type="text" id='eventHost' placeholder="e.g. Will Smith">
-			</label>
-		</div>
-	</div>
-	<!--Event start date and time-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventStart">Start Time:
-				<input type="datetime-local" id='eventStart'>
-			</label>
-		</div>
-	</div>
-	<!--Event end date and time-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventEnd">Ends At:
-				<input type="datetime-local" id='eventEnd'>
-			</label>
-		</div>
-	</div>
-	<!--Optional message to the guests with additional information about the event-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<label for="eventMessage"><i>(Optional)</i> Event Message:
-				<input type="text" id='eventMessage' placeholder="This'll be the best event!">
-			</label>
-		</div>
-	</div>
-	<!--Guest list-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<h4>Guest List</h4>
-			<div>
-				<strong>Invite a Guest</strong>
-				<label for="inviteeName">Name:
-					<input type="text" id='inviteeName' placeholder='F. Scott Fitzgerald'>
-				</label>
-				<label for="inviteeEmail">Email:
-					<input type="email" placeholder='f.scott@fitzgerald.com'>
+	<!--Section 1: When-->
+	<div ng-if='anEvent.manageSections[1].active'>
+		<!--Name of the event-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventName">Event Name:
+					<input type="text" id='eventName' ng-model='anEvent.eventName' placeholder='My Cool Event'>
 				</label>
 			</div>
-			<div>
-				<strong>Guests Invited</strong>
-				<div class="row">
-					<div class="col-xs-2 col-sm-12 ">
-						<i>RSVP?</i><br>
-					</div>
-					<div class="col-xs-5 col-sm-5">
-						<i>Name</i><br>
-					</div>
-					<div class="col-xs-5 col-sm-5">
-						<i>Email</i><br>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-2 col-sm-12">
-						Yes
-					</div>
-					<div class="col-xs-5 col-sm-5">
-						Margert Thatcher
-					</div>
-					<div class="col-xs-5 col-sm-5">
-						Margert@thatcher.uk
-					</div>
-				</div>
+		</div>
+		<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventTypePicker">Type of Event:
+					<select name="eventTypePicker" id="eventTypePicker">
+						<option value="Birthday Party">Birthday Party</option>
+						<option value="Conference/Tak">Conference/Talk</option>
+						<option value="Wedding">Wedding</option>
+					</select>
+				</label>
+			</div>
+		</div>
+		<!--Event host (could be an individual’s name or an organization)-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventHost">Event Host:
+					<input type="text" id='eventHost' ng-model='anEvent.eventHost' placeholder="e.g. Will Smith">
+				</label>
+			</div>
+		</div>
+		<!--Event start date and time-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventStart">Start Time:
+					<input type="datetime-local" id='eventStart' ng-model='anEvent.eventStart'>
+				</label>
+			</div>
+		</div>
+		<!--Event end date and time-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventEnd">Ends At:
+					<input type="datetime-local" id='eventEnd' ng-model='anEvent.eventEnd'>
+				</label>
+			</div>
+		</div>
+		<!--Optional message to the guests with additional information about the event-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<label for="eventMessage"><i>(Optional)</i> Event Message:
+					<input type="text" id='eventMessage' ng-model='anEvent.eventMessage' placeholder="This'll be the best event!">
+				</label>
 			</div>
 		</div>
 	</div>
-	<!--Location-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<h4>Location</h4>
-			<label for="eventStreet01">Street:
-				<input type="text" id='eventStreet01' placeholder="e.g. 4928 Bronx Ave.">
-			</label>
-			<label for="eventStreet02">Street:
-				<input type="text" id='eventStreet02' placeholder="3rd Floor">
-			</label>
-			<label for="eventStreet03">Street:
-				<input type="text" id='eventStreet03' placeholder="Unit 11">
-			</label>
-			<label for="eventCity">City:
-				<input type="text" id='eventCity' placeholder="New York">
-			</label>
-			<label for="eventState">State:
-				<input type="text" id='eventState' placeholder='NY'>
-			</label>
-			<label for="eventZip">Zip:
-				<input type="text" id='eventZip' placeholder="012345">
-			</label>
+
+	<!--Section 2: Where-->
+	<div ng-if='anEvent.manageSections[2].active'>
+		<!--Location-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<h4>Location</h4>
+				<label for="eventStreet01">Street:
+					<input type="text" id='eventStreet01' ng-model='anEvent.eventAddress.Street01' placeholder="e.g. 4928 Bronx Ave.">
+				</label>
+				<label for="eventStreet02">Street:
+					<input type="text" id='eventStreet02' ng-model='anEvent.eventAddress.Street02' placeholder="3rd Floor">
+				</label>
+				<label for="eventStreet03">Street:
+					<input type="text" id='eventStreet03' ng-model='anEvent.eventAddress.Street03' placeholder="Unit 11">
+				</label>
+				<label for="eventCity">City:
+					<input type="text" id='eventCity' ng-model='anEvent.eventAddress.City' placeholder="New York">
+				</label>
+				<label for="eventState">State:
+					<input type="text" id='eventState' ng-model='anEvent.eventAddress.State' placeholder='NY'>
+				</label>
+				<label for="eventZip">Zip:
+					<input type="text" id='eventZip' ng-model='anEvent.eventAddress.Zip' placeholder="012345">
+				</label>
+			</div>
 		</div>
 	</div>
+
+	<!--Section 3: Who-->
+	<div ng-if='anEvent.manageSections[3].active'>
+		<!--Guest list-->
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<h4>Guest List</h4>
+				<div>
+					<strong>Invite a Guest</strong>
+					<label for="inviteeName">Name:
+						<input type="text" id='inviteeName' placeholder='F. Scott Fitzgerald'>
+					</label>
+					<label for="inviteeEmail">Email:
+						<input type="email" placeholder='f.scott@fitzgerald.com'>
+					</label>
+				</div>
+				<div>
+					<strong>Guests Invited</strong>
+					<div class="row">
+						<div class="col-xs-2 col-sm-12 ">
+							<i>RSVP?</i><br>
+						</div>
+						<div class="col-xs-5 col-sm-5">
+							<i>Name</i><br>
+						</div>
+						<div class="col-xs-5 col-sm-5">
+							<i>Email</i><br>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 col-sm-12">
+							Yes
+						</div>
+						<div class="col-xs-5 col-sm-5">
+							Margert Thatcher
+						</div>
+						<div class="col-xs-5 col-sm-5">
+							Margert@thatcher.uk
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
 	<!--Save & return to userEvents-->
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.submit()'>Save & Submit</div>
