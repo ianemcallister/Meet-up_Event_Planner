@@ -37,8 +37,8 @@ function UserEventsController($log, $location, $routeParams, userData) {
 		//create event model to start with
 		ref.child('Users').child($routeParams.uid).child('hosting').child(eventID).set({
 			eventTimes: {
-				start: 1458086111000,
-				end: 14580861110000
+				start: Date.parse(date),
+				end: Date.parse(date)
 			}
 		});
 

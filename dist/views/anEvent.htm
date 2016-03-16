@@ -13,7 +13,6 @@
 	</div>
 	<!--Section 1: When-->
 	<div ng-if='anEvent.manageSections[1].active'>
-		{{ anEvent.event | json }}
 		<h4>What & When</h4>
 		<!--Name of the event-->
 		<div class="row">
@@ -116,36 +115,28 @@
 				<div>
 					<strong>Invite a Guest</strong>
 					<label for="inviteeName">Name:
-						<input type="text" id='inviteeName' placeholder='F. Scott Fitzgerald'>
+						<input type="text" id='inviteeName' ng-model='anEvent.newGuest.name' placeholder='F. Scott Fitzgerald'>
 					</label>
 					<label for="inviteeEmail">Email:
-						<input type="email" placeholder='f.scott@fitzgerald.com'>
+						<input type="email" ng-model='anEvent.newGuest.email.address' ng-change='anEvent.validateGuestEmail()' ng-style='anEvent.newGuest.email.style' placeholder='f.scott@fitzgerald.com'>
 					</label>
+					<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToList()'>Add Recipient</div>
 				</div>
 				<div>
 					<strong>Guests Invited</strong>
-					<div class="row">
-						<div class="col-xs-2 col-sm-12 ">
-							<i>RSVP?</i><br>
-						</div>
-						<div class="col-xs-5 col-sm-5">
-							<i>Name</i><br>
-						</div>
-						<div class="col-xs-5 col-sm-5">
-							<i>Email</i><br>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-2 col-sm-12">
-							Yes
-						</div>
-						<div class="col-xs-5 col-sm-5">
-							Margert Thatcher
-						</div>
-						<div class="col-xs-5 col-sm-5">
-							Margert@thatcher.uk
-						</div>
-					</div>
+					<table class="table table-striped table-border">
+						<tr>
+							<th class='col-xs-2 col-sm-2'>STATUS</th>
+							<th class='col-xs-5 col-sm-5'>NAME</th>
+							<th class='col-xs-5 col-sm-5'>EMAIL</th>
+						</tr>
+						<tr ng-if='anEvent.areGuestsInvited()'><td colspan='3'>No Guests Currently Invited</td></tr>
+						<tr ng-repeat='guest in anEvent.tempEvent.tempGuestList'>
+							<td>{{guest.status}}</td>
+							<td>{{guest.name}}</td>
+							<td>{{guest.email}}</td>
+						</tr>
+					</table>
 				</div>
 			</div>
 		</div>

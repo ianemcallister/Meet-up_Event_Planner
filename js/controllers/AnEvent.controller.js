@@ -9,8 +9,10 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
 	
+	
 	//declare and initialize local variables
 	vm.tempDateTime = {start: new Date(), end: new Date()};
+	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
 
 	vm.manageSections = {
 		1: {active: true, complete: false, style:{color:'black', 'background-color':'yellow'}},
@@ -56,10 +58,46 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 		$log.info('something changed');
 	}
 
+	vm.areGuestsInvited = function() {
+		//$log.info(vm.event.guestList);
+		if(vm.event.guestList) return true;
+		else return false;
+	}
+
+	vm.validateGuestEmail = function() {
+		//if there is an email address
+		if(vm.newGuest.email.address) {
+			//check validity
+			var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
+
+			if(constraint.test(vm.newGuest.email.address)) {
+				vm.newGuest.email.valid = true;
+				vm.newGuest.email.style = {color:'green'};
+			} else {
+				vm.newGuest.email.valid = false;
+				vm.newGuest.email.style = {color:''};
+			}			
+		}
+	}
+
+	vm.addGuestToList = function() {
+		//if email is valid and name exists
+		if (vm.newGuest.name && vm.newGuest.email.valid) {
+			//check if they are a user on the site
+			//add them to the event guest list
+			$log.info('adding the guest');
+		} else {
+			$log.info('you didn\'t enter a name and or email');
+		}
+	}
+
 	//execution
 	$log.info($routeParams.uid);
 	$log.info($routeParams.eventId);
+	
 	//binding to the event
 	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
-	
+
+
+
 }
