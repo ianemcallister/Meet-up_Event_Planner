@@ -10,16 +10,7 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 	var ref = new Firebase(fbURL);
 	
 	//declare and initialize local variables
-	vm.event = {
-		name: '',
-		type: '',
-		host: '',
-		startTime: 0,
-		endTime: 0,
-		message: '',
-		guestList: {},
-		address: {}
-	};
+	vm.tempDateTime = {start: new Date(), end: new Date()};
 
 	vm.manageSections = {
 		1: {active: true, complete: false, style:{color:'black', 'background-color':'yellow'}},
@@ -27,10 +18,14 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 		3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
 	};
 
-	$log.info($routeParams.uid);
-	$log.info($routeParams.eventId);
-	//binding to the event
-	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
+	//Methods
+	vm.unixTimeToDateTime = function(unixTime) {
+		return new Date(parseInt(unixTime));
+	};
+
+	vm.dateTimeToUnixTime = function(dateTime) {
+		return Date.parse(dateTime);
+	};
 
 	vm.submit = function() {
 		$log.info('submitting the form now!');
@@ -49,4 +44,22 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 			}
 		}
 	}
+
+	vm.saveEventTime = function(dateTime, target) {
+		if((vm.tempDateTime.end < vm.tempDateTime.start) && target == 'start') vm.tempDateTime.end = vm.tempDateTime.start;
+		if(target == 'start') vm.event.eventTimes.start = vm.dateTimeToUnixTime(dateTime);
+		if(target == 'end') vm.event.eventTimes.end = vm.dateTimeToUnixTime(dateTime);
+		$log.info(dateTime + " changed to " + vm.event.eventTimes[target] + " at " + target);
+	}
+
+	vm.alertMe = function() {
+		$log.info('something changed');
+	}
+
+	//execution
+	$log.info($routeParams.uid);
+	$log.info($routeParams.eventId);
+	//binding to the event
+	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
+	
 }

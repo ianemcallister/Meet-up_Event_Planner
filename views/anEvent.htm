@@ -35,7 +35,7 @@
 					</select>
 					<div ng-if='anEvent.event.type == "Other"'>
 						<label for="otherDefine">Enter A New Event Type:
-							<input type="text" id='otherDefine' ng-model='anEvent.event.type'>
+							<input type="text" id='otherDefine' ng-model='anEvent.event.type.other' placeholder="Something new">
 						</label>
 					</div>
 				</label>
@@ -53,7 +53,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventStart">Start Time:
-					<input type="datetime-local" id='eventStart' ng-model='anEvent.eventStart'>
+					<input type="datetime-local" id='eventStart' ng-model='anEvent.tempDateTime.start' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")'>
 				</label>
 			</div>
 		</div>
@@ -61,7 +61,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventEnd">Ends At:
-					<input type="datetime-local" id='eventEnd' ng-model='anEvent.eventEnd'>
+					<input type="datetime-local" id='eventEnd' ng-model='anEvent.tempDateTime.end' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")'>
 				</label>
 			</div>
 		</div>

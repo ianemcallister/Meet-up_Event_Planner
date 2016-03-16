@@ -7,6 +7,8 @@ UserEventsController.$inject = ['$log', '$location', '$routeParams', 'userData']
 function UserEventsController($log, $location, $routeParams, userData) {
 	var vm = this;
 	var currentUserData = userData;
+	var fbURL = 'https://meetupplanner.firebaseio.com/';
+	var ref = new Firebase(fbURL);
 
 	//declare and initialize local variables
 	vm.events = {pendingInvites: {}, attending: {}, hosting: {}, completed: {}};
@@ -31,6 +33,14 @@ function UserEventsController($log, $location, $routeParams, userData) {
  
 		$log.info('today is: ' + Date.parse(date));
 		$log.info('eventID is: ' + eventID);
+
+		//create event model to start with
+		ref.child('Users').child($routeParams.uid).child('hosting').child(eventID).set({
+			eventTimes: {
+				start: 1458086111000,
+				end: 14580861110000
+			}
+		});
 
 		//redirect to the new Event Page
 		vm.eventRedirect('/event', eventID, redirectCreds);
