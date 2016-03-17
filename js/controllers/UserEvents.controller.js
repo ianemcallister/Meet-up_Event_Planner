@@ -11,10 +11,9 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 	var ref = new Firebase(fbURL);
 
 	//declare and initialize local variables
-	vm.events = { pendingInvites: {}, attending: {}, hosting: {}, completed: {} };
-	vm.message = 'does this work?';
+	vm.events = { pending: {}, attending: {}, hosting: {}, completed: {} };
 
-	//declare methods
+	//declare view methods
 	vm.eventRedirect = function(path, eventID, credentials) {
 		var fullPath = path + '/' + eventID + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
@@ -23,17 +22,32 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 	}
 
 	vm.eventsAreBeingHosted = function() {
-		if(vm.events.hosting) return true;
-		else return false;
+		if(vm.events.hosting) {
+			for(event in vm.events.hosting) {
+				return true;
+			}
+		} else return false;
+	}
+
+	vm.eventInvitationsPending = function() {
+		if(vm.events.pending) {
+			for(event in vm.events.pending) {
+				return true;
+			}
+		} else return false;
+	}
+
+	vm.attendingEvents = function(guestList) {
+		if(vm.events.attending) {
+			for(event in vm.events.attending) {
+				return true;
+			}
+		} else return false;
 	}
 
 	vm.percentRSVPed = function(guestList) {		
 		if(guestList) {
-			var attending = 0;
-			for(i = 0; i < guestList.length; i++) {
-				if(guestList[i].attending == true) attending++;
-			}
-			return attending / guestList.length;
+			return (vm.totalAttending(guestList) / vm.totalInvited(guestList)) * 100;
 		}
 		else return 0;
 	}
@@ -41,17 +55,60 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 	vm.totalAttending = function(guestList) {
 		if(guestList) {
 			var attending = 0;
-			for(i = 0; i < guestList.length; i++) {
-				if(guestList[i].attending == true) attending++;
-			}
+			angular.forEach(guestList, function(guest, id) {
+				if(guest.attending == true) attending++;
+			});
 			return attending;
 		}
 		else return 0;
 	}
 
 	vm.totalInvited = function(guestList) {
-		if(guestList) return guestList.length;
+		if(guestList) {
+			var invited = 0;
+			angular.forEach(guestList, function(guest, id) {
+				invited++;
+			});
+			return invited;
+		}
 		else return 0;
+	}
+
+	vm.acceptEventInvitation = function(event) {
+		$log.info(event.host);
+		$log.info(event.id);
+		//update hosts' lists
+		ref.child('Users').child(event.host).child('hosting').child(event.id).child('guestList').child($routeParams.uid).update({
+			attending: true,
+			status: 'attndng'
+		});
+
+		//update guest's lists
+		//add to the attending list - on the server
+		ref.child('Users').child($routeParams.uid).child('attending').child(event.host).child(event.id).set({
+			id: event.id,
+			host: event.host,
+			eventTimes: {
+				start: vm.events.pending[event.host][event.id].eventTimes.start,
+				end: vm.events.pending[event.host][event.id].eventTimes.end
+			},
+			name: vm.events.pending[event.host][event.id].name
+		});
+		//add to the attending list - in the browser
+		vm.events.attending[event.host][event.id] = {
+			id: event.id,
+			host: event.host,
+			eventTimes: {
+				start: vm.events.pending[event.host][event.id].eventTimes.start,
+				end: vm.events.pending[event.host][event.id].eventTimes.end
+			},
+			name: vm.events.pending[event.host][event.id].name
+		};
+
+		//remove from the pending list - on the server
+		ref.child('Users').child($routeParams.uid).child('pending').child(event.host).child(event.id).remove();
+		//remove from the pending list - in the browser
+		vm.events.pending[event.host][event.id] = {};
 	}
 
 	vm.redirectToHostedEvent = function(eventID) {
@@ -71,9 +128,6 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 		//define the eventID
 		var date = new Date();
 		var eventID = (Date.parse(date) * 10) + Object.keys(vm.events.hosting).length;
- 
-		$log.info('today is: ' + Date.parse(date));
-		$log.info('eventID is: ' + eventID);
 
 		//create event model to start with
 		ref.child('Users').child($routeParams.uid).child('hosting').child(eventID).set({
@@ -95,14 +149,12 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 			//set hosting object equal to the returned value
 			var userProfile = snapshot.val();
 
-			if(userProfile.pendingInvites) allUserEvents.pendingInvites = userProfile.pendingInvites;
+			if(userProfile.pending) allUserEvents.pending = userProfile.pending;
 			if(userProfile.attending) allUserEvents.attending = userProfile.attending;
 			if(userProfile.hosting) allUserEvents.hosting = userProfile.hosting;
 			if(userProfile.completed) allUserEvents.completed = userProfile.completed;
 
 			vm.events = allUserEvents;
-			$log.info('finished uploading');
-			vm.message = 'this is now finished';
 			$scope.$apply();
 
 		}, function(errorObject) {

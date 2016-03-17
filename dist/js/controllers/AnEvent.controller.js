@@ -24,7 +24,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
 	};
 
-	//Methods
+	//Local Methods
 	function utf8_to_b64(str) {
 		return btoa(str);
 	}
@@ -53,7 +53,8 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 				start: vm.event.eventTimes.start,
 				end: vm.event.eventTimes.end
 			},
-			name: vm.event.name
+			name: vm.event.name,
+			host: $routeParams.uid
 		}, function(error) {
 			if(error) $log.info('there was an error' + error);
 		});
@@ -63,6 +64,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		$log.info('adding them to the UNREGISTERED users list ' + userKey);
 		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
 			id: $routeParams.eventId,
+			host: $routeParams.uid,
 			eventTimes: {
 				start: vm.event.eventTimes.start,
 				end: vm.event.eventTimes.end
@@ -73,6 +75,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		});
 	}
 
+	//view Methods
 	vm.submit = function() {
 		$log.info('submitting the form now!');
 	}
@@ -109,7 +112,6 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		if((vm.tempDateTime.end < vm.tempDateTime.start) && target == 'start') vm.tempDateTime.end = vm.tempDateTime.start;
 		if(target == 'start') vm.event.eventTimes.start = dateTimeToUnixTime(dateTime);
 		if(target == 'end') vm.event.eventTimes.end = dateTimeToUnixTime(dateTime);
-		$log.info(dateTime + " changed to " + vm.event.eventTimes[target] + " at " + target);
 	}
 
 	vm.alertMe = function() {
@@ -181,7 +183,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		else if (vm.manageSections[3].active) vm.changeSection(1);
 	}
 
-	vm.addGuestHostsToList = function() {
+	vm.addGuestToHostsList = function() {
 		//declare and initialize local variables
 		var userKey = utf8_to_b64(vm.newGuest.email.address);
 
@@ -189,7 +191,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		if (vm.newGuest.name && vm.newGuest.email.valid) {
 			//is there a guest list already? If not create one
 			if(!vm.event.guestList) {
-				vm.event.guestList = [];
+				vm.event.guestList = {};
 			} else {
 				//if so is this person already on the list?
 				var i =0;
@@ -221,8 +223,13 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 			}
 
 			//add the guest to the list
-			vm.event.guestList.push({attending: false, status:'pending', name: vm.newGuest.name, email:vm.newGuest.email.address});
-			//save the evet
+			vm.event.guestList[registeredUsers[userKey]] = {
+				attending: false, 
+				status:'pending', 
+				name: vm.newGuest.name, 
+				email:vm.newGuest.email.address,
+			};
+			//save the event
 			vm.saveEvent();
 			//clear the temp values
 			cleanNewGuestVariable();
