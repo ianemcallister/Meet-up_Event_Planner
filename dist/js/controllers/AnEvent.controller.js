@@ -47,10 +47,30 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 
 	function inviteARegisteredUser(uid) {
 		$log.info('adding them to the registered users list ' + uid);
+		ref.child('Users').child(uid).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
+			id: $routeParams.eventId,
+			eventTimes: {
+				start: vm.event.eventTimes.start,
+				end: vm.event.eventTimes.end
+			},
+			name: vm.event.name
+		}, function(error) {
+			if(error) $log.info('there was an error' + error);
+		});
 	}
 
 	function inviteAnUnregisteredUser(userKey) {
 		$log.info('adding them to the UNREGISTERED users list ' + userKey);
+		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
+			id: $routeParams.eventId,
+			eventTimes: {
+				start: vm.event.eventTimes.start,
+				end: vm.event.eventTimes.end
+			},
+			name: vm.event.name
+		}, function(error) {
+			if(error) $log.info('there was an error' + error);
+		});
 	}
 
 	vm.submit = function() {
