@@ -77,6 +77,7 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 
 		//create event model to start with
 		ref.child('Users').child($routeParams.uid).child('hosting').child(eventID).set({
+			id: eventID,
 			eventTimes: {
 				start: Date.parse(date),
 				end: Date.parse(date)
