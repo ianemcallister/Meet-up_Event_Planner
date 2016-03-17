@@ -38,6 +38,15 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 		return 10;
 	}
 
+	vm.redirectToHostedEvent = function(eventID) {
+		$log.info('you\'re accessing event ' + eventID);
+		//define credentials
+		var redirectCreds = {uid: eventID, token:$routeParams.token};
+
+		//redirect to the event
+		vm.eventRedirect('/event', eventID, redirectCreds);
+	}
+
 	vm.createNewEvent = function() {
 		$log.info('you\'re creating a new event!');
 		//define credentials
@@ -60,10 +69,6 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 
 		//redirect to the new Event Page
 		vm.eventRedirect('/event', eventID, redirectCreds);
-	}
-
-	vm.redirectToHostedEvent = function(eventObject) {
-		$log.info('the event object is: ' + eventObject);
 	}
 
 	vm.loadAllEvents = function() {
