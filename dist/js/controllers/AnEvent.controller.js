@@ -33,6 +33,13 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		$log.info('submitting the form now!');
 	}
 
+	vm.eventRedirect = function(path, eventID, credentials) {
+		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
+		//redirect
+		$log.info('redirecting to: ' + fullPath);
+		$location.path(fullPath);
+	}
+
 	vm.changeSection = function(targetSection) {
 		for(i = 1; i <=3; i++) {
 			if(i==targetSection) {
@@ -86,12 +93,48 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		}
 	}
 
+	vm.isSectionComplete = function() {
+		if(vm.manageSections[1].active) {
+			if( vm.event.name &&
+				vm.event.type &&
+				vm.event.eventTimes.start &&
+				vm.event.eventTimes.start) vm.manageSections[1].complete = true;
+			else vm.manageSections[1].complete = false;
+		} else if (vm.manageSections[2].active) {
+			if( vm.event.address.city && 
+				vm.event.address.state &&
+				vm.event.address.street01 &&
+				vm.event.address.zip) vm.manageSections[2].complete = true;
+			else vm.manageSections[2].complete = false;
+		} else if (vm.manageSections[3].active) {
+			vm.manageSections[3].complete = true;
+		}
+	}
+
 	vm.saveEvent = function() {
 		vm.event.$save().then(function() {
 			$log.info('event saved');
 		}).catch(function(error) {
 			$log.info('error! ' + error);
 		});
+	}
+
+	vm.saveAndAdvance = function() {
+		vm.event.$save().then(function() {
+			$log.info('event saved');
+		}).catch(function(error) {
+			$log.info('error! ' + error);
+		});
+
+		//check for completenes
+		vm.isSectionComplete();
+
+		if(vm.manageSections[1].complete == true && vm.manageSections[2].complete == true && vm.manageSections[3].complete == true) {
+			var redirectCreds = {uid: $routeParams.eventId, token:$routeParams.token};
+			vm.eventRedirect('/userEvents', $routeParams.uid, redirectCreds);
+		} else if (vm.manageSections[1].active) vm.changeSection(2);
+		else if (vm.manageSections[2].active) vm.changeSection(3);
+		else if (vm.manageSections[3].active) vm.changeSection(1);
 	}
 
 	vm.addGuestToList = function() {
