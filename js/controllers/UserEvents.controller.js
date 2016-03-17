@@ -23,19 +23,35 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 	}
 
 	vm.eventsAreBeingHosted = function() {
-		return true;
+		if(vm.events.hosting) return true;
+		else return false;
 	}
 
-	vm.percentRSVPed = function(guestList) {
-		return 60;
+	vm.percentRSVPed = function(guestList) {		
+		if(guestList) {
+			var attending = 0;
+			for(i = 0; i < guestList.length; i++) {
+				if(guestList[i].attending == true) attending++;
+			}
+			return attending / guestList.length;
+		}
+		else return 0;
 	}
 
 	vm.totalAttending = function(guestList) {
-		return 6;
+		if(guestList) {
+			var attending = 0;
+			for(i = 0; i < guestList.length; i++) {
+				if(guestList[i].attending == true) attending++;
+			}
+			return attending;
+		}
+		else return 0;
 	}
 
 	vm.totalInvited = function(guestList) {
-		return 10;
+		if(guestList) return guestList.length;
+		else return 0;
 	}
 
 	vm.redirectToHostedEvent = function(eventID) {
@@ -77,7 +93,6 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 		ref.child('Users').child($routeParams.uid).on('value', function(snapshot) {
 			//set hosting object equal to the returned value
 			var userProfile = snapshot.val();
-			$log.info(userProfile);
 
 			if(userProfile.pendingInvites) allUserEvents.pendingInvites = userProfile.pendingInvites;
 			if(userProfile.attending) allUserEvents.attending = userProfile.attending;

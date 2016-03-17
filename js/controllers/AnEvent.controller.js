@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('AnEventController', AnEventController);
 
-AnEventController.$inject = ['$log', '$location', '$routeParams', '$firebaseObject', 'userData'];
+AnEventController.$inject = ['$scope', '$log', '$location', '$routeParams', '$firebaseObject', 'userData'];
 
-function AnEventController($log, $location, $routeParams, $firebaseObject, userData) {
+function AnEventController($scope, $log, $location, $routeParams, $firebaseObject, userData) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
@@ -48,6 +48,13 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 	}
 
 	vm.saveEventTime = function(dateTime, target) {
+		//if this event didn't have a start time, create it
+		if(!vm.event.eventTimes) { 
+			vm.event.eventTimes = {start: '', end: ''};
+			vm.event.eventTimes.start = vm.dateTimeToUnixTime(vm.tempDateTime.start); 
+			vm.event.eventTimes.end = vm.dateTimeToUnixTime(vm.tempDateTime.end);
+		}
+
 		if((vm.tempDateTime.end < vm.tempDateTime.start) && target == 'start') vm.tempDateTime.end = vm.tempDateTime.start;
 		if(target == 'start') vm.event.eventTimes.start = vm.dateTimeToUnixTime(dateTime);
 		if(target == 'end') vm.event.eventTimes.end = vm.dateTimeToUnixTime(dateTime);
@@ -98,7 +105,7 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 			}
 			$log.info('adding the guest');
 			//add the guest to the list
-			vm.event.guestList.push({status:'pending', name: vm.newGuest.name, email:vm.newGuest.email.address});
+			vm.event.guestList.push({attending: false, status:'pending', name: vm.newGuest.name, email:vm.newGuest.email.address});
 			//save the evet
 			vm.saveEvent();
 		} else {

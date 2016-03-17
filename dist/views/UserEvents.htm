@@ -30,7 +30,7 @@
 			<tr ng-repeat='hostedEvent in theUserEvents.events.hosting'>
 				<td>{{hostedEvent.eventTimes.start | date: 'MMM, d' }}</td>
 				<td ng-click='theUserEvents.redirectToHostedEvent(hostedEvent.id)'>{{hostedEvent.eventTimes.start | date: 'h:mm a'}} - {{hostedEvent.name}}</td>
-				<td>{{hostedEvent.percentRSVPed(hostedEvent.guestList)}}% ({{hostedEvent.totalAttending(hostedEvent.guestList)}}/{{hostedEvent.totalInvited(hostedEvent.guestList)}})</td>
+				<td>{{theUserEvents.percentRSVPed(hostedEvent.guestList)}}% ({{theUserEvents.totalAttending(hostedEvent.guestList)}}/{{theUserEvents.totalInvited(hostedEvent.guestList)}})</td>
 			</tr>
 		</table>
 	</div>
