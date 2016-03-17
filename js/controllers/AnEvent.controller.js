@@ -58,8 +58,7 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 		$log.info('something changed');
 	}
 
-	vm.areGuestsInvited = function() {
-		//$log.info(vm.event.guestList);
+	vm.guestsAreInvited = function() {
 		if(vm.event.guestList) return true;
 		else return false;
 	}
@@ -80,12 +79,28 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 		}
 	}
 
+	vm.saveEvent = function() {
+		vm.event.$save().then(function() {
+			$log.info('event saved');
+		}).catch(function(error) {
+			$log.info('error! ' + error);
+		});
+	}
+
 	vm.addGuestToList = function() {
 		//if email is valid and name exists
 		if (vm.newGuest.name && vm.newGuest.email.valid) {
 			//check if they are a user on the site
 			//add them to the event guest list
+			//if this is the first guest create the array
+			if(!vm.event.guestList) {
+				vm.event.guestList = [];
+			}
 			$log.info('adding the guest');
+			//add the guest to the list
+			vm.event.guestList.push({status:'pending', name: vm.newGuest.name, email:vm.newGuest.email.address});
+			//save the evet
+			vm.saveEvent();
 		} else {
 			$log.info('you didn\'t enter a name and or email');
 		}
@@ -97,7 +112,5 @@ function AnEventController($log, $location, $routeParams, $firebaseObject, userD
 	
 	//binding to the event
 	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
-
-
 
 }

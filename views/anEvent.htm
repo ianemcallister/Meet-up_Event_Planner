@@ -123,6 +123,7 @@
 					<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToList()'>Add Recipient</div>
 				</div>
 				<div>
+					
 					<strong>Guests Invited</strong>
 					<table class="table table-striped table-border">
 						<tr>
@@ -130,8 +131,8 @@
 							<th class='col-xs-5 col-sm-5'>NAME</th>
 							<th class='col-xs-5 col-sm-5'>EMAIL</th>
 						</tr>
-						<tr ng-if='anEvent.areGuestsInvited()'><td colspan='3'>No Guests Currently Invited</td></tr>
-						<tr ng-repeat='guest in anEvent.tempEvent.tempGuestList'>
+						<tr ng-if='!anEvent.guestsAreInvited()'><td colspan='3'>No Guests Currently Invited</td></tr>
+						<tr ng-repeat='guest in anEvent.event.guestList'>
 							<td>{{guest.status}}</td>
 							<td>{{guest.name}}</td>
 							<td>{{guest.email}}</td>
@@ -141,7 +142,7 @@
 			</div>
 		</div>
 	</div>
-		
+	{{anEvent.event}}
 	<!--Save & return to userEvents-->
 	<div class="row">
 		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.submit()'>Save & Move To Where</div>
