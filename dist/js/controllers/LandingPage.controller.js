@@ -29,6 +29,15 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 		6:{'constraint':"Doesn't have any illegal characters", 'style':{color:'red'}, 'met':false}
 	};
 	
+	//local methods
+	function unixTimeToDateTime(unixTime) {
+		return new Date(parseInt(unixTime));
+	};
+
+	function dateTimeToUnixTime(dateTime) {
+		return Date.parse(dateTime);
+	};
+
 	//define controller methods
 	vm.displayPassReqs = function() {
 		if(vm.newName && vm.newEmail) {
@@ -214,7 +223,7 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 	}
 
 	vm.redirect = function(path, userData) {
-		var fullPath = path + '/' + userData.uid + '/' + userData.token;
+		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$location.path(fullPath);
 		$scope.$apply();
@@ -237,16 +246,31 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					$log.info(userData);
 
 					//save all the data
-					saveUserData.init(userData.uid, userData.provider, userData.token, userData.expires);
+					//saveUserData.init(userData.uid, userData.provider, userData.token, userData.expires);
 
 					//generate the user record
 					var usersRef = ref.child('Users/' + userData.uid);
+					var currentDate = new Date();
 
 					//write new user to the database with bio info
 					usersRef.set({ 
 						'bio': {
 							'name': vm.newName,
 							'email': vm.newEmail
+						},
+						'events': {
+							'pending': {
+								'updated': dateTimeToUnixTime(currentDate)
+							},
+							'hosting': {
+								'updated': dateTimeToUnixTime(currentDate)
+							},
+							'attending': {
+								'updated': dateTimeToUnixTime(currentDate)
+							},
+							'completed': {
+								'updated': dateTimeToUnixTime(currentDate)
+							}
 						}
 					}, function(error) {
 						if(error) {

@@ -1,7 +1,8 @@
 <div class="container-fluid" ng-controller='UserEventsController as theUserEvents'>
 <!--Allow them to create a new event-->
 <div class="row">
-	<h3>Hey ___________</h3>
+	<h3>Hey {{ theUserEvents.currentUserName }}</h3>
+	<p>What would you like to do?</p>
 </div>
 <div class="row">
 	<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='theUserEvents.createNewEvent()'>Create A New Event</div>

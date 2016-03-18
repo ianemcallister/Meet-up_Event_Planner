@@ -6,6 +6,7 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint'); 
 var jasmine = require('gulp-jasmine-phantom'); 
+//var attachFastClick = require('fastclick');
 //var karma = require('karma').server;
 
 var testFiles = [

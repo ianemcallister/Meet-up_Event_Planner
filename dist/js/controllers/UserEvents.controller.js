@@ -2,19 +2,40 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$inject = ['$scope', '$log', '$location', '$routeParams', 'userData'];
+UserEventsController.$inject = ['$scope', '$log', '$location', '$routeParams', '$firebaseObject'];
 
-function UserEventsController($scope, $log, $location, $routeParams, userData) {
+function UserEventsController($scope, $log, $location, $routeParams, $firebaseObject) {
 	var vm = this;
-	var currentUserData = userData;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
+	var userEvents = ref.child('Users').child($routeParams.uid).child('events');
+	var currentUserBio = ref.child('Users').child($routeParams.uid).child('bio');
+	var userEventsSnapshot;
 
-	//declare and initialize local variables
-	vm.events = { pending: {}, attending: {}, hosting: {}, completed: {} };
+	//binding important variables
+	vm.events = $firebaseObject(userEvents);
+
+	currentUserBio.child('name').on('value', function(snapshot) {
+		vm.currentUserName = snapshot.val();
+	}, function(errorObject) {
+		$log.info("The read failed: " + errorObject.code);
+	});
+
+	//declare local methods
+	function unixTimeToDateTime(unixTime) {
+		return new Date(parseInt(unixTime));
+	};
+
+	function dateTimeToUnixTime(dateTime) {
+		return Date.parse(dateTime);
+	};
+
+	function generateEventID(date, noOfEventsAlready) {
+		return (date * 10) + noOfEventsAlready;
+	}
 
 	//declare view methods
-	vm.eventRedirect = function(path, eventID, credentials) {
+	vm.eventRedirect = function(path, eventID) {
 		var fullPath = path + '/' + eventID + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
@@ -22,27 +43,33 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 	}
 
 	vm.eventsAreBeingHosted = function() {
-		if(vm.events.hosting) {
-			for(event in vm.events.hosting) {
-				return true;
+		var eventFound = false;
+		for(element in vm.events.hosting) {
+			if(element != 'updated'){
+				eventFound = true;
 			}
-		} else return false;
+		}
+		return eventFound;
 	}
 
 	vm.eventInvitationsPending = function() {
-		if(vm.events.pending) {
-			for(event in vm.events.pending) {
-				return true;
+		var eventFound = false;
+		for(element in vm.events.pending) {
+			if(element != 'updated'){
+				eventFound = true;
 			}
-		} else return false;
+		}
+		return eventFound;
 	}
 
 	vm.attendingEvents = function(guestList) {
-		if(vm.events.attending) {
-			for(event in vm.events.attending) {
-				return true;
+		var eventFound = false;
+		for(element in vm.events.attending) {
+			if(element != 'updated'){
+				eventFound = true;
 			}
-		} else return false;
+		}
+		return eventFound;
 	}
 
 	vm.percentRSVPed = function(guestList) {		
@@ -78,14 +105,14 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 		$log.info(event.host);
 		$log.info(event.id);
 		//update hosts' lists
-		ref.child('Users').child(event.host).child('hosting').child(event.id).child('guestList').child($routeParams.uid).update({
+		ref.child('Users').child(event.host).child('events').child('hosting').child(event.id).child('guestList').child($routeParams.uid).update({
 			attending: true,
 			status: 'attndng'
 		});
 
 		//update guest's lists
 		//add to the attending list - on the server
-		ref.child('Users').child($routeParams.uid).child('attending').child(event.host).child(event.id).set({
+		userEvents.child('attending').child(event.host).child(event.id).set({
 			id: event.id,
 			host: event.host,
 			eventTimes: {
@@ -106,69 +133,56 @@ function UserEventsController($scope, $log, $location, $routeParams, userData) {
 		};
 
 		//remove from the pending list - on the server
-		ref.child('Users').child($routeParams.uid).child('pending').child(event.host).child(event.id).remove();
+		userEvents.child('pending').child(event.host).child(event.id).remove();
 		//remove from the pending list - in the browser
 		vm.events.pending[event.host][event.id] = {};
 	}
 
 	vm.redirectToHostedEvent = function(eventID) {
 		$log.info('you\'re accessing event ' + eventID);
-		//define credentials
-		var redirectCreds = {uid: eventID, token:$routeParams.token};
 
 		//redirect to the event
-		vm.eventRedirect('/event', eventID, redirectCreds);
+		vm.eventRedirect('/event', eventID);
 	}
 
 	vm.createNewEvent = function() {
 		$log.info('you\'re creating a new event!');
-		//define credentials
-		var redirectCreds = {uid: currentUserData.getUID(), token:currentUserData.getToken()}
 
 		//define the eventID
-		var date = new Date();
-		var eventID = (Date.parse(date) * 10) + Object.keys(vm.events.hosting).length;
+		var date = new Date(); 
+			if(vm.events.hosting) noOfEventsAlready = Object.keys(vm.events.hosting).length;
+			else noOfEventsAlready = 0;
+		var eventID = generateEventID(dateTimeToUnixTime(date), noOfEventsAlready);
 
 		//create event model to start with
-		ref.child('Users').child($routeParams.uid).child('hosting').child(eventID).set({
+		vm.events.hosting[eventID] = {
 			id: eventID,
 			eventTimes: {
-				start: Date.parse(date),
-				end: Date.parse(date)
-			}
+				start: dateTimeToUnixTime(date),
+				end: dateTimeToUnixTime(date)
+			},
+			host: $routeParams.uid
+		};
+
+		//delete the 'updated' field
+		if(vm.events.hosting.updated == '') {
+			$log.info('deleting the updated field');
+			delete vm.events.hosting.updated;
+		}
+		//save the new event
+		vm.events.$save().then(function() {
+			$log.info('Profile saved!');
+			$log.info(vm.events.hosting[eventID]);
+		}).catch(function(error) {
+			$log.info('Error!');
 		});
 
 		//redirect to the new Event Page
-		vm.eventRedirect('/event', eventID, redirectCreds);
-	}
-
-	vm.loadAllEvents = function() {
-		var allUserEvents = { pendingInvites: [], attending: [], hosting: [], completed: [] };
-
-		ref.child('Users').child($routeParams.uid).on('value', function(snapshot) {
-			//set hosting object equal to the returned value
-			var userProfile = snapshot.val();
-
-			if(userProfile.pending) allUserEvents.pending = userProfile.pending;
-			if(userProfile.attending) allUserEvents.attending = userProfile.attending;
-			if(userProfile.hosting) allUserEvents.hosting = userProfile.hosting;
-			if(userProfile.completed) allUserEvents.completed = userProfile.completed;
-
-			vm.events = allUserEvents;
-			$scope.$apply();
-
-		}, function(errorObject) {
-			if(errorObject) {
-				$log.info("The read failed: " + errorObject.code);
-			}
-		});
-
+		vm.eventRedirect('/event', eventID);
 	}
 
 	//execute scripts
 	$log.info('into the user Events controller');
-
-	//load hosted events
-	vm.loadAllEvents();
+	$log.info(vm.events);
 
 }
