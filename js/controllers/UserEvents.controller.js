@@ -155,13 +155,17 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 		var eventID = generateEventID(dateTimeToUnixTime(date), noOfEventsAlready);
 
 		//create event model to start with
+		//$log.info(vm.events['hosting']);
 		vm.events.hosting[eventID] = {
 			id: eventID,
 			eventTimes: {
 				start: dateTimeToUnixTime(date),
 				end: dateTimeToUnixTime(date)
 			},
-			host: $routeParams.uid
+			host: { 
+				id: $routeParams.uid,
+				name: vm.currentUserName
+			}
 		};
 
 		//delete the 'updated' field

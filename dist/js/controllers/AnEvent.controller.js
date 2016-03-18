@@ -8,14 +8,15 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
-	
+	var userEvents = ref.child('Users').child($routeParams.hostId).child('events').child('hosting').child($routeParams.eventId)
 	
 	//declare and initialize local variables
 	vm.tempDateTime = {start: new Date(), end: new Date()};
 	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
+	vm.isTheHost = false;
 
 	//binding to the event
-	vm.event = $firebaseObject(ref.child('Users').child($routeParams.uid).child('hosting').child($routeParams.eventId))
+	vm.event = $firebaseObject(userEvents)
 	var registeredUsers = $firebaseObject(ref.child('Uids'));
 
 	vm.manageSections = {
@@ -62,9 +63,9 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 
 	function inviteAnUnregisteredUser(userKey) {
 		$log.info('adding them to the UNREGISTERED users list ' + userKey);
-		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
+		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.hostId).child($routeParams.eventId).set({
 			id: $routeParams.eventId,
-			host: $routeParams.uid,
+			host: $routeParams.hostId,
 			eventTimes: {
 				start: vm.event.eventTimes.start,
 				end: vm.event.eventTimes.end
@@ -75,13 +76,18 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		});
 	}
 
+	function checkUserAccess(uid) {
+		//check event host
+		return true;
+	}
+
 	//view Methods
 	vm.submit = function() {
 		$log.info('submitting the form now!');
 	}
 
-	vm.eventRedirect = function(path, eventID, credentials) {
-		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
+	vm.eventRedirect = function(path, eventID) {
+		var fullPath = path + '/' + $routeParams.hostId + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);
@@ -105,17 +111,13 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		//if this event didn't have a start time, create it
 		if(!vm.event.eventTimes) { 
 			vm.event.eventTimes = {start: '', end: ''};
-			vm.event.eventTimes.start = vm.dateTimeToUnixTime(vm.tempDateTime.start); 
-			vm.event.eventTimes.end = vm.dateTimeToUnixTime(vm.tempDateTime.end);
+			vm.event.eventTimes.start = dateTimeToUnixTime(vm.tempDateTime.start); 
+			vm.event.eventTimes.end = dateTimeToUnixTime(vm.tempDateTime.end);
 		}
 
 		if((vm.tempDateTime.end < vm.tempDateTime.start) && target == 'start') vm.tempDateTime.end = vm.tempDateTime.start;
 		if(target == 'start') vm.event.eventTimes.start = dateTimeToUnixTime(dateTime);
 		if(target == 'end') vm.event.eventTimes.end = dateTimeToUnixTime(dateTime);
-	}
-
-	vm.alertMe = function() {
-		$log.info('something changed');
 	}
 
 	vm.guestsAreInvited = function() {
@@ -176,8 +178,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		vm.isSectionComplete();
 
 		if(vm.manageSections[1].complete == true && vm.manageSections[2].complete == true && vm.manageSections[3].complete == true) {
-			var redirectCreds = {uid: $routeParams.eventId, token:$routeParams.token};
-			vm.eventRedirect('/userEvents', $routeParams.uid, redirectCreds);
+			vm.eventRedirect('/userEvents', $routeParams.hostId);
 		} else if (vm.manageSections[1].active) vm.changeSection(2);
 		else if (vm.manageSections[2].active) vm.changeSection(3);
 		else if (vm.manageSections[3].active) vm.changeSection(1);
@@ -208,7 +209,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 			//is this guest a registered user?
 			if(registeredUsers[userKey]) {
 				//is the registered user the host?
-				if(registeredUsers[userKey] == $routeParams.uid) {
+				if(registeredUsers[userKey] == $routeParams.hostId) {
 					$log.info('tried to register the host');
 					cleanNewGuestVariable();
 					return;
@@ -216,19 +217,29 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 				else {
 					//add them to the appropriate registered users' list of event invites
 					inviteARegisteredUser(registeredUsers[userKey]);
+
+					//add the guest to the list
+					vm.event.guestList[registeredUsers[userKey]] = {
+						attending: false, 
+						status:'pending', 
+						name: vm.newGuest.name, 
+						email:vm.newGuest.email.address,
+					};					
 				}
 			} else {
 				//add the invite to the non-registered users list of event invites
 				inviteAnUnregisteredUser(userKey);
+
+				//add the guest to the list
+				vm.event.guestList[userKey] = {
+						attending: false, 
+						status:'pending', 
+						name: vm.newGuest.name, 
+						email:vm.newGuest.email.address,
+				};
 			}
 
-			//add the guest to the list
-			vm.event.guestList[registeredUsers[userKey]] = {
-				attending: false, 
-				status:'pending', 
-				name: vm.newGuest.name, 
-				email:vm.newGuest.email.address,
-			};
+
 			//save the event
 			vm.saveEvent();
 			//clear the temp values
@@ -239,7 +250,10 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	//execution
-	$log.info($routeParams.uid);
+	$log.info($routeParams.hostId);
 	$log.info($routeParams.eventId);
+
+	//check user to determine state
+	vm.isTheHost = checkUserAccess($routeParams.hostId);
 	
 }
