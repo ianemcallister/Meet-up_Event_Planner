@@ -8,7 +8,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
-	var userEvents = ref.child('Users').child($routeParams.uid).child('events').child('hosting').child($routeParams.eventId)
+	var userEvents = ref.child('Users').child($routeParams.hostId).child('events').child('hosting').child($routeParams.eventId)
 	
 	//declare and initialize local variables
 	vm.tempDateTime = {start: new Date(), end: new Date()};
@@ -92,9 +92,17 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		});
 	}
 
-	function checkUserAccess(uid) {
+	function checkForHost() {
 		//check event host
-		return true;
+		var authData = ref.getAuth();
+
+		if(authData.uid == $routeParams.hostId) {
+			$log.info('is the host');
+			return true;
+		} else {
+			$log.info('not the host');
+			return false;
+		}
 	}
 
 	//view Methods
@@ -270,6 +278,6 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	$log.info($routeParams.eventId);
 
 	//check user to determine state
-	vm.isTheHost = checkUserAccess($routeParams.uid);
+	vm.isTheHost = checkForHost();
 	
 }

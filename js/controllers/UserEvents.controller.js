@@ -35,7 +35,7 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 	}
 
 	//declare view methods
-	vm.eventRedirect = function(path, eventID, hostId) {
+	function eventRedirect(path, eventID, hostId) {
 		var fullPath = path + '/' + eventID + '/' + hostId + '/'+ $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
@@ -144,17 +144,19 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 		$log.info('you\'re accessing event ' + eventID);
 
 		//redirect to the event
-		vm.eventRedirect('/event', eventID, $routeParams.uid);
+		eventRedirect('/event', eventID, $routeParams.uid);
 	}
 
-	vm.redirectTo3rdPartyEvent = function(eventID, inviteStatus) {
-		$log.info('you\'re accessing event ' + eventID);
+	vm.redirectTo3rdPartyEvent = function(event, inviteStatus) {
+		$log.info(event);
 
 		//getting the host's Id
 		if(inviteStatus == 'pending') {
-			//vm.events['pending']
-		} else if(inviteStatus == 'attending') {
+			$log.info('accessing from a pending invitation');
+			eventRedirect('/event', event.id, event.host);
 
+		} else if(inviteStatus == 'attending') {
+			$log.info('accessing from an rsvped invitation');
 		}
 
 		//redirecting to the event
@@ -198,7 +200,7 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 		});
 
 		//redirect to the new Event Page
-		vm.eventRedirect('/event', eventID);
+		eventRedirect('/event', eventID, $routeParams.uid);
 	}
 
 	//execute scripts

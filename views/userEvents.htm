@@ -24,7 +24,7 @@
 			<tbody ng-repeat='host in theUserEvents.events.pending'>
 				<tr ng-repeat='event in host' ng-if='event'>
 					<td>{{event.eventTimes.start | date: 'MMM, d' }}</td>
-					<td>{{event.name}}</td>
+					<td ng-click='theUserEvents.redirectTo3rdPartyEvent(event, "pending")'>{{event.name}}</td>
 					<td class='btn btn-primary col-xs-3 col-sm-3' ng-click='theUserEvents.acceptEventInvitation(event)' style='background-color:#428bca'>Accept</td>
 				</tr>
 			</tbody>
