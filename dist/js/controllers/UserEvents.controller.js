@@ -153,6 +153,7 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 		//getting the host's Id
 		if(inviteStatus == 'pending') {
 			$log.info('accessing from a pending invitation');
+			$log.info(event);
 			eventRedirect('/event', event.id, event.host);
 
 		} else if(inviteStatus == 'attending') {

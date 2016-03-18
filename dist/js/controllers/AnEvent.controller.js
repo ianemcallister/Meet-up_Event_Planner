@@ -34,6 +34,10 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
     	return atob(str);
 	}
 
+	function dateTimeToUnixTime(dateTime) {
+		return Date.parse(dateTime);
+	}
+
 	function cleanNewGuestVariable() {
 		vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
 	}
@@ -119,7 +123,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	vm.backToUserEvents = function() {
 		$location.path('/userEvents/' + $routeParams.uid + '/' + $routeParams.token);
 	}
-	
+
 	vm.eventRedirect = function(path, eventID) {
 		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
@@ -294,7 +298,51 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	vm.guestWillAttend = function(response) {
-		$log.info(response);
+		var currentUser = ref.child('Users').child($routeParams.uid).child('events');
+		var totalPendingInvitations = 0;
+		var removeAttendingUpdated = false;
+		//change attending status in host's guestList
+		vm.event.guestList[$routeParams.uid].attending = response;
+		//get the invitation details
+		currentUser.child('pending').on('value', function(snapshot) {
+			var invitations = snapshot.val();
+			var thisInvitation = invitations[$routeParams.hostId][$routeParams.eventId];
+			$log.info(invitations);
+			$log.info(invitations[$routeParams.hostId]);
+			$log.info(invitations[$routeParams.hostId][$routeParams.eventId]);
+			for(invitation in invitations) {
+				totalPendingInvitations++;
+			}
+			$log.info("total attending: " + totalPendingInvitations);
+			//add the event to the guest's attending list
+			if(response) currentUser.child('attending').child($routeParams.hostId).child($routeParams.eventId).set(thisInvitation, function(error) {
+				if(error) $log.info(error);
+			});
+		});
+		//if the updated placeholder was on the attending list remove it
+		currentUser.child('attending').on('value', function(snapshot) {
+			var attendingList = snapshot.val();
+			$log.info('this is the attending list');
+			$log.info(attendingList);
+			if(attendingList.updated) removeAttendingUpdated = true;
+		}, function(error) {
+			if(error) $log.info(error);
+		});
+		//if this is the last pending event on the guest's pending list, add the updated placeholder
+		if(totalPendingInvitations < 2) {
+			var currentDate = new Date();
+			currentUser.child('pending').update({
+				updated: dateTimeToUnixTime(currentDate)
+			}, function(error) {
+				if(error) $log.info(error);
+			});
+		}
+		//remove the event from the guest's pending list
+		currentUser.child('pending').child($routeParams.hostId).remove();
+		//if(removeAttendingUpdated) currentUser.child('attending').child('updated').remove();
+		//save changes
+		vm.event.$save();
+
 	}
 
 	//execution
