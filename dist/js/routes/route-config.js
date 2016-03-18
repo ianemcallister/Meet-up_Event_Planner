@@ -19,7 +19,7 @@ function config($routeProvider) {
         controller: 'UserEventsController',
         controllerAs: 'vm'
     })
-    .when('/event/:eventId?/:hostId?/:token?', {
+    .when('/event/:eventId?/:hostId?/:uid?/:token?', {
         templateUrl: 'views/anEvent.htm',
         controller: 'AnEventController',
         controllerAs: 'vm'

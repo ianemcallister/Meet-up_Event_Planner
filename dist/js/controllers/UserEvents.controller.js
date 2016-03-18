@@ -35,8 +35,8 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 	}
 
 	//declare view methods
-	vm.eventRedirect = function(path, eventID) {
-		var fullPath = path + '/' + eventID + '/' + $routeParams.uid + '/' + $routeParams.token;
+	vm.eventRedirect = function(path, eventID, hostId) {
+		var fullPath = path + '/' + eventID + '/' + hostId + '/'+ $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);
@@ -102,6 +102,7 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 	}
 
 	vm.acceptEventInvitation = function(event) {
+		/*
 		$log.info(event.host);
 		$log.info(event.id);
 		//update hosts' lists
@@ -136,13 +137,28 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 		userEvents.child('pending').child(event.host).child(event.id).remove();
 		//remove from the pending list - in the browser
 		vm.events.pending[event.host][event.id] = {};
+		*/
 	}
 
 	vm.redirectToHostedEvent = function(eventID) {
 		$log.info('you\'re accessing event ' + eventID);
 
 		//redirect to the event
-		vm.eventRedirect('/event', eventID);
+		vm.eventRedirect('/event', eventID, $routeParams.uid);
+	}
+
+	vm.redirectTo3rdPartyEvent = function(eventID, inviteStatus) {
+		$log.info('you\'re accessing event ' + eventID);
+
+		//getting the host's Id
+		if(inviteStatus == 'pending') {
+			//vm.events['pending']
+		} else if(inviteStatus == 'attending') {
+
+		}
+
+		//redirecting to the event
+
 	}
 
 	vm.createNewEvent = function() {

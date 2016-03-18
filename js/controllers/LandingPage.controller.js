@@ -2,12 +2,13 @@ angular
     .module('meetUpEventApp')
     .controller('LandingPageController', LandingPageController);
 
-LandingPageController.$inject = ['$log', '$location', '$document', '$scope', 'userData'];
+LandingPageController.$inject = ['$scope', '$log', '$location', '$document'];
 
-function LandingPageController($log, $location, $document, $scope, userData) {
+function LandingPageController($scope, $log, $location, $document) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var authData = {};
+	var currentUserData = {};
 
 	//define local variables
 	vm.showRequirnments = false;
@@ -30,13 +31,21 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 	};
 	
 	//local methods
+	function utf8_to_b64(str) {
+		return btoa(str);
+	}
+
+	function b64_to_utf8(str) {
+    	return atob(str);
+	}
+
 	function unixTimeToDateTime(unixTime) {
 		return new Date(parseInt(unixTime));
-	};
+	}
 
 	function dateTimeToUnixTime(dateTime) {
 		return Date.parse(dateTime);
-	};
+	}
 
 	//define controller methods
 	vm.displayPassReqs = function() {
@@ -222,9 +231,10 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 		vm.checkUserEmail();
 	}
 
-	vm.redirect = function(path, userData) {
-		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
+	function redirect(path, userData) {
+		var fullPath = path + '/' + currentUserData.uid + '/' + currentUserData.token;
 		//redirect
+		$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);
 		$scope.$apply();
 	}
@@ -246,8 +256,8 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					$log.info(userData);
 
 					//save all the data
-					//saveUserData.init(userData.uid, userData.provider, userData.token, userData.expires);
-
+					currentUserData = userData;
+					
 					//generate the user record
 					var usersRef = ref.child('Users/' + userData.uid);
 					var currentDate = new Date();
@@ -279,10 +289,14 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 							$log.info('Data saved successfully.');
 						}
 					});
-					//out of the databse call
+					//add this user to the list of registered users
+					ref.child('Uids').child(utf8_to_b64(vm.newEmail)).set(currentUserData.uid, function(error) {
+						if(error) $log.info("Data could not be saved. " + error);
+						else $log.info("uid created sucessfully.");
+					});
 
 					//redirect to UserInformation
-					vm.redirect('/userInformation', userData);
+					redirect('/userInformation', currentUserData);
 				}
 			});
 
@@ -304,16 +318,16 @@ function LandingPageController($log, $location, $document, $scope, userData) {
 					$log.info('Error Logging In: ' + error);
 				} else {
 					$log.info('Logged In successfully: ' + authData.uid);
-
+					$log.info(authData);
 					//save all the data
-					saveUserData.init(authData.uid, authData.provider, authData.token, authData.expires);
+					currentUserData = authData;
 
 					//load user bio
 					
 					//load user events
 
 					//redirect
-					vm.redirect('/userInformation', authData);
+					redirect('/userInformation', currentUserData);
 
 				}
 			});

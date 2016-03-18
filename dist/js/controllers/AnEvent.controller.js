@@ -8,7 +8,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
-	var userEvents = ref.child('Users').child($routeParams.hostId).child('events').child('hosting').child($routeParams.eventId)
+	var userEvents = ref.child('Users').child($routeParams.uid).child('events').child('hosting').child($routeParams.eventId)
 	
 	//declare and initialize local variables
 	vm.tempDateTime = {start: new Date(), end: new Date()};
@@ -48,7 +48,8 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 
 	function inviteARegisteredUser(uid) {
 		$log.info('adding them to the registered users list ' + uid);
-		ref.child('Users').child(uid).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
+		//set the new event
+		ref.child('Users').child(uid).child('events').child('pending').child($routeParams.uid).child($routeParams.eventId).set({
 			id: $routeParams.eventId,
 			eventTimes: {
 				start: vm.event.eventTimes.start,
@@ -59,13 +60,28 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		}, function(error) {
 			if(error) $log.info('there was an error' + error);
 		});
+		//if there was an updated place holder, remove it
+		ref.child('Users').child(uid).child('events').child('pending').once('value', function(snapshot) {
+			var checkForPlaceholder = snapshot.val()
+			$log.info(snapshot.val());
+
+			if(checkForPlaceholder.updated) {
+				$log.info('deleting updated');
+				ref.child('Users').child(uid).child('events').child('pending').child('updated').remove(function(errorObject) {
+					if(errorObject) $log.info("Deleting failed: " + errorObject.code);
+				});
+			} else $log.info('nothing to do');
+
+		}, function(errorObject) {
+			if(errorObject) $log.info("The read failed: " + errorObject.code);
+		});
 	}
 
 	function inviteAnUnregisteredUser(userKey) {
 		$log.info('adding them to the UNREGISTERED users list ' + userKey);
-		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.hostId).child($routeParams.eventId).set({
+		ref.child('UnregisteredUsers').child(userKey).child('pending').child($routeParams.uid).child($routeParams.eventId).set({
 			id: $routeParams.eventId,
-			host: $routeParams.hostId,
+			host: $routeParams.uid,
 			eventTimes: {
 				start: vm.event.eventTimes.start,
 				end: vm.event.eventTimes.end
@@ -87,7 +103,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	vm.eventRedirect = function(path, eventID) {
-		var fullPath = path + '/' + $routeParams.hostId + '/' + $routeParams.token;
+		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
 		$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);
@@ -178,7 +194,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		vm.isSectionComplete();
 
 		if(vm.manageSections[1].complete == true && vm.manageSections[2].complete == true && vm.manageSections[3].complete == true) {
-			vm.eventRedirect('/userEvents', $routeParams.hostId);
+			vm.eventRedirect('/userEvents', $routeParams.uid);
 		} else if (vm.manageSections[1].active) vm.changeSection(2);
 		else if (vm.manageSections[2].active) vm.changeSection(3);
 		else if (vm.manageSections[3].active) vm.changeSection(1);
@@ -209,7 +225,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 			//is this guest a registered user?
 			if(registeredUsers[userKey]) {
 				//is the registered user the host?
-				if(registeredUsers[userKey] == $routeParams.hostId) {
+				if(registeredUsers[userKey] == $routeParams.uid) {
 					$log.info('tried to register the host');
 					cleanNewGuestVariable();
 					return;
@@ -250,10 +266,10 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	//execution
-	$log.info($routeParams.hostId);
+	$log.info($routeParams.uid);
 	$log.info($routeParams.eventId);
 
 	//check user to determine state
-	vm.isTheHost = checkUserAccess($routeParams.hostId);
+	vm.isTheHost = checkUserAccess($routeParams.uid);
 	
 }
