@@ -1,7 +1,11 @@
 <div class="container-fluid" ng-controller='AnEventController as anEvent'>
+	<!--To return to events page-->
+	<div class="row">
+		<strong style='color: #428bca' ng-click='anEvent.backToUserEvents()'>< Back to Events</strong>
+	</div>
 	<!--If this is an existing event show the tracking tool bar-->
 	<!--Progress Bar-->
-	<div class="row">
+	<div class="row" ng-if='anEvent.showIfHost'>
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[1].style' ng-click='anEvent.changeSection(1)'><strong>When?</strong></div>
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[2].style' ng-click='anEvent.changeSection(2)'>Where?</div>
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[3].style' ng-click='anEvent.changeSection(3)'>Who?</div>
@@ -13,17 +17,20 @@
 	</div>
 	<!--Section 1: When-->
 	<div ng-if='anEvent.manageSections[1].active'>
-		<h4>What & When</h4>
 		<!--Name of the event-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
+			<h4>What & When</h4>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventName">Event Name:
 					<input type="text" id='eventName' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event'>
 				</label>
 			</div>
 		</div>
+		<div class='row' ng-if='!anEvent.showIfHost'>
+			<h3>{{anEvent.event.name}}</h3>
+		</div>
 		<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventTypePicker">Type of Event:
 					<select name="eventTypePicker" id="eventTypePicker" ng-model='anEvent.event.type' ng-change='anEvent.event.$save()'>
@@ -41,15 +48,20 @@
 			</div>
 		</div>
 		<!--Event host (could be an individual’s name or an organization)-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventHost">Event Host:
 					<input type="text" id='eventHost' ng-model='anEvent.event.host.name' ng-change='anEvent.event.$save()' placeholder="e.g. Will Smith">
 				</label>
 			</div>
 		</div>
+		<!--For Guests display event type and host in same line & event message-->
+		<div class="row" ng-if='!anEvent.showIfHost'>
+			<p>{{anEvent.event.type}} hosted by {{anEvent.event.host.name}}</p>
+			<p><i>{{anEvent.event.message}}</i></p>
+		</div>
 		<!--Event start date and time-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventStart">Start Time:
 					<input type="datetime-local" id='eventStart' ng-model='anEvent.tempDateTime.start' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")'>
@@ -57,15 +69,25 @@
 			</div>
 		</div>
 		<!--Event end date and time-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventEnd">Ends At:
 					<input type="datetime-local" id='eventEnd' ng-model='anEvent.tempDateTime.end' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")'>
 				</label>
 			</div>
 		</div>
+		<!--For Guests display event start and end in same line-->
+		<div class="row" ng-if='!anEvent.showIfHost'>
+			<div class="col-xs-2 col-sm-2" style='padding-left: 0px;'>
+				<strong>When:</strong>
+			</div>
+			<div class="col-xs-10 col-sm-10" style='margin-bottom: 10px;'>
+				{{anEvent.unixTimeToDateTime(anEvent.event.eventTimes.start) | date:'h:mm a'}} - 
+				{{anEvent.unixTimeToDateTime(anEvent.event.eventTimes.end) | date:'h:mm a'}}
+			</div>
+		</div>
 		<!--Optional message to the guests with additional information about the event-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventMessage"><i>(Optional)</i> Event Message:
 					<input type="text" id='eventMessage' ng-model='anEvent.event.message' ng-change='anEvent.event.$save()'  placeholder="This'll be the best event!">
@@ -77,7 +99,7 @@
 	<!--Section 2: Where-->
 	<div ng-if='anEvent.manageSections[2].active'>
 		<!--Location-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<h4>Location</h4>
 				<label for="eventStreet01">Street:
@@ -100,8 +122,19 @@
 				</label>
 			</div>
 		</div>
+		<div class="row" ng-if='!anEvent.showIfHost'>
+			<div class="col-xs-2 col-sm-2" style='padding-left: 0px;'>
+				<strong>Where: </strong>
+			</div>
+			<div class="col-xs-10 col-sm-10" style='margin-bottom: 10px;'>
+				{{anEvent.event.address.street01}} <br>
+				<span ng-if='anEvent.event.address.street02'>{{anEvent.event.address.street02}} <br></span>
+				<span ng-if='anEvent.event.address.street03'>{{anEvent.event.address.street03}} <br></span>
+				<span>{{anEvent.event.address.city}}, {{anEvent.event.address.state}} {{anEvent.event.address.zip}}</span>
+			</div>
+		</div>
 		<!--Map Goes Here-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			This will be the map
 		</div>
 	</div>
@@ -109,7 +142,7 @@
 	<!--Section 3: Who-->
 	<div ng-if='anEvent.manageSections[3].active'>
 		<!--Guest list-->
-		<div class="row">
+		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<h4>Guest List</h4>
 				<div>
@@ -141,9 +174,24 @@
 				</div>
 			</div>
 		</div>
+		<div class="row" ng-if='!anEvent.showIfHost'>
+			<div class="col-xs-2 col-sm-2" style='padding-left: 0px;'>
+				<strong>Guests:</strong>
+			</div>
+			<div class="col-xs-10 col-sm-10" style='margin-bottom: 10px;'>
+				<div class="" ng-repeat='guest in anEvent.event.guestList'>
+					<!--Maybe add this later <strong ng-if='guest.email == '>You</strong>-->
+					<span>{{guest.name}} ({{guest.status}})</span>
+				</div>
+			</div>
+		</div>
 	</div>
-	<!--Save & return to userEvents-->
-	<div class="row">
+	<!--Call to Action: Save & return to userEvents OR invite guest to RSVP-->
+	<div class="row" ng-if='anEvent.showIfHost'>
 		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.saveAndAdvance()'>Save & Move To Where</div>
+	</div>
+	<div class="row" ng-if='!anEvent.showIfHost'>
+		<div class="col-xs-6 col-sm-6 btn btn-success" ng-click='anEvent.guestWillAttend(true)'>I Will Attend</div>
+		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)'>Decline Invitation</div>
 	</div>
 </div>

@@ -13,7 +13,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	//declare and initialize local variables
 	vm.tempDateTime = {start: new Date(), end: new Date()};
 	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
-	vm.isTheHost = false;
+	vm.showIfHost = false;
 
 	//binding to the event
 	vm.event = $firebaseObject(userEvents)
@@ -33,14 +33,6 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	function b64_to_utf8(str) {
     	return atob(str);
 	}
-
-	function unixTimeToDateTime(unixTime) {
-		return new Date(parseInt(unixTime));
-	};
-
-	function dateTimeToUnixTime(dateTime) {
-		return Date.parse(dateTime);
-	};
 
 	function cleanNewGuestVariable() {
 		vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
@@ -105,11 +97,29 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		}
 	}
 
-	//view Methods
+	function openAllSections() {
+		vm.manageSections[1].active = true;
+		vm.manageSections[2].active = true;
+		vm.manageSections[3].active = true;
+	}
+
+	//view Method
+	vm.unixTimeToDateTime = function (unixTime) {
+		return new Date(parseInt(unixTime));
+	};
+
+	vm.dateTimeToUnixTime = function (dateTime) {
+		return Date.parse(dateTime);
+	};
+
 	vm.submit = function() {
 		$log.info('submitting the form now!');
 	}
 
+	vm.backToUserEvents = function() {
+		$location.path('/userEvents/' + $routeParams.uid + '/' + $routeParams.token);
+	}
+	
 	vm.eventRedirect = function(path, eventID) {
 		var fullPath = path + '/' + $routeParams.uid + '/' + $routeParams.token;
 		//redirect
@@ -135,13 +145,13 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		//if this event didn't have a start time, create it
 		if(!vm.event.eventTimes) { 
 			vm.event.eventTimes = {start: '', end: ''};
-			vm.event.eventTimes.start = dateTimeToUnixTime(vm.tempDateTime.start); 
-			vm.event.eventTimes.end = dateTimeToUnixTime(vm.tempDateTime.end);
+			vm.event.eventTimes.start = vm.dateTimeToUnixTime(vm.tempDateTime.start); 
+			vm.event.eventTimes.end = vm.dateTimeToUnixTime(vm.tempDateTime.end);
 		}
 
 		if((vm.tempDateTime.end < vm.tempDateTime.start) && target == 'start') vm.tempDateTime.end = vm.tempDateTime.start;
-		if(target == 'start') vm.event.eventTimes.start = dateTimeToUnixTime(dateTime);
-		if(target == 'end') vm.event.eventTimes.end = dateTimeToUnixTime(dateTime);
+		if(target == 'start') vm.event.eventTimes.start = vm.dateTimeToUnixTime(dateTime);
+		if(target == 'end') vm.event.eventTimes.end = vm.dateTimeToUnixTime(dateTime);
 	}
 
 	vm.guestsAreInvited = function() {
@@ -170,16 +180,26 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 			if( vm.event.name &&
 				vm.event.type &&
 				vm.event.eventTimes.start &&
-				vm.event.eventTimes.start) vm.manageSections[1].complete = true;
+				vm.event.eventTimes.start) {
+				$log.info('setting section 1 to green');
+				vm.manageSections[1].complete = true;
+				vm.manageSections[1].style['background-color'] = 'green';
+			}
 			else vm.manageSections[1].complete = false;
 		} else if (vm.manageSections[2].active) {
 			if( vm.event.address.city && 
 				vm.event.address.state &&
 				vm.event.address.street01 &&
-				vm.event.address.zip) vm.manageSections[2].complete = true;
+				vm.event.address.zip) {
+				$log.info('setting section 2 to green');
+				vm.manageSections[2].complete = true;
+				vm.manageSections[2].style['background-color'] = 'green';
+			}
 			else vm.manageSections[2].complete = false;
 		} else if (vm.manageSections[3].active) {
+			$log.info('setting section 2 to green');
 			vm.manageSections[3].complete = true;
+			vm.manageSections[3].style['background-color'] = 'green';
 		}
 	}
 
@@ -273,11 +293,15 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		}
 	}
 
+	vm.guestWillAttend = function(response) {
+		$log.info(response);
+	}
+
 	//execution
 	$log.info($routeParams.uid);
 	$log.info($routeParams.eventId);
 
 	//check user to determine state
-	vm.isTheHost = checkForHost();
-	
+	vm.showIfHost = checkForHost();
+	if(!vm.showIfHost) openAllSections();
 }
