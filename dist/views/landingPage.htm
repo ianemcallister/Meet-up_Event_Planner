@@ -10,7 +10,7 @@
 		<div class="col-xs-12 col-sm-12">
 			<h4>Create an Account</h4>
 			<p>It's easy, just sign up here!</p>
-				<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name:<input type="text" id='newName' ng-model='recruitUsers.newName' ng-keyup='recruitUsers.checkNewName()' required autocomplete="name"  ng-change='recruitUsers.update()' placeholder='e.g. Hugh Jackman'></label>
+				<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name:<input type="text" id='newName' ng-model='recruitUsers.newName' ng-keyup='recruitUsers.checkNewName()' required autocomplete="name"  ng-change='recruitUsers.update()' placeholder='e.g. Hugh Jackman' autofocus></label>
 				<label for='newEmail' ng-style='recruitUsers.validNewEmail.style'>Email:<input type="email" id='newEmail' ng-model='recruitUsers.newEmail' ng-keyup='recruitUsers.checkNewEmail()' required autocomplete="email"  ng-change='recruitUsers.update()' placeholder='e.g. hugh.jackman@gmail.com'></label>
 				<label for='newPassword' ng-style='recruitUsers.securePassword.style'>Password:<input type="password" id='newPassword' ng-model='recruitUsers.newPassword' ng-focus='recruitUsers.displayPassReqs()' ng-keyup='recruitUsers.checkNewPasswords()' placeholder='**********'></label>
 				<div ng-if='recruitUsers.showRequirnments' id="passReqs">

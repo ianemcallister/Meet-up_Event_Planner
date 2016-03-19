@@ -22,7 +22,7 @@
 			<h4>What & When</h4>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventName">Event Name:
-					<input type="text" id='eventName' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event'>
+					<input type="text" id='eventName' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event' autofocus>
 				</label>
 			</div>
 		</div>
@@ -195,4 +195,7 @@
 		<div class="col-xs-6 col-sm-6 btn btn-success" ng-click='anEvent.guestWillAttend(true)' ng-if='anEvent.hideIfAttending'>I Will Attend</div>
 		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)' ng-if='anEvent.hideIfAttending'>Decline Invitation</div>
 	</div>
+
+	<button class='btn btn-primary' ng-click='anEvent.updateUpdatedParam()'>Updated Status</button>
+	<button class='btn btn-warning' ng-click='anEvent.addInvitationToAttending(true)'>add to attending</button>
 </div>

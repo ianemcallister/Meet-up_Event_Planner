@@ -14,7 +14,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	vm.tempDateTime = {start: new Date(), end: new Date()};
 	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
 	vm.showIfHost = false;
-	vm.hideIfAttending = false;
+	vm.hideIfAttending = true;
 
 	//binding to the event
 	vm.event = $firebaseObject(userEvents)
@@ -103,9 +103,13 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	function checkIfGuestIsAttending() {
-		$log.info('check guest attendance');
-		for(guest in vm.event.guestList) {
-			if(guest == $routeParams.uid) vm.hideIfAttending = true;
+		if(vm.showIfHost) {
+			$log.info('check guest attendance');
+			userEvents.child('guestList').on('value', function(snapshot) {
+				var allGuests = snapshot.val();
+				vm.hideIfAttending = !allGuests[$routeParams.uid].attending;
+				
+			});
 		}
 	}
 
@@ -319,12 +323,14 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		currentUser.child('pending').on('value', function(snapshot) {
 			//define local varialbe
 			var invitations = snapshot.val();
-			var thisInvitation = invitations[$routeParams.hostId][$routeParams.eventId];
-			
 			//log starting values
 			$log.info(invitations);
 			$log.info(invitations[$routeParams.hostId]);
 			$log.info(invitations[$routeParams.hostId][$routeParams.eventId]);
+
+			var thisInvitation = invitations[$routeParams.hostId][$routeParams.eventId];
+			
+			$log.info(thisInvitation);
 			
 			//check # of iniviations
 			for(invitation in invitations) {
@@ -376,13 +382,56 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 
 		//if there was an updated field in attending, remove it
 		if(removeAttendingUpdated) {
-			currentUser.child('attending').child('updated').update({'updated':'this is a test'}, function(error) {
-				if(error) $log.info(error);
-			});
+			$log.info('removing the updated placeholder');
+			//currentUser.child('attending').child('updated').remove();
 		}
 
 		//save changes
 		vm.event.$save();
+	}
+
+	vm.updateUpdatedParam = function() {
+		var currentUser = ref.child('Users').child($routeParams.uid).child('events');
+		
+		$log.info('updating the param');
+		currentUser.child('attending').on('value', function(snapshot) {
+			$log.info(snapshot.val());
+		});
+		currentUser.child('attending').child('updated').remove();
+	}
+
+	vm.addInvitationToAttending = function(response) {
+		var currentUser = ref.child('Users').child($routeParams.uid).child('events');
+		var totalPendingInvitations = 0;
+
+		//get the invitation details
+		currentUser.child('pending').on('value', function(snapshot) {
+			//define local varialbe
+			var invitations = snapshot.val();
+			var thisInvitation = invitations[$routeParams.hostId][$routeParams.eventId];
+			
+			//log starting values
+			$log.info(invitations);
+			$log.info(invitations[$routeParams.hostId]);
+			$log.info(invitations[$routeParams.hostId][$routeParams.eventId]);
+			
+			//check # of iniviations
+			for(invitation in invitations) {
+				totalPendingInvitations++;
+			}
+
+			//report # of invitations
+			$log.info("total pending invitations: " + totalPendingInvitations);
+			
+			$log.info(response);
+			//add the event to the guest's attending list
+			if(response) currentUser.child('attending').child($routeParams.hostId).child($routeParams.eventId).set(thisInvitation, function(error) {
+				if(error) $log.info(error);
+			});
+
+
+
+		});
 	}
 
 	//execution
