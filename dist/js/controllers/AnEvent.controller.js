@@ -14,6 +14,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	vm.tempDateTime = {start: new Date(), end: new Date()};
 	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
 	vm.showIfHost = false;
+	vm.hideIfAttending = false;
 
 	//binding to the event
 	vm.event = $firebaseObject(userEvents)
@@ -94,10 +95,17 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 
 		if(authData.uid == $routeParams.hostId) {
 			$log.info('is the host');
-			return true;
+			vm.showIfHost = true;
 		} else {
 			$log.info('not the host');
-			return false;
+			vm.showIfHost = false;
+		}
+	}
+
+	function checkIfGuestIsAttending() {
+		$log.info('check guest attendance');
+		for(guest in vm.event.guestList) {
+			if(guest == $routeParams.uid) vm.hideIfAttending = true;
 		}
 	}
 
@@ -301,48 +309,80 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		var currentUser = ref.child('Users').child($routeParams.uid).child('events');
 		var totalPendingInvitations = 0;
 		var removeAttendingUpdated = false;
-		//change attending status in host's guestList
+		
+		//change attending to true in host's guestList
 		vm.event.guestList[$routeParams.uid].attending = response;
+		//change status to 'attending' in host's guestList
+		vm.event.guestList[$routeParams.uid].status = 'attending';
+		
 		//get the invitation details
 		currentUser.child('pending').on('value', function(snapshot) {
+			//define local varialbe
 			var invitations = snapshot.val();
 			var thisInvitation = invitations[$routeParams.hostId][$routeParams.eventId];
+			
+			//log starting values
 			$log.info(invitations);
 			$log.info(invitations[$routeParams.hostId]);
 			$log.info(invitations[$routeParams.hostId][$routeParams.eventId]);
+			
+			//check # of iniviations
 			for(invitation in invitations) {
 				totalPendingInvitations++;
 			}
+
+			//report # of invitations
 			$log.info("total attending: " + totalPendingInvitations);
+			
 			//add the event to the guest's attending list
 			if(response) currentUser.child('attending').child($routeParams.hostId).child($routeParams.eventId).set(thisInvitation, function(error) {
 				if(error) $log.info(error);
 			});
+
 		});
+
 		//if the updated placeholder was on the attending list remove it
 		currentUser.child('attending').on('value', function(snapshot) {
+			//local variables
 			var attendingList = snapshot.val();
+			
+			//report actions
 			$log.info('this is the attending list');
 			$log.info(attendingList);
+			
+			//throw flag for later
 			if(attendingList.updated) removeAttendingUpdated = true;
+
 		}, function(error) {
+			//if ther was an error report it
 			if(error) $log.info(error);
 		});
+
 		//if this is the last pending event on the guest's pending list, add the updated placeholder
 		if(totalPendingInvitations < 2) {
+			//local variables
 			var currentDate = new Date();
+
+			//replace with updated field
 			currentUser.child('pending').update({
 				updated: dateTimeToUnixTime(currentDate)
 			}, function(error) {
 				if(error) $log.info(error);
 			});
 		}
+
 		//remove the event from the guest's pending list
 		currentUser.child('pending').child($routeParams.hostId).remove();
-		//if(removeAttendingUpdated) currentUser.child('attending').child('updated').remove();
+
+		//if there was an updated field in attending, remove it
+		if(removeAttendingUpdated) {
+			currentUser.child('attending').child('updated').update({'updated':'this is a test'}, function(error) {
+				if(error) $log.info(error);
+			});
+		}
+
 		//save changes
 		vm.event.$save();
-
 	}
 
 	//execution
@@ -350,6 +390,8 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	$log.info($routeParams.eventId);
 
 	//check user to determine state
-	vm.showIfHost = checkForHost();
+	checkForHost();
+	checkIfGuestIsAttending();
+
 	if(!vm.showIfHost) openAllSections();
 }

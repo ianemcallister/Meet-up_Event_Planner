@@ -158,6 +158,7 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 
 		} else if(inviteStatus == 'attending') {
 			$log.info('accessing from an rsvped invitation');
+			eventRedirect('/event', event.id, event.host);
 		}
 
 		//redirecting to the event

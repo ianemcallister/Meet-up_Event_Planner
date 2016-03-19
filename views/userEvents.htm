@@ -46,7 +46,7 @@
 			<tbody ng-repeat='host in theUserEvents.events.attending'>
 				<tr ng-repeat='event in host' ng-if='host'>
 					<td>{{event.eventTimes.start | date: 'MMM, d' }}</td>
-					<td>{{event.eventTimes.start | date: 'h:mm a'}} - {{event.name}}</td>
+					<td ng-click='theUserEvents.redirectTo3rdPartyEvent(event, "attending")'>{{event.eventTimes.start | date: 'h:mm a'}} - {{event.name}}</td>
 			</tbody>
 		</table>
 	</div>

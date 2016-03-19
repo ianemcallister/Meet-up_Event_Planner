@@ -28,6 +28,7 @@
 		</div>
 		<div class='row' ng-if='!anEvent.showIfHost'>
 			<h3>{{anEvent.event.name}}</h3>
+			<strong style='color: green' ng-if='!anEvent.hideIfAttending'>ATTENDING</strong>
 		</div>
 		<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
 		<div class="row" ng-if='anEvent.showIfHost'>
@@ -191,7 +192,7 @@
 		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.saveAndAdvance()'>Save & Move To Where</div>
 	</div>
 	<div class="row" ng-if='!anEvent.showIfHost'>
-		<div class="col-xs-6 col-sm-6 btn btn-success" ng-click='anEvent.guestWillAttend(true)'>I Will Attend</div>
-		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)'>Decline Invitation</div>
+		<div class="col-xs-6 col-sm-6 btn btn-success" ng-click='anEvent.guestWillAttend(true)' ng-if='anEvent.hideIfAttending'>I Will Attend</div>
+		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)' ng-if='anEvent.hideIfAttending'>Decline Invitation</div>
 	</div>
 </div>
