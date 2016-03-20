@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('MainController', MainController);
 
-MainController.$inject = ['$location'];
+MainController.$inject = ['$log', '$location', '$document'];
 
-function MainController($location) {
+function MainController($log, $location, $document) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL); 
@@ -14,4 +14,11 @@ function MainController($location) {
 		ref.unauth();
 		$location.path('/');
 	};
+
+	if ('addEventListener' in $document) {
+    $document.addEventListener('DOMContentLoaded', function() {
+    	$log.info('adding FastClick');
+        FastClick.attach($document.body);
+    }, false);
+}
 }

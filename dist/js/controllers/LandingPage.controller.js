@@ -16,6 +16,7 @@ function LandingPageController($scope, $log, $location, $document) {
 	vm.validNewEmail = {'valid':false, 'style':{color:''}};
 	vm.securePassword = {'secure':false, 'style':{color:''}};
 	vm.unlockCreateUserBtn = {'usable':false, 'class':'btn btn-warning'};
+	vm.message = 'testing';
 	
 	vm.validUserEmail = {'valid':false, 'style':{color:''}};
 	vm.validUserPassword = {'valid':false, 'style':{color:''}};
@@ -29,7 +30,15 @@ function LandingPageController($scope, $log, $location, $document) {
 		5:{'constraint':'Contains at least one uppercase letter', 'style':{color:'red'}, 'met':false},
 		6:{'constraint':"Doesn't have any illegal characters", 'style':{color:'red'}, 'met':false}
 	};
-	
+
+	//event listeners
+	if ('addEventListener' in $document) {
+	    $document.addEventListener('DOMContentLoaded', function() {
+	    	$log.info('adding FastClick');
+	        FastClick.attach($document.body);
+	    }, false);
+	}
+
 	//local methods
 	function utf8_to_b64(str) {
 		return btoa(str);
@@ -240,10 +249,11 @@ function LandingPageController($scope, $log, $location, $document) {
 	}
 
 	vm.createNewUser = function() {
+		alert('Creating a new user account now!');
+
 		if(vm.unlockCreateUserBtn.usable) {
 			//define local variable
 			var ref = new Firebase(fbURL);
-			var saveUserData = userData;
 
 			ref.createUser({
 				email:vm.newEmail,
@@ -304,11 +314,14 @@ function LandingPageController($scope, $log, $location, $document) {
 	}
 
 	vm.loginRegisteredUser = function() {
-		if(vm.unclockUserLoginBtn.usable) {
+		alert('Logging you in as a registered user now!');
+		alert('This is a second test alert');
+		//if(vm.unclockUserLoginBtn.usable) {
+		//if(true) {
 			//define local variable
 			var ref = new Firebase(fbURL);
-			var saveUserData = userData;
 
+			$log.info('did it make it in here?');
 			//authenticate the user
 			ref.authWithPassword({
 				email: vm.userEmail,
@@ -328,12 +341,16 @@ function LandingPageController($scope, $log, $location, $document) {
 
 					//redirect
 					redirect('/userInformation', currentUserData);
-
+					$scope.$apply();
 				}
 			});
 
-		}
+		//}
 
+	}
+
+	vm.alertMe = function() {
+		alert('this is working! an alert!');
 	}
 
 }

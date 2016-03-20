@@ -19,7 +19,7 @@
 						<li ng-repeat="requirnment in recruitUsers.passwordRequirnments" value='{{ requirnment.constraint }}' ng-style='requirnment.style'>{{ requirnment.constraint }}</li>
 					</ul>
 				</div>
-				<label for='newSubmit'><input ng-class='recruitUsers.unlockCreateUserBtn.class' id='newSubmit' type="submit" value='Create User Account' ng-click='recruitUsers.createNewUser()'></label>
+				<label for='newSubmit'><input ng-class='recruitUsers.unlockCreateUserBtn.class' id='newSubmit' type="submit" value='Create User Account' ng-click='recruitUsers.createNewUser()' ng-touch='recruitUsers.createNewUser()'></label>
 		</div>
 	</div>
 
@@ -30,8 +30,7 @@
 			<h4>Login</h4>
 				<label for="userNameOrEmail" ng-style='recruitUsers.validUserEmail.style'>Email: <input type="email" id='userEmail' ng-model='recruitUsers.userEmail' ng-change='recruitUsers.update()' ng-keyup='recruitUsers.checkUserEmail()' required autocomplete="email" placeholder='e.g. MileyCyrus@gmail.com'></label>
 				<label for="userPassword" ng-style='recruitUsers.validUserPassword.style'>Password:<input type="password" id='userPassword' ng-model='recruitUsers.userPassword' ng-keyup='recruitUsers.checkUserPasswords()' required autocomplete="password" placeholder='**********' ></label>
-				<label for="userSubmit"><input ng-class='recruitUsers.unclockUserLoginBtn.class' type="submit" value='Login' ng-click='recruitUsers.loginRegisteredUser()'></label>
+				<label for="userSubmit"><button ng-class='recruitUsers.unclockUserLoginBtn.class' type="submit" value='Login' ng-click='recruitUsers.loginRegisteredUser()' ng-touch='recruitUsers.loginRegisteredUser()'>Login</button></label>
 		</div>	
 	</div>
-
 </div>

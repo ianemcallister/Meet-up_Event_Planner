@@ -15,7 +15,7 @@ function config($routeProvider) {
         controllerAs: 'vm'
     })
     .when('/userEvents/:uid?/:token?', {
-        templateUrl: 'views/userEvents.htm',
+        templateUrl: 'views/UserEvents.htm',
         controller: 'UserEventsController',
         controllerAs: 'vm'
     })
@@ -23,5 +23,8 @@ function config($routeProvider) {
         templateUrl: 'views/anEvent.htm',
         controller: 'AnEventController',
         controllerAs: 'vm'
+    })
+    .otherwise({
+        redirectTo: '/'
     });
 }
