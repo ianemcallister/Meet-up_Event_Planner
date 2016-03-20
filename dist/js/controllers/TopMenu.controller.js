@@ -2,15 +2,23 @@ angular
     .module('meetUpEventApp')
     .controller('topMenuController', topMenuController);
 
-topMenuController.$inject = ['$scope', '$log', '$location'];
+topMenuController.$inject = ['$scope', '$log', '$location', '$document'];
 
-function topMenuController($scope, $log, $location) {
+function topMenuController($scope, $log, $location, $document) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
 
 	//local variables
 	vm.loggedIn = false
+
+	//event listeners
+	if ('addEventListener' in $document) {
+	    $document.addEventListener('DOMContentLoaded', function() {
+	    	$log.info('adding FastClick');
+	        FastClick.attach($document.body);
+	    }, false);
+	}
 
 	// Create a callback which logs the current auth state
 	function authDataCallback(authData) {
@@ -34,6 +42,7 @@ function topMenuController($scope, $log, $location) {
 	//vm accessible methods
 	vm.logout = function() {
 		$log.info('logging out!');
+		vm.loggedIn = false;
 		ref.unauth();
 		redirect('/', {uid:'', token:''});
 	}

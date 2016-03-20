@@ -9,7 +9,10 @@ function UserInformationController($log, $location, $routeParams, $firebaseObjec
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL); 
 	var userBio = ref.child('Users').child($routeParams.uid).child('bio');
+	
 	vm.user = $firebaseObject(userBio);
+
+	activate();
 
 	//local variables
 	vm.proceedBtn = 'btn btn-primary';
@@ -24,6 +27,10 @@ function UserInformationController($log, $location, $routeParams, $firebaseObjec
 	});
 
 	//local methods
+	function activate() {
+		//what happens when the controller launches
+	}
+
 	function unixTimeToDateTime(unixTime) {
 		return new Date(parseInt(unixTime));
 	};
