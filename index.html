@@ -18,7 +18,6 @@
   
   <!-- adding javascript-->
   <script src="js/modules/app.module.js"></script>
-  <!--<script src="js/main.run.js"></script> DON'T NEED RIGHT NOW MAYBE LATER -->
   <script src="js/routes/route-config.js"></script>
   <script src="js/controllers/Main.controller.js"></script>
   <script src="js/controllers/TopMenu.controller.js"></script>
@@ -26,8 +25,6 @@
   <script src="js/controllers/UserInformation.controller.js"></script>
   <script src="js/controllers/UserEvents.controller.js"></script>
   <script src="js/controllers/AnEvent.controller.js"></script>
-  <!--<script src="js/factories/UserData.factory.js"></script> DON'T NEED THIS RIGHT NOW -->
-  <script src="js/directives/test.directives.js"></script>
 
 </head>
 
@@ -39,15 +36,16 @@
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="glyphicon glyphicon-log-in"></span> 
+          <span ng-if='!topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-in"></span>
+          <span ng-if='topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-out" ng-click='topMenuCtrl.logout()'></span> 
         </button>
-        <a class="navbar-brand" href="#">Meet-Up Event Planner</a>
+        <a class="navbar-brand" href="#/">Meet-Up Event Planner</a>
       </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
+      <div class="collapse navbar-collapse" id="myNavbar" ng-if='!topMenuCtrl.loggedIn'>
         <ul class="nav navbar-nav navbar-right">
-          <li><label for="userEmail"><input type="text" id='userEmail' placeholder="e-mail" autofocus></label></li>
-          <li><label for="userPass"><input type="password" id='userPass' placeholder="password"></label></li>
-          <li><label for="submitUserLogin"><button id='submitUserLogin' class='btn btn-success'>Login</button></label></li>
+          <li><label for="navbarUserEmail"><input type="text" id='navbarUserEmail' placeholder="e-mail" ng-model='topMenuCtrl.navbarUserEmail'></label></li>
+          <li><label for="navbarUserPass"><input type="password" id='navbarUserPass' placeholder="password" ng-model='topMenuCtrl.navbarUserPass'></label></li>
+          <li><label for="submitUserLogin"><button id='submitUserLogin' class='btn btn-success' ng-click='topMenuCtrl.navBarLoginRegisteredUser()'>Login</button></label></li>
         </ul>
       </div>
     </div>

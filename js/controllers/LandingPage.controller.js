@@ -314,14 +314,11 @@ function LandingPageController($scope, $log, $location, $document) {
 	}
 
 	vm.loginRegisteredUser = function() {
-		alert('Logging you in as a registered user now!');
-		alert('This is a second test alert');
-		//if(vm.unclockUserLoginBtn.usable) {
-		//if(true) {
+
+		if(vm.unclockUserLoginBtn.usable) {
 			//define local variable
 			var ref = new Firebase(fbURL);
 
-			$log.info('did it make it in here?');
 			//authenticate the user
 			ref.authWithPassword({
 				email: vm.userEmail,
@@ -345,7 +342,7 @@ function LandingPageController($scope, $log, $location, $document) {
 				}
 			});
 
-		//}
+		}
 
 	}
 
