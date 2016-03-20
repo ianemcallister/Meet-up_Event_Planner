@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('LandingPageController', LandingPageController);
 
-LandingPageController.$inject = ['$scope', '$log', '$location', '$document'];
+LandingPageController.$inject = ['$scope', '$log', '$location', '$document', '$window'];
 
-function LandingPageController($scope, $log, $location, $document) {
+function LandingPageController($scope, $log, $location, $document, $window) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var authData = {};
@@ -30,14 +30,6 @@ function LandingPageController($scope, $log, $location, $document) {
 		5:{'constraint':'Contains at least one uppercase letter', 'style':{color:'red'}, 'met':false},
 		6:{'constraint':"Doesn't have any illegal characters", 'style':{color:'red'}, 'met':false}
 	};
-
-	//event listeners
-	if ('addEventListener' in $document) {
-	    $document.addEventListener('DOMContentLoaded', function() {
-	    	$log.info('adding FastClick');
-	        FastClick.attach($document.body);
-	    }, false);
-	}
 
 	//local methods
 	function utf8_to_b64(str) {
@@ -349,5 +341,35 @@ function LandingPageController($scope, $log, $location, $document) {
 	vm.alertMe = function() {
 		alert('this is working! an alert!');
 	}
+
+	vm.onResizeFunction = function() {
+		var inputText = angular.element('.inputText');
+		if($window.outerWidth > $window.outerHeight) {
+			inputText.css('font-size', '2em');
+			$log.info('making bigger');
+		} else {
+			inputText.css('font-size', '1.2em');
+		}
+	}
+
+	//event listeners
+	if ('addEventListener' in $document) {
+	    $document.addEventListener('DOMContentLoaded', function() {
+	    	$log.info('adding FastClick');
+	        FastClick.attach($document.body);
+	    }, false);
+	}
+
+	angular.element($window).bind('resize', function() {
+		vm.onResizeFunction();
+		//$scope.$apply();
+	});
+
+	angular.element($document).ready(function() {
+		if($window.outerWidth < 600) {
+			vm.onResizeFunction();
+			//$scope.$apply();
+		}
+	})
 
 }

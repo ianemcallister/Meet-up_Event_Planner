@@ -2,9 +2,9 @@ angular
     .module('meetUpEventApp')
     .controller('topMenuController', topMenuController);
 
-topMenuController.$inject = ['$scope', '$log', '$location', '$document'];
+topMenuController.$inject = ['$scope', '$log', '$location', '$document', '$window'];
 
-function topMenuController($scope, $log, $location, $document) {
+function topMenuController($scope, $log, $location, $document, $window) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
@@ -12,6 +12,8 @@ function topMenuController($scope, $log, $location, $document) {
 	//local variables
 	vm.loggedIn = false
 
+	//styles variables
+	
 	//event listeners
 	if ('addEventListener' in $document) {
 	    $document.addEventListener('DOMContentLoaded', function() {
@@ -20,7 +22,26 @@ function topMenuController($scope, $log, $location, $document) {
 	    }, false);
 	}
 
+	angular.element($window).bind('resize', function() {
+		vm.onResizeFunction();
+		$scope.$apply();
+	});
+
+	angular.element($document).ready(function() {
+		if($window.outerWidth < 600) {
+			vm.onResizeFunction();
+			$scope.$apply();
+		}
+	})
+	//dynamically set input width
+
+
 	// Create a callback which logs the current auth state
+	function init() {
+		vm.onResizeFunction();
+		$scope.$apply();
+	}
+
 	function authDataCallback(authData) {
 	  if (authData) {
 	    $log.info("User " + authData.uid + " is logged in with " + authData.provider);
@@ -77,6 +98,11 @@ function topMenuController($scope, $log, $location, $document) {
 
 		}
 
+	}
+
+	vm.onResizeFunction = function() {
+		var navbarInputs = angular.element('.navbarInputs');
+		navbarInputs.css('width', ($window.outerWidth - 26) + 'px');
 	}
 
 	// Register the callback to be fired every time auth state changes

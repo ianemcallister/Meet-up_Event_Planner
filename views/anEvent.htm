@@ -34,12 +34,12 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventTypePicker">Type of Event:
-					<select name="eventTypePicker" id="eventTypePicker" ng-model='anEvent.event.type' ng-change='anEvent.event.$save()'>
+					<datalist name="eventTypePicker" id="eventTypePicker" ng-model='anEvent.event.type' ng-change='anEvent.event.$save()'>
 						<option value="Birthday Party">Birthday Party</option>
 						<option value="Conference/Tak">Conference/Talk</option>
 						<option value="Wedding">Wedding</option>
 						<option value="Other">Other</option>
-					</select>
+					</datalist>
 					<div ng-if='anEvent.event.type == "Other"'>
 						<label for="otherDefine">Enter A New Event Type:
 							<input type="text" id='otherDefine' ng-model='anEvent.event.type.other' placeholder="Something new">

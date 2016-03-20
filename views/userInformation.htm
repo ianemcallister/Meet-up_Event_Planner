@@ -14,10 +14,10 @@
 		<div class="col-xs-12 col-sm-12">
 			<h4>Required</h4>
 			<label for="name">Name:
-				<input type="text" id='name' ng-model='userInformation.user.name' autofocus>
+				<input type="text" id='name' class='inputText' ng-model='userInformation.user.name' autofocus>
 			</label>
 			<label for="email">E-mail:
-				<input type="email" id='email' ng-model='userInformation.user.email'>
+				<input type="email" id='email' class='inputText' ng-model='userInformation.user.email'>
 			</label>
 		</div>
 	</div>
@@ -26,10 +26,10 @@
 		<div class="col-xs-12 col-sm-12">
 			<h4>Work</h4>
 			<label for="employerName">Employer:
-				<input type="text" id='employerName' ng-model='userInformation.user.employer' ng-change='userInformation.checkValues()' placeholder='e.g. Google, Facebook, etc'>
+				<input type="text" id='employerName' class='inputText' ng-model='userInformation.user.employer' ng-change='userInformation.checkValues()' placeholder='e.g. Google, Facebook, etc'>
 			</label>
 			<label for="jobTitle">Job Title:
-				<input type="text" id='jobTitle' ng-model='userInformation.user.jobTitle' ng-change='userInformation.checkValues()' placeholder='e.g. Desk Jocky, Dental Hygenist'>
+				<input type="text" id='jobTitle' class='inputText' ng-model='userInformation.user.jobTitle' ng-change='userInformation.checkValues()' placeholder='e.g. Desk Jocky, Dental Hygenist'>
 			</label>
 		</div>
 	</div>
@@ -38,10 +38,11 @@
 		<div class="col-xs-12 col-sm-12">
 			<h4>Personal</h4>
 			<label for="birthday">Birhtday:
-				<input type="datetime-local" id='birthday' ng-model='userInformation.tempBirthday' ng-change='userInformation.checkValues()' placeholder='Sep. 19, 1983'>
+				<input type="datetime-local" id='birthday' class='inputText' ng-model='userInformation.tempBirthday' ng-change='userInformation.checkValues()' placeholder='Sep. 19, 1983'>
 			</label>
 		</div>
 	</div>
+	<br>
 	<!--Move On to user Events-->
 	<div class="row col-xs-12 col-sm-12" ng-class='userInformation.proceedBtn' ng-click='userInformation.saveAndMoveOn()'>{{ userInformation.btnMssg }}</div>
 </div>

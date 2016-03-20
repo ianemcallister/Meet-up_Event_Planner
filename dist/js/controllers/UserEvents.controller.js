@@ -17,6 +17,8 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 
 	currentUserBio.child('name').on('value', function(snapshot) {
 		vm.currentUserName = snapshot.val();
+		$log.info('got the user name');
+		$scope.$apply();
 	}, function(errorObject) {
 		$log.info("The read failed: " + errorObject.code);
 	});

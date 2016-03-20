@@ -1,0 +1,12 @@
+.eventSnapshot {
+  font-size: 1em;
+  color: black; }
+
+.table-striped > tbody > tr:nth-child(n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: rgba(216, 216, 216, 0.8); }
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+  background-color: rgba(255, 255, 255, 0.6); }
+
+.table-hover tbody tr:hover td {
+  background-color: rgba(255, 255, 0, 0.6); }

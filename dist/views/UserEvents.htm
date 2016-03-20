@@ -13,7 +13,7 @@
 		<h4>Pending Invitations</h4>
 		<p ng-if='theUserEvents.eventInvitationsPending()'>Swipe left to decline the invitation.</p>
 		<p ng-if='!theUserEvents.eventInvitationsPending()'>You don't have any pending Invitaions.</p>
-		<table class="table table-striped table-border" ng-if='theUserEvents.eventInvitationsPending()'>
+		<table class="table table-striped table-border eventSnapshot" ng-if='theUserEvents.eventInvitationsPending()'>
 			<thead>
 				<tr>
 					<th class="col-xs-3 col-sm-3">DATE</th>
@@ -36,7 +36,7 @@
 	<div class="col-xs-12 col-sm-12">
 		<h4>Events You're Attending</h4>
 		<p ng-if='!theUserEvents.attendingEvents()'>You aren't attending any events yet.</p>
-		<table class="table table-striped table-border" ng-if='theUserEvents.attendingEvents()'>
+		<table class="table table-striped table-border eventSnapshot" ng-if='theUserEvents.attendingEvents()'>
 			<thead>
 				<tr>
 					<th class="col-xs-3 col-sm-3">DATE</th>
@@ -56,13 +56,13 @@
 	<div class="col-xs-12 col-sm-12">
 		<h4>Events You're Hosting</h4>
 		<p ng-if='!theUserEvents.eventsAreBeingHosted()'>You're not hosting any upcoming events.</p>
-		<table class="table table-striped table-border" ng-if='theUserEvents.eventsAreBeingHosted()'>
+		<table class="table table-striped table-hover table-border eventSnapshot" ng-if='theUserEvents.eventsAreBeingHosted()'>
 			<tr>
 				<th class="col-xs-3 col-sm-3">DATE</th>
 				<th class="col-xs-6 col-sm-6">EVENT</th>
 				<th class="col-xs-3 col-sm-3">ATTENDING</th>
 			</tr>
-			<tr ng-repeat='hostedEvent in theUserEvents.events.hosting'>
+			<tr ng-repeat='hostedEvent in theUserEvents.events.hosting' >
 				<td>{{hostedEvent.eventTimes.start | date: 'MMM, d' }}</td>
 				<td ng-click='theUserEvents.redirectToHostedEvent(hostedEvent.id)'>{{hostedEvent.eventTimes.start | date: 'h:mm a'}} - {{hostedEvent.name}}</td>
 				<td>{{theUserEvents.percentRSVPed(hostedEvent.guestList)}}% ({{theUserEvents.totalAttending(hostedEvent.guestList)}}/{{theUserEvents.totalInvited(hostedEvent.guestList)}})</td>
