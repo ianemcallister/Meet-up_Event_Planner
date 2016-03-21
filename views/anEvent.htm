@@ -1,8 +1,9 @@
 <div class="container-fluid" ng-controller='AnEventController as anEvent'>
 	<!--To return to events page-->
 	<div class="row">
-		<strong style='color: #428bca' ng-click='anEvent.backToUserEvents()'>< Back to Events</strong>
+		<strong id='backButton' ng-click='anEvent.backToUserEvents()'>< Back to Events</strong>
 	</div>
+	<br>
 	<!--If this is an existing event show the tracking tool bar-->
 	<!--Progress Bar-->
 	<div class="row" ng-if='anEvent.showIfHost'>
@@ -22,7 +23,7 @@
 			<h4>What & When</h4>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventName">Event Name:
-					<input type="text" id='eventName' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event' autofocus>
+					<input type="text" id='eventName' class='inputField' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event' autofocus>
 				</label>
 			</div>
 		</div>
@@ -34,15 +35,16 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventTypePicker">Type of Event:
-					<datalist name="eventTypePicker" id="eventTypePicker" ng-model='anEvent.event.type' ng-change='anEvent.event.$save()'>
+					<input list='eventTypePicker' class='inputField' ng-change='anEvent.event.$save()' ng-model='anEvent.event.type'>
+					<datalist name="eventTypePicker" id="eventTypePicker">
 						<option value="Birthday Party">Birthday Party</option>
-						<option value="Conference/Tak">Conference/Talk</option>
+						<option value="Conference/Talk">Conference/Talk</option>
 						<option value="Wedding">Wedding</option>
 						<option value="Other">Other</option>
 					</datalist>
 					<div ng-if='anEvent.event.type == "Other"'>
 						<label for="otherDefine">Enter A New Event Type:
-							<input type="text" id='otherDefine' ng-model='anEvent.event.type.other' placeholder="Something new">
+							<input type="text" id='otherDefine' class='inputField' ng-model='anEvent.event.type.other' placeholder="Something new">
 						</label>
 					</div>
 				</label>
@@ -52,7 +54,7 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventHost">Event Host:
-					<input type="text" id='eventHost' ng-model='anEvent.event.host.name' ng-change='anEvent.event.$save()' placeholder="e.g. Will Smith">
+					<input type="text" id='eventHost' class='inputField' ng-model='anEvent.event.host.name' ng-change='anEvent.event.$save()' placeholder="e.g. Will Smith">
 				</label>
 			</div>
 		</div>
@@ -65,7 +67,7 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventStart">Start Time:
-					<input type="datetime-local" id='eventStart' ng-model='anEvent.tempDateTime.start' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")'>
+					<input type="datetime-local" id='eventStart' class='inputField' ng-model='anEvent.tempDateTime.start' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")'>
 				</label>
 			</div>
 		</div>
@@ -73,7 +75,7 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventEnd">Ends At:
-					<input type="datetime-local" id='eventEnd' ng-model='anEvent.tempDateTime.end' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")'>
+					<input type="datetime-local" id='eventEnd' class='inputField' ng-model='anEvent.tempDateTime.end' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")'>
 				</label>
 			</div>
 		</div>
@@ -91,7 +93,7 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventMessage"><i>(Optional)</i> Event Message:
-					<input type="text" id='eventMessage' ng-model='anEvent.event.message' ng-change='anEvent.event.$save()'  placeholder="This'll be the best event!">
+					<input type="text" id='eventMessage' class='inputField' ng-model='anEvent.event.message' ng-change='anEvent.event.$save()'  placeholder="This'll be the best event!">
 				</label>
 			</div>
 		</div>
@@ -104,22 +106,22 @@
 			<div class="col-xs-12 col-sm-12">
 				<h4>Location</h4>
 				<label for="eventStreet01">Street:
-					<input type="text" id='eventStreet01' ng-model='anEvent.event.address.street01' ng-change='anEvent.event.$save()'  placeholder="e.g. 4928 Bronx Ave.">
+					<input type="text" id='eventStreet01' class='inputField' ng-model='anEvent.event.address.street01' ng-change='anEvent.event.$save()'  placeholder="e.g. 4928 Bronx Ave.">
 				</label>
 				<label for="eventStreet02">Street:
-					<input type="text" id='eventStreet02' ng-model='anEvent.event.address.street02' ng-change='anEvent.event.$save()'  placeholder="3rd Floor">
+					<input type="text" id='eventStreet02' class='inputField' ng-model='anEvent.event.address.street02' ng-change='anEvent.event.$save()'  placeholder="3rd Floor">
 				</label>
 				<label for="eventStreet03">Street:
-					<input type="text" id='eventStreet03' ng-model='anEvent.event.address.street03' ng-change='anEvent.event.$save()'  placeholder="Unit 11">
+					<input type="text" id='eventStreet03' class='inputField' ng-model='anEvent.event.address.street03' ng-change='anEvent.event.$save()'  placeholder="Unit 11">
 				</label>
 				<label for="eventCity">City:
-					<input type="text" id='eventCity' ng-model='anEvent.event.address.city' ng-change='anEvent.event.$save()'  placeholder="New York">
+					<input type="text" id='eventCity' class='inputField' ng-model='anEvent.event.address.city' ng-change='anEvent.event.$save()'  placeholder="New York">
 				</label>
 				<label for="eventState">State:
-					<input type="text" id='eventState' ng-model='anEvent.event.address.state' ng-change='anEvent.event.$save()'  placeholder='NY'>
+					<input type="text" id='eventState' class='inputField' ng-model='anEvent.event.address.state' ng-change='anEvent.event.$save()'  placeholder='NY'>
 				</label>
 				<label for="eventZip">Zip:
-					<input type="text" id='eventZip' ng-model='anEvent.event.address.zip' ng-change='anEvent.event.$save()'  placeholder="012345">
+					<input type="text" id='eventZip' class='inputField' ng-model='anEvent.event.address.zip' ng-change='anEvent.event.$save()'  placeholder="012345">
 				</label>
 			</div>
 		</div>
@@ -149,21 +151,21 @@
 				<div>
 					<strong>Invite a Guest</strong>
 					<label for="inviteeName">Name:
-						<input type="text" id='inviteeName' ng-model='anEvent.newGuest.name' placeholder='F. Scott Fitzgerald'>
+						<input type="text" id='inviteeName' class='inputField' ng-model='anEvent.newGuest.name' placeholder='F. Scott Fitzgerald'>
 					</label>
 					<label for="inviteeEmail">Email:
-						<input type="email" ng-model='anEvent.newGuest.email.address' ng-change='anEvent.validateGuestEmail()' ng-style='anEvent.newGuest.email.style' placeholder='f.scott@fitzgerald.com'>
+						<input type="email" ng-model='anEvent.newGuest.email.address' class='inputField' ng-change='anEvent.validateGuestEmail()' ng-style='anEvent.newGuest.email.style' placeholder='f.scott@fitzgerald.com'>
 					</label>
 					<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToHostsList()'>Add Recipient</div>
 				</div>
 				<div>
 					
 					<strong>Guests Invited</strong>
-					<table class="table table-striped table-border">
+					<table class="table table-striped table-hover table-border">
 						<tr>
 							<th class='col-xs-2 col-sm-2'>STATUS</th>
 							<th class='col-xs-5 col-sm-5'>NAME</th>
-							<th class='col-xs-5 col-sm-5'>EMAIL</th>
+							<th class='col-xs-4 col-sm-4'>EMAIL</th>
 						</tr>
 						<tr ng-if='!anEvent.guestsAreInvited()'><td colspan='3'>No Guests Currently Invited</td></tr>
 						<tr ng-repeat='guest in anEvent.event.guestList'>
@@ -196,6 +198,4 @@
 		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)' ng-if='anEvent.hideIfAttending'>Decline Invitation</div>
 	</div>
 
-	<button class='btn btn-primary' ng-click='anEvent.updateUpdatedParam()'>Updated Status</button>
-	<button class='btn btn-warning' ng-click='anEvent.addInvitationToAttending(true)'>add to attending</button>
 </div>

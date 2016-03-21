@@ -103,7 +103,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	function checkIfGuestIsAttending() {
-		if(vm.showIfHost) {
+		if(!vm.showIfHost) {
 			$log.info('check guest attendance');
 			userEvents.child('guestList').on('value', function(snapshot) {
 				var allGuests = snapshot.val();
