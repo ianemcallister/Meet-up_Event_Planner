@@ -18,6 +18,7 @@ function LandingPageController($scope, $log, $location, $document, $window) {
 	vm.securePassword = {'secure':false, 'style':{color:''}};
 	vm.unlockCreateUserBtn = {'usable':false, 'class':'btn btn-warning'};
 	vm.message = 'testing';
+
 	
 	vm.validUserEmail = {'valid':false, 'style':{color:''}};
 	vm.validUserPassword = {'valid':false, 'style':{color:''}};
@@ -31,6 +32,11 @@ function LandingPageController($scope, $log, $location, $document, $window) {
 		5:{'constraint':'Contains at least one uppercase letter', 'style':{color:'red'}, 'met':false},
 		6:{'constraint':"Doesn't have any illegal characters", 'style':{color:'red'}, 'met':false}
 	};
+
+	//var theTestBox = angular.element($document).find('#testBox');
+
+	//theTestBox.checkValidity();
+	//setCustomValidity('you need something else');
 
 	//local methods
 	function utf8_to_b64(str) {
@@ -373,4 +379,20 @@ function LandingPageController($scope, $log, $location, $document, $window) {
 		}
 	})
 
+
+	 vm.master = {};
+
+	  vm.update = function(user) {
+	    vm.master = angular.copy(user);
+	  };
+
+	  vm.reset = function(form) {
+	    if (form) {
+	      form.$setPristine();
+	      form.$setUntouched();
+	    }
+	    vm.user = angular.copy(vm.master);
+	  };
+
+	  vm.reset();
 }

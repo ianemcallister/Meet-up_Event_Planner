@@ -16,3 +16,13 @@
 
 .table-hover tbody tr:hover td {
   background-color: rgba(255, 255, 0, 0.6); }
+
+.requiredAlert {
+  background-color: red;
+  color: white; }
+
+.css-form input.ng-invalid.ng-touched {
+  background-color: #FA787E; }
+
+.css-form input.ng-valid.ng-touched {
+  background-color: #78FA89; }

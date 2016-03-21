@@ -1,4 +1,6 @@
 <div class="container-fluid" ng-controller='AnEventController as anEvent'>
+	
+
 	<!--To return to events page-->
 	<div class="row">
 		<strong id='backButton' ng-click='anEvent.backToUserEvents()'>< Back to Events</strong>
@@ -10,22 +12,23 @@
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[1].style' ng-click='anEvent.changeSection(1)'><strong>When?</strong></div>
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[2].style' ng-click='anEvent.changeSection(2)'>Where?</div>
 		<div class="col-xs-4 col-sm-4" ng-style='anEvent.manageSections[3].style' ng-click='anEvent.changeSection(3)'>Who?</div>
-		<!-- play with this more later
-		<svg height="100" width="250">
-		  <polygon points="0,0 200,00 250,50 200,100 00,100 50,50" style="fill:lime;stroke:purple;stroke-width:1" />
-		</svg>
-		-->
 	</div>
 	<!--Section 1: When-->
+	<form name='WhenForm' class='css-form' novalidate>
 	<div ng-if='anEvent.manageSections[1].active'>
 		<!--Name of the event-->
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<h4>What & When</h4>
+			<form name='form'>
 			<div class="col-xs-12 col-sm-12">
-				<label for="eventName">Event Name:
-					<input type="text" id='eventName' class='inputField' ng-model='anEvent.event.name' ng-change='anEvent.event.$save()' placeholder='My Cool Event' autofocus>
+				<label for="eventName">Event Name: 
+					<input type="text" id='eventName' name='eventName' class='inputField' ng-model='anEvent.event.name' ng-blur='anEvent.checkInputFieldValidity("inputEventName", anEvent.event.name)' placeholder='My Cool Event' autofocus required=''>
+					<div ng-show='WhenForm.$submitted || WhenForm.eventName.$touched'>
+						<div ng-show='WhenForm.eventName.$error.required'>You need an event name</div>
+					</div>
 				</label>
 			</div>
+			</form>
 		</div>
 		<div class='row' ng-if='!anEvent.showIfHost'>
 			<h3>{{anEvent.event.name}}</h3>
@@ -35,13 +38,16 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventTypePicker">Type of Event:
-					<input list='eventTypePicker' class='inputField' ng-change='anEvent.event.$save()' ng-model='anEvent.event.type'>
+					<input list='eventTypePicker' name='eventTypePicker' class='inputField' ng-change='' ng-model='anEvent.event.type' required=''>
 					<datalist name="eventTypePicker" id="eventTypePicker">
 						<option value="Birthday Party">Birthday Party</option>
 						<option value="Conference/Talk">Conference/Talk</option>
 						<option value="Wedding">Wedding</option>
 						<option value="Other">Other</option>
 					</datalist>
+					<div ng-show='WhenForm.$submitted || WhenForm.eventTypePicker.$touched'>
+						<div ng-show='WhenForm.eventTypePicker.$error.required'>You need an event type</div>
+					</div>
 					<div ng-if='anEvent.event.type == "Other"'>
 						<label for="otherDefine">Enter A New Event Type:
 							<input type="text" id='otherDefine' class='inputField' ng-model='anEvent.event.type.other' placeholder="Something new">
@@ -54,7 +60,10 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventHost">Event Host:
-					<input type="text" id='eventHost' class='inputField' ng-model='anEvent.event.host.name' ng-change='anEvent.event.$save()' placeholder="e.g. Will Smith">
+					<input type="text" id='eventHost' name='eventHost' class='inputField' ng-model='anEvent.event.host.name' ng-change='' placeholder="e.g. Will Smith" required=''>
+					<div ng-show='WhenForm.$submitted || WhenForm.eventHost.$touched'>
+						<div ng-show='WhenForm.eventHost.$error.required'>You need an event host</div>
+					</div>
 				</label>
 			</div>
 		</div>
@@ -67,7 +76,10 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventStart">Start Time:
-					<input type="datetime-local" id='eventStart' class='inputField' ng-model='anEvent.tempDateTime.start' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")'>
+					<input type="datetime-local" id='eventStart' name='' class='inputField' ng-model='anEvent.tempDateTime.start' ng-focus='anEvent.setTempTime("start")' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.start, "start")' required=''>
+					<div ng-show='WhenForm.$submitted || WhenForm.eventStart.$touched'>
+						<div ng-show='WhenForm.eventStart.$error.required'>You need a start time</div>
+					</div>
 				</label>
 			</div>
 		</div>
@@ -75,7 +87,10 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventEnd">Ends At:
-					<input type="datetime-local" id='eventEnd' class='inputField' ng-model='anEvent.tempDateTime.end' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")'>
+					<input type="datetime-local" id='eventEnd' name='eventEnd' class='inputField' ng-model='anEvent.tempDateTime.end' ng-focus='anEvent.setTempTime("end")' ng-change='anEvent.saveEventTime(anEvent.tempDateTime.end, "end")' required=''>
+					<div ng-show='WhenForm.$submitted || WhenForm.eventEnd.$touched'>
+						<div ng-show='WhenForm.eventEnd.$error.required'>You need a ending time</div>
+					</div>
 				</label>
 			</div>
 		</div>
@@ -93,35 +108,49 @@
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventMessage"><i>(Optional)</i> Event Message:
-					<input type="text" id='eventMessage' class='inputField' ng-model='anEvent.event.message' ng-change='anEvent.event.$save()'  placeholder="This'll be the best event!">
+					<input type="text" id='eventMessage' class='inputField' ng-model='anEvent.event.message' ng-change=''  placeholder="This'll be the best event!">
 				</label>
 			</div>
 		</div>
 	</div>
+	</form>
 
 	<!--Section 2: Where-->
+	<form name='WhereForm' class='css-form' novalidate>
 	<div ng-if='anEvent.manageSections[2].active'>
 		<!--Location-->
 		<div class="row" ng-if='anEvent.showIfHost'>
 			<div class="col-xs-12 col-sm-12">
 				<h4>Location</h4>
 				<label for="eventStreet01">Street:
-					<input type="text" id='eventStreet01' class='inputField' ng-model='anEvent.event.address.street01' ng-change='anEvent.event.$save()'  placeholder="e.g. 4928 Bronx Ave.">
+					<input type="text" id='eventStreet01' name='eventStreet01' class='inputField' ng-model='anEvent.event.address.street01' ng-change=''  placeholder="e.g. 4928 Bronx Ave." required=''>
+					<div ng-show='WhereForm.$submitted || WhereForm.eventStreet01.$touched'>
+						<div ng-show='WhereForm.eventStreet01.$error.required'>You need a street address</div>
+					</div>
 				</label>
 				<label for="eventStreet02">Street:
-					<input type="text" id='eventStreet02' class='inputField' ng-model='anEvent.event.address.street02' ng-change='anEvent.event.$save()'  placeholder="3rd Floor">
+					<input type="text" id='eventStreet02' class='inputField' ng-model='anEvent.event.address.street02' ng-change=''  placeholder="3rd Floor">
 				</label>
 				<label for="eventStreet03">Street:
-					<input type="text" id='eventStreet03' class='inputField' ng-model='anEvent.event.address.street03' ng-change='anEvent.event.$save()'  placeholder="Unit 11">
+					<input type="text" id='eventStreet03' class='inputField' ng-model='anEvent.event.address.street03' ng-change=''  placeholder="Unit 11">
 				</label>
 				<label for="eventCity">City:
-					<input type="text" id='eventCity' class='inputField' ng-model='anEvent.event.address.city' ng-change='anEvent.event.$save()'  placeholder="New York">
+					<input type="text" id='eventCity' name='eventCity' class='inputField' ng-model='anEvent.event.address.city' ng-change=''  placeholder="New York" required=''>
+					<div ng-show='WhereForm.$submitted || WhereForm.eventCity.$touched'>
+						<div ng-show='WhereForm.eventCity.$error.required'>You need a city for this event</div>
+					</div>
 				</label>
 				<label for="eventState">State:
-					<input type="text" id='eventState' class='inputField' ng-model='anEvent.event.address.state' ng-change='anEvent.event.$save()'  placeholder='NY'>
+					<input type="text" id='eventState' name='eventState' class='inputField' ng-model='anEvent.event.address.state' ng-change=''  placeholder='NY' required=''>
+					<div ng-show='WhereForm.$submitted || WhereForm.eventState.$touched'>
+						<div ng-show='WhereForm.eventState.$error.required'>You need a city for this event</div>
+					</div>
 				</label>
 				<label for="eventZip">Zip:
-					<input type="text" id='eventZip' class='inputField' ng-model='anEvent.event.address.zip' ng-change='anEvent.event.$save()'  placeholder="012345">
+					<input type="text" id='eventZip' name='eventZip' class='inputField' ng-model='anEvent.event.address.zip' ng-change=''  placeholder="012345" required=''>
+					<div ng-show='WhereForm.$submitted || WhereForm.eventZip.$touched'>
+						<div ng-show='WhereForm.eventZip.$error.required'>You need a zip for this event</div>
+					</div>
 				</label>
 			</div>
 		</div>
@@ -138,9 +167,10 @@
 		</div>
 		<!--Map Goes Here-->
 		<div class="row" ng-if='anEvent.showIfHost'>
-			This will be the map
+			<!--This will be the map-->
 		</div>
 	</div>
+	</form>
 
 	<!--Section 3: Who-->
 	<div ng-if='anEvent.manageSections[3].active'>
@@ -191,11 +221,12 @@
 	</div>
 	<!--Call to Action: Save & return to userEvents OR invite guest to RSVP-->
 	<div class="row" ng-if='anEvent.showIfHost'>
-		<div class="col-xs-12 col-sm-12 btn btn-success" ng-click='anEvent.saveAndAdvance()'>Save & Move To Where</div>
+		<div class="col-xs-12 col-sm-12 btn btn-success" ng-show='!WhenForm.$error.required && anEvent.manageSections[1].active' ng-click='anEvent.saveAndAdvance()'>Save & Move To Where</div>
+		<div class="col-xs-12 col-sm-12 btn btn-success" ng-show='!WhereForm.$error.required && anEvent.manageSections[2].active' ng-click='anEvent.saveAndAdvance()'>Save & Move To Who</div>
 	</div>
 	<div class="row" ng-if='!anEvent.showIfHost'>
 		<div class="col-xs-6 col-sm-6 btn btn-success" ng-click='anEvent.guestWillAttend(true)' ng-if='anEvent.hideIfAttending'>I Will Attend</div>
 		<div class="col-xs-6 col-sm-6 btn btn-danger" ng-click='anEvent.guestWillAttend(false)' ng-if='anEvent.hideIfAttending'>Decline Invitation</div>
 	</div>
-
+	
 </div>

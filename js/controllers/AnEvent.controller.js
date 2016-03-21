@@ -10,24 +10,36 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);
 	var userEvents = ref.child('Users').child($routeParams.hostId).child('events').child('hosting').child($routeParams.eventId)
-	
-	//declare and initialize local variables
-	vm.tempDateTime = {start: new Date(), end: new Date()};
-	vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
-	vm.showIfHost = false;
-	vm.hideIfAttending = true;
 
 	//binding to the event
 	vm.event = $firebaseObject(userEvents)
 	var registeredUsers = $firebaseObject(ref.child('Uids'));
 
-	vm.manageSections = {
-		1: {active: true, complete: false, style:{color:'black', 'background-color':'yellow'}},
-		2: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}},
-		3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
-	};
+	//required fields
+	vm.requiredInputs = ['', '', '', '', '', '', '', '', ''];
 
 	//Local Methods
+	function init() {
+		//declare and initialize local variables
+		vm.tempDateTime = {start: '', end: ''};
+		vm.newGuest = {name: '', email:{address:'', valid:false, style:{color:''}}};
+		vm.showIfHost = false;
+		vm.hideIfAttending = true;
+		//sections
+		vm.manageSections = {
+			1: {active: true, complete: false, style:{color:'black', 'background-color':'yellow'}},
+			2: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}},
+			3: {active: false, complete: false, style:{color:'white', 'background-color':'gray'}}
+		};
+
+		//check user to determine state
+		checkForHost();
+		checkIfGuestIsAttending();
+
+		//open up sections
+		if(!vm.showIfHost) openAllSections();
+	}
+
 	function utf8_to_b64(str) {
 		return btoa(str);
 	}
@@ -120,7 +132,20 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		vm.manageSections[3].active = true;
 	}
 
+	function saveEvent() {
+		vm.event.$save().then(function() {
+			$log.info('event saved');
+		}).catch(function(error) {
+			$log.info('error! ' + error);
+		});
+	}
+
 	//view Method
+	vm.setTempTime = function(endpoint) {
+		if(endpoint == 'start') vm.tempDateTime.start = new Date();
+		if(endpoint == 'end') vm.tempDateTime.end = new Date();
+	}
+
 	vm.unixTimeToDateTime = function (unixTime) {
 		return new Date(parseInt(unixTime));
 	};
@@ -145,6 +170,7 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	vm.changeSection = function(targetSection) {
+		$log.info('are we here');
 		for(i = 1; i <=3; i++) {
 			if(i==targetSection) {
 				vm.manageSections[i].active = true;
@@ -193,39 +219,9 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 	}
 
 	vm.isSectionComplete = function() {
-		if(vm.manageSections[1].active) {
-			if( vm.event.name &&
-				vm.event.type &&
-				vm.event.eventTimes.start &&
-				vm.event.eventTimes.start) {
-				$log.info('setting section 1 to green');
-				vm.manageSections[1].complete = true;
-				vm.manageSections[1].style['background-color'] = 'green';
-			}
-			else vm.manageSections[1].complete = false;
-		} else if (vm.manageSections[2].active) {
-			if( vm.event.address.city && 
-				vm.event.address.state &&
-				vm.event.address.street01 &&
-				vm.event.address.zip) {
-				$log.info('setting section 2 to green');
-				vm.manageSections[2].complete = true;
-				vm.manageSections[2].style['background-color'] = 'green';
-			}
-			else vm.manageSections[2].complete = false;
-		} else if (vm.manageSections[3].active) {
-			$log.info('setting section 2 to green');
-			vm.manageSections[3].complete = true;
-			vm.manageSections[3].style['background-color'] = 'green';
+		for(i=0;i<8;i++) {
+			$log.info(vm.requiredInputs[i]);
 		}
-	}
-
-	vm.saveEvent = function() {
-		vm.event.$save().then(function() {
-			$log.info('event saved');
-		}).catch(function(error) {
-			$log.info('error! ' + error);
-		});
 	}
 
 	vm.saveAndAdvance = function() {
@@ -435,13 +431,6 @@ function AnEventController($scope, $log, $location, $routeParams, $firebaseObjec
 		});
 	}
 
-	//execution
-	$log.info($routeParams.uid);
-	$log.info($routeParams.eventId);
-
-	//check user to determine state
-	checkForHost();
-	checkIfGuestIsAttending();
-
-	if(!vm.showIfHost) openAllSections();
+	//start run
+	init();
 }

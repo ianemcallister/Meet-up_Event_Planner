@@ -199,12 +199,13 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 			delete vm.events.hosting.updated;
 		}
 		//save the new event
+		/*
 		vm.events.$save().then(function() {
 			$log.info('Profile saved!');
 			$log.info(vm.events.hosting[eventID]);
 		}).catch(function(error) {
 			$log.info('Error!');
-		});
+		});*/
 
 		//redirect to the new Event Page
 		eventRedirect('/event', eventID, $routeParams.uid);
