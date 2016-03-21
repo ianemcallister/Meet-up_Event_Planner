@@ -37,5 +37,5 @@
 	<li>When users create an account, if their email address has been invited to events before add their pending events to their new profile</li>
 	<li>When users are invited to an event they are sent an e-mail with a link to the event</li>
 	<li>I would refactor the code to clean up the controllers, using more factores, as per the suggestions of <a href="https://www.pluralsight.com/authors/john-papa">John Papa</a> of pluralsight, <a href="Angular 1 Style Guide">https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md</a></li>
-	<li></li>
+	<li>I could generally like to clean the code up, it could be far more concise.</li>
 </ul></p>
