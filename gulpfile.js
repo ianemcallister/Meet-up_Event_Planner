@@ -6,7 +6,10 @@ var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync').create();
 var eslint = require('gulp-eslint'); 
 var jasmine = require('gulp-jasmine-phantom'); 
-//var attachFastClick = require('fastclick');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+var ngAnnotate = require('gulp-ng-annotate');
 //var karma = require('karma').server;
 
 var testFiles = [
@@ -42,12 +45,29 @@ gulp.task('dist', [
 ]);
 
 gulp.task('scripts', function() {
-	gulp.src('js/**/*.js')
+	gulp.src([
+		'js/modules/app.module.js',
+		'js/controllers/*.js',
+		'js/factories/*.js',
+		'js/routes/*.js'
+		])
+	//gulp.src('js/**/*.js')
+		.pipe(concat('all.js'))
 		.pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('scripts-dist', function() {
-	gulp.src('js/**/*.js')
+	gulp.src([
+		'js/modules/app.module.js',
+		'js/controllers/*.js',
+		'js/factories/*.js',
+		'js/routes/*.js'
+		])
+		.pipe(sourcemaps.init())
+		.pipe(concat('all.js'))
+		.pipe(ngAnnotate())
+		.pipe(uglify())
+		.pipe(sourcemaps.write())
 		.pipe(gulp.dest('dist/js'));
 });
 

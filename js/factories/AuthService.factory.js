@@ -4,6 +4,7 @@ angular
 
 authService.$inject = ['$log', '$q', '$location'];
 
+/* @ngInject */
 function authService($log, $q, $location) {
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL);

@@ -4,6 +4,7 @@ angular
 
 UserInformationController.$inject = ['$log', '$location', '$routeParams', '$firebaseObject'];
 
+/* @ngInject */
 function UserInformationController($log, $location, $routeParams, $firebaseObject) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';

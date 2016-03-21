@@ -4,6 +4,7 @@ angular
 
 topMenuController.$inject = ['$scope', '$log', '$location', '$document', '$window'];
 
+/* @ngInject */
 function topMenuController($scope, $log, $location, $document, $window) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
@@ -93,8 +94,13 @@ function topMenuController($scope, $log, $location, $document, $window) {
 					//redirect
 					redirect('/userInformation', authData);
 					$scope.$apply();
+
+					//click closed the navbar
+					angular.element('.navbar-toggle').click();
 				}
 			});
+
+
 
 		}
 

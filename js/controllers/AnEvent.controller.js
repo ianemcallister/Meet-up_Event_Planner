@@ -4,6 +4,7 @@ angular
 
 AnEventController.$inject = ['$scope', '$log', '$location', '$routeParams', '$firebaseObject'];
 
+/* @ngInject */
 function AnEventController($scope, $log, $location, $routeParams, $firebaseObject) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';

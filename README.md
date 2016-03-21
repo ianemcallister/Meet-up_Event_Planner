@@ -1,6 +1,6 @@
 <h2 style="color:blue">Meet-Up Event Planner</h2>
 
-<p>This is the first assignment as part of the Senior Web Developer Nano Degree through Udacity.<p>
+<p>This is my first project as part of the Senior Web Developer Nano Degree through Udacity.<p>
 
 <p>To test on mobile I've uploaded this project to my temporary web server, the project can be found here: <a href="http://79.170.44.81/ianemcallister.com/eventPlanner/index.html#/">http://79.170.44.81/ianemcallister.com/eventPlanner/index.html#/</a> </p>
 
@@ -11,6 +11,8 @@
 <li>Must provide uers with a form to create a user account.</li>
 <li>Should allow users to create a new event.</li>
 <li>Should display events that have been created.</li>
+<li>Should respond to touches naturally.</li>
+<li>The form is understandable while using a screen reader.</li>
 <li>Should be responsive (equally functional on mobile and desktop).</li>
 </ol>
 </p>

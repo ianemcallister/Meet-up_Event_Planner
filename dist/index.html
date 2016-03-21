@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang='en' ng-app='meetUpEventApp'>
+<html lang='en' ng-app='meetUpEventApp' ng-strict-di>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,15 +17,7 @@
   <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
   
   <!-- adding javascript-->
-  <script src="js/modules/app.module.js"></script>
-  <script src="js/routes/route-config.js"></script>
-  <script src="js/controllers/Main.controller.js"></script>
-  <script src="js/controllers/TopMenu.controller.js"></script>
-  <script src="js/controllers/LandingPage.controller.js"></script>
-  <script src="js/controllers/UserInformation.controller.js"></script>
-  <script src="js/controllers/UserEvents.controller.js"></script>
-  <script src="js/controllers/AnEvent.controller.js"></script>
-  <script src='js/factories/AuthService.factory.js'></script>
+  <script src="js/all.js"></script>
 
   <!-- adding styles-->
   <link rel="stylesheet" href="css/landingStyles.css">
@@ -60,20 +52,6 @@
     </div>
   </nav>
   </HEADER>
-  <!--
-  <HEADER ng-controller="topMenuController as topMenuCtrl">
-    <nav class="navbar navbar-default">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand navbar-left" href="/#/" data-target="#" id="">
-            <span><strong>Meet-Up Event Planner</strong></span>
-          </a>
-          <button class='navbar-right btn btn-danger' ng-click='mainCtrl.logout()'>Logout</button> 
-        </div>
-        <div class="navbar navbar-right"><span class="glyphicon glyphicon-log-out"></span></div>
-      </div>
-    </nav>
-  </HEADER>-->
   
   <!--body page-->
   <div class="container">
@@ -81,6 +59,8 @@
     <div ng-view></div>
 
   </div>
+
+  <div class="footer"></div>
 
   <!-- Bigger Scripts to load later -->
 

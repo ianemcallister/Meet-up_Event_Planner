@@ -4,6 +4,7 @@ angular
 
 MainController.$inject = ['$log', '$location', '$document'];
 
+/* @ngInject */
 function MainController($log, $location, $document) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';

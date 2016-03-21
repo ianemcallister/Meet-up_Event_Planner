@@ -1,7 +1,7 @@
 angular
     .module('meetUpEventApp')
     .config(config);
-
+/* @ngInject */
 function config($routeProvider) {   
     $routeProvider
     .when('/', {
@@ -13,7 +13,7 @@ function config($routeProvider) {
         templateUrl: 'views/userInformation.htm',
         controller: 'UserInformationController',
         controllerAs: 'vm',
-        resolve: {
+        resolve: { /* @ngInject */
             userAuthenticationService: userAuthenticationService
         }
     })
@@ -21,7 +21,7 @@ function config($routeProvider) {
         templateUrl: 'views/userEvents.htm',
         controller: 'UserEventsController',
         controllerAs: 'vm',
-        resolve: {
+        resolve: { /* @ngInject */
             userAuthenticationService: userAuthenticationService
         }
     })
@@ -29,7 +29,7 @@ function config($routeProvider) {
         templateUrl: 'views/anEvent.htm',
         controller: 'AnEventController',
         controllerAs: 'vm',
-        resolve: {
+        resolve: { /* @ngInject */
             userAuthenticationService: userAuthenticationService
         }
     })

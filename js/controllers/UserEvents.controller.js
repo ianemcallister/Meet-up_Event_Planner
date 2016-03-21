@@ -4,6 +4,7 @@ angular
 
 UserEventsController.$inject = ['$scope', '$log', '$location', '$routeParams', '$firebaseObject'];
 
+/* @ngInject */
 function UserEventsController($scope, $log, $location, $routeParams, $firebaseObject) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
@@ -15,6 +16,8 @@ function UserEventsController($scope, $log, $location, $routeParams, $firebaseOb
 	//binding important variables
 	vm.events = $firebaseObject(userEvents);
 
+	vm.showDecline = false;
+	
 	currentUserBio.child('name').on('value', function(snapshot) {
 		vm.currentUserName = snapshot.val();
 		$log.info('got the user name');

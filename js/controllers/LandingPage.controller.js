@@ -4,6 +4,7 @@ angular
 
 LandingPageController.$inject = ['$scope', '$log', '$location', '$document', '$window'];
 
+/* @ngInject */
 function LandingPageController($scope, $log, $location, $document, $window) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
@@ -241,7 +242,7 @@ function LandingPageController($scope, $log, $location, $document, $window) {
 	}
 
 	vm.createNewUser = function() {
-		alert('Creating a new user account now!');
+		$log.info('Creating a new user account now!');
 
 		if(vm.unlockCreateUserBtn.usable) {
 			//define local variable
