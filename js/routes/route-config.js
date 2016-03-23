@@ -9,6 +9,16 @@ function config($routeProvider) {
         controller: 'LandingPageController',
         controllerAs: 'vm'
     })
+    .when('/signup', {
+        templateUrl: 'views/newUserSignup.htm',
+        controller: 'NewUserSignUpController',
+        controllerAs: 'vm'
+    })
+    .when('/login', {
+        templateUrl: 'views/registeredUserLogin',
+        controller: 'RegUserLoginController',
+        controllerAs: 'vm'
+    })
     .when('/userInformation/:uid?/:token?', {
         templateUrl: 'views/userInformation.htm',
         controller: 'UserInformationController',

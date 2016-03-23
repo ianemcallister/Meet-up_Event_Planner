@@ -13,8 +13,6 @@ function authService($log, $q, $location) {
 		isLoggedIn: isLoggedIn
 	};
 
-	return allAuthServices;
-
 	function authDataCallback(authData) {
 	  
 	  if (authData) {
@@ -31,4 +29,7 @@ function authService($log, $q, $location) {
 		$log.info('logging from the isLoggedIn Method');
 		ref.onAuth(authDataCallback);
 	}
+	
+	return allAuthServices;
+
 }

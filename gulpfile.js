@@ -47,12 +47,35 @@ gulp.task('dist', [
 gulp.task('scripts', function() {
 	gulp.src([
 		'js/modules/app.module.js',
-		'js/controllers/*.js',
 		'js/factories/*.js',
+		'js/controllers/*.js',
 		'js/routes/*.js'
 		])
-	//gulp.src('js/**/*.js')
-		.pipe(concat('all.js'))
+		.pipe(concat('app.js'))
+		.pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('bundle', function() {
+	/*gulp.src([
+		'node_modules/fastclick/lib/fastclick.js',
+		'node_modules/npm-angular-route/lib/angular-route.js' 
+		])
+		.pipe(sourcemaps.init())
+		.pipe(concat('minifiedPreBundle.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest('lib'));*/
+	gulp.src([
+		'node_modules/jquery/dist/jquery.js',
+		'node_modules/angular/angular.js',
+		'node_modules/npm-angular-route/lib/angular-route.js',
+		'node_modules/bootstrap/dist/js/bootstrap.js'
+		//'node_modules/angular-touch/angular-touch.js',
+		//'node_modules/firebase/lib/firebase-web.js', 
+		//'node_modules/angularfire/dist/angularfire.js',
+		//'node_modules/fastclick/lib/fastclick.js',
+		])
+		.pipe(concat('bundle.js'))
 		.pipe(gulp.dest('dist/js'));
 });
 
@@ -64,7 +87,7 @@ gulp.task('scripts-dist', function() {
 		'js/routes/*.js'
 		])
 		.pipe(sourcemaps.init())
-		.pipe(concat('all.js'))
+		.pipe(concat('app.js'))
 		.pipe(ngAnnotate())
 		.pipe(uglify())
 		.pipe(sourcemaps.write())

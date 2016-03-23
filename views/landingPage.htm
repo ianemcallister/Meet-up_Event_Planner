@@ -5,23 +5,7 @@
 			<h3>Have Fun. Schedule Your Events. Make Memories.</h3>
 		</div>
 	</div>
-	<!--Create a New User account-->
-	<div class="row" id='newUserBox'>
-		<div class="col-xs-12 col-sm-12">
-			<h4>Create an Account</h4>
-			<p>It's easy, just sign up here!</p>
-				<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name:<input type="text" class='col-xs-12 col-sm-12 col-md-12 inputText' id='newName' ng-model='recruitUsers.newName' ng-keyup='recruitUsers.checkNewName()' required autocomplete="name"  ng-change='recruitUsers.update()' placeholder='e.g. Hugh Jackman' autofocus></label>
-				<label for='newEmail' ng-style='recruitUsers.validNewEmail.style'>Email:<input type="email" class='col-xs-12 col-sm-12 col-md-12 inputText' id='newEmail' ng-model='recruitUsers.newEmail' ng-keyup='recruitUsers.checkNewEmail()' required autocomplete="email"  ng-change='recruitUsers.update()' placeholder='e.g. hugh.jackman@gmail.com'></label>
-				<label for='newPassword' ng-style='recruitUsers.securePassword.style'>Password:<input type="password" class='col-xs-12 col-sm-12 col-md-12 inputText' id='newPassword' ng-model='recruitUsers.newPassword' ng-focus='recruitUsers.displayPassReqs()' ng-keyup='recruitUsers.checkNewPasswords()' placeholder='**********'></label>
-				<div ng-if='recruitUsers.showRequirnments' id="passReqs">
-					<strong>PASSWORD REQUIRNMENTS</strong>
-					<ul>
-						<li ng-repeat="requirnment in recruitUsers.passwordRequirnments" value='{{ requirnment.constraint }}' ng-style='requirnment.style'>{{ requirnment.constraint }}</li>
-					</ul>
-				</div> <br>
-				<label for='newSubmit'><input ng-class='recruitUsers.unlockCreateUserBtn.class' id='newSubmit' type="submit" value='Create User Account' ng-click='recruitUsers.createNewUser()' ng-touch='recruitUsers.createNewUser()'></label>
-		</div>
-	</div>
+	Create a new account
 
 	<!--Login an Existing user-->
 	<div class="row">
