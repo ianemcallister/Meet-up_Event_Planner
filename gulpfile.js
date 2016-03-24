@@ -57,27 +57,54 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('bundle', function() {
-	/*gulp.src([
-		'node_modules/fastclick/lib/fastclick.js',
-		'node_modules/npm-angular-route/lib/angular-route.js' 
-		])
-		.pipe(sourcemaps.init())
-		.pipe(concat('minifiedPreBundle.js'))
-		.pipe(uglify())
-		.pipe(sourcemaps.write())
-		.pipe(gulp.dest('lib'));*/
 	gulp.src([
-		'node_modules/jquery/dist/jquery.js',
-		'node_modules/angular/angular.js',
-		'node_modules/npm-angular-route/lib/angular-route.js',
-		'node_modules/bootstrap/dist/js/bootstrap.js'
-		//'node_modules/angular-touch/angular-touch.js',
-		//'node_modules/firebase/lib/firebase-web.js', 
-		//'node_modules/angularfire/dist/angularfire.js',
-		//'node_modules/fastclick/lib/fastclick.js',
+		'lib/jquery.min.js'
 		])
-		.pipe(concat('bundle.js'))
-		.pipe(gulp.dest('dist/js'));
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/angular.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/angular-route.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/angular-touch.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/angular-animate.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/angularfire.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/firebase.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));	
+	gulp.src([
+		'lib/bootstrap.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/fastclick.min.js'
+		])
+		.pipe(gulp.dest('dist/js/lib'));
+	gulp.src([
+		'lib/bootstrap.min.css'
+		])
+		.pipe(gulp.dest('dist/css/lib'));
+	gulp.src([
+		'lib/glyphicons-halflings-regular.ttf'
+		])
+		.pipe(gulp.dest('dist/css/fonts'));
+	gulp.src([
+		'lib/glyphicons-halflings-regular.woff'
+		])
+		.pipe(gulp.dest('dist/css/fonts'));
 });
 
 gulp.task('scripts-dist', function() {
