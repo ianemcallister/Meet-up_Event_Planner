@@ -49,7 +49,8 @@ gulp.task('scripts', function() {
 		'js/modules/app.module.js',
 		'js/factories/*.js',
 		'js/controllers/*.js',
-		'js/routes/*.js'
+		'js/routes/*.js',
+		'js/directives/*.js'
 		])
 		.pipe(concat('app.js'))
 		.pipe(gulp.dest('dist/js'));
@@ -84,7 +85,8 @@ gulp.task('scripts-dist', function() {
 		'js/modules/app.module.js',
 		'js/controllers/*.js',
 		'js/factories/*.js',
-		'js/routes/*.js'
+		'js/routes/*.js',
+		'js/directives/*.js'
 		])
 		.pipe(sourcemaps.init())
 		.pipe(concat('app.js'))
