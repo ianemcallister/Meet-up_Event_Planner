@@ -18,30 +18,43 @@ function NewUserSignUpController($scope, $log, validation) {
 	vm.errors = {
 		name: '',
 		email: '',
-		password: '',
+		password: false,
 		passesAllTests: false
 	}
+	vm.passReqs = {
+		0: { id:'', req:'Is at least 16 characters long', fulfilled:false, 'style':{color:'red'}},
+		1: { id:'', req:'Is no longer than 100 characters', fulfilled:false, 'style':{color:'red'} },
+		2: { id:'', req:'Contains at least one lowercase letter', fulfilled:false, 'style':{color:'red'} },
+		3: { id:'', req:'Contains at least one uppercase letter', fulfilled:false, 'style':{color:'red'} },
+		4: { id:'', req:'Contains at least one number', fulfilled:false, 'style':{color:'red'} },
+		5: { id:'', req:'Contains at least one required symbol (\!\@\#\$\%\^\&\*)', fulfilled:false, 'style':{color:'red'} },
+		6: { id:'', req:"Doesn't have any illegal characters", fulfilled:true, 'style':{color:'red'} }
+	}
+	vm.showReqsBox = false;
 
 	//define required field constraints
 	var signupValidation = validation;
 
 	//define controller methods
 	function verifyRequirnments() {
-		if(vm.errors.name == '' && vm.errors.email == '' && vm.errors.password == '') vm.errors.passesAllTests = true;
+		if(vm.errors.name == '' && vm.errors.email == '' && !vm.errors.password) vm.errors.passesAllTests = true;
 		else vm.errors.passesAllTests = false;
 
-		if( angular.isDefined(vm.inputs.newName) && 
-			angular.isDefined(vm.inputs.newEmail) && 
-			angular.isDefined(vm.inputs.newPassword)) vm.inputs.allFieldsDefined = true;
+		if( angular.isDefined(vm.inputs.newName) && vm.inputs.newName !== '' &&
+			angular.isDefined(vm.inputs.newEmail) && vm.inputs.newEmail !== '' &&
+			angular.isDefined(vm.inputs.newPassword) && vm.inputs.newPassword !== '') 
+				vm.inputs.allFieldsDefined = true;
 		else vm.inputs.allFieldsDefined = false;
 	}
+
+
 
 	//define vm accessible methods
 	vm.checkNewName = function() {
 		//local variable
 		var errors = [];
 		var hasName = signupValidation.required(vm.inputs.newName);
-		var longEnough = signupValidation.minLength(vm.inputs.newName)
+		var longEnough = signupValidation.minNameLength(vm.inputs.newName)
 		
 		//log errors
 		if(angular.isDefined(hasName)) errors.push(hasName);
@@ -72,9 +85,49 @@ function NewUserSignUpController($scope, $log, validation) {
 	}
 
 	vm.checkNewPassword = function() {
+		//flip on reqs box
+		vm.showReqsBox = true;
 
-		
+		//local variable
+		var errors = [];
+		var hasPassword = signupValidation.required(vm.inputs.newPassword);
+		var specificReqs = [
+			signupValidation.minPassLength(vm.inputs.newPassword),
+			signupValidation.maxPassLength(vm.inputs.newPassword),
+			signupValidation.atLeastOneLowercase(vm.inputs.newPassword),
+			signupValidation.atLeastOneUppercase(vm.inputs.newPassword),
+			signupValidation.atLeastOneNumber(vm.inputs.newPassword),
+			signupValidation.atLeastOneSymbol(vm.inputs.newPassword),
+			signupValidation.illegalCharacter(vm.inputs.newPassword)
+		];
+
+		//log errors
+		if(angular.isDefined(hasPassword)) errors.push(hasPassword);
+
+		//update the errors model
+		if(errors.length > 0) vm.errors.password = errors.join(', ');
+		else vm.errors.email = '';
+
+		//update reqs model
+		var anyErrors = false;
+		for(i=0; i<7; i++) {
+			if(specificReqs[i]) {
+				vm.passReqs[i].fulfilled = true;
+				vm.passReqs[i].style = {color:'green'};
+			} else {
+				vm.passReqs[i].fulfilled = false;
+				vm.passReqs[i].style = {color:'red'};
+				anyErrors = true;
+			}
+		}
+
+		vm.errors.password = anyErrors;
 		verifyRequirnments();
+	}
+
+	vm.exitPassword = function() {
+		vm.checkNewPassword();
+		vm.showReqsBox = false;
 	}
 
 	vm.createNewUser = function () {

@@ -8,20 +8,21 @@
 			<p>*Required fields</p>
 		</div>
 	</div>
+	<form name='CreateUserForm' class='css-form' novalidate>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<span ng-if="recruitUsers.errors.name != ''" class="label label-danger">error: {{recruitUsers.errors.name}}</span>
+			<span ng-if="recruitUsers.errors.name != ''" class="label label-danger">error: {{recruitUsers.errors.name}}<br></span> 
 			<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name*:
-				<input 	name='newName' 
+				<input 	required
+						name='newName' 
 						autofocus
-						autocomplete="on" 
+						autocomplete="name" 
 						type="text" 
 						class='col-xs-12 col-sm-12 col-md-12 inputText' 
 						id='newName' 
 						ng-model='recruitUsers.inputs.newName' 
 						ng-keyup='recruitUsers.checkNewName()'
 						ng-blur='recruitUsers.checkNewName()'  
-						required autocomplete="name"  
 						ng-change='recruitUsers.update()' 
 						placeholder='e.g. Hugh Jackman' 
 						>
@@ -30,47 +31,48 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<span ng-if="recruitUsers.errors.email != ''" class="label label-danger">error: {{recruitUsers.errors.email}}</span>
+			<span ng-if="recruitUsers.errors.email != ''" class="label label-danger">error: {{recruitUsers.errors.email}}<br></span> 
 			<label for='newEmail' ng-style='recruitUsers.validNewEmail.style'>Email*:
 				<input 	name='newEmail' 
 						type="email"
-						autocomplete="on"  
+						required 
+						autocomplete="email" 
 						class='col-xs-12 col-sm-12 col-md-12 inputText' 
 						id='newEmail' 
 						ng-model='recruitUsers.inputs.newEmail' 
 						ng-keyup='recruitUsers.checkNewEmail()'
-						ng-blur='recruitUsers.checkNewEmail()' 
-						required autocomplete="email"  
-						ng-change='recruitUsers.update()' 
+						ng-blur='recruitUsers.checkNewEmail()'
+						ng-change='recruitUsers.checkNewEmail()'  
 						placeholder='e.g. hugh.jackman@gmail.com'>
 			</label>
 		</div>
 	</div>		
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<span ng-if="recruitUsers.errors.password != ''" class="label label-danger">error: {{recruitUsers.errors.password}}</span>
 			<label for='newPassword' ng-style='recruitUsers.securePassword.style'>Password*:
 				<input 	name='newPassword'
 						type="password"
-						autocomplete="on" 
+						required 
+						autocomplete="passowrd" 
 						class='col-xs-12 col-sm-12 col-md-12 inputText' 
 						id='newPassword' 
 						ng-model='recruitUsers.inputs.newPassword' 
-						ng-focus='recruitUsers.displayPassReqs()' 
+						ng-focus='recruitUsers.checkNewPassword()' 
 						ng-keyup='recruitUsers.checkNewPassword()' 
-						ng-blur='recruitUsers.checkNewPassword()'
+						ng-blur='recruitUsers.exitPassword()'
 						placeholder='**********'>
 			</label>
-			<!--
-			<div ng-if='recruitUsers.showRequirnments' id="passReqs">
+			<!--{{recruitUsers.passReqs }}-->
+			<div ng-if='recruitUsers.showReqsBox' id="passReqs">
 				<strong>PASSWORD REQUIRNMENTS</strong>
 				<ul>
-					<li 	ng-repeat="requirnment in recruitUsers.passwordRequirnments" 
-							value='{{ requirnment.constraint }}' 
-							ng-style='requirnment.style'>
-								{{ requirnment.constraint }}</li>
+					<li ng-repeat="requirnment in recruitUsers.passReqs" 
+						value='{{ requirnment.req }}'
+						ng-style='requirnment.style' 
+						>
+						{{ requirnment.req }}</li>
 				</ul>
-			</div> <br>-->
+			</div> <br>
 		</div>
 	</div>		
 	<div class="row">
@@ -87,4 +89,5 @@
 			</label>
 		</div>
 	</div>
+	</form>
 </div>
