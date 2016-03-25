@@ -17,9 +17,9 @@ function MainController($log, $location, $document) {
 	};
 
 	if ('addEventListener' in $document) {
-    $document.addEventListener('DOMContentLoaded', function() {
-    	$log.info('adding FastClick');
-        FastClick.attach($document.body);
-    }, false);
-}
+	    $document.addEventListener('DOMContentLoaded', function() {
+	    	$log.info('adding FastClick');
+	        FastClick.attach($document.body);
+	    }, false);
+	}
 }

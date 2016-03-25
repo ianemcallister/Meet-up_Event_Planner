@@ -11,6 +11,7 @@
 	<form name='CreateUserForm' class='css-form' novalidate>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span ng-if="recruitUsers.errors.name == ''"><br></span> 
 			<span ng-if="recruitUsers.errors.name != ''" class="label label-danger">error: {{recruitUsers.errors.name}}<br></span> 
 			<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name*:
 				<input 	required
@@ -22,8 +23,8 @@
 						id='newName' 
 						ng-model='recruitUsers.inputs.newName' 
 						ng-keyup='recruitUsers.checkNewName()'
+						ng-change='recruitUsers.checkNewName()'
 						ng-blur='recruitUsers.checkNewName()'  
-						ng-change='recruitUsers.update()' 
 						placeholder='e.g. Hugh Jackman' 
 						>
 			</label>
@@ -31,6 +32,7 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span ng-if="recruitUsers.errors.email == ''"><br></span> 
 			<span ng-if="recruitUsers.errors.email != ''" class="label label-danger">error: {{recruitUsers.errors.email}}<br></span> 
 			<label for='newEmail' ng-style='recruitUsers.validNewEmail.style'>Email*:
 				<input 	name='newEmail' 
@@ -41,14 +43,15 @@
 						id='newEmail' 
 						ng-model='recruitUsers.inputs.newEmail' 
 						ng-keyup='recruitUsers.checkNewEmail()'
-						ng-blur='recruitUsers.checkNewEmail()'
-						ng-change='recruitUsers.checkNewEmail()'  
+						ng-change='recruitUsers.checkNewEmail()'
+						ng-blur='recruitUsers.checkNewEmail()'  
 						placeholder='e.g. hugh.jackman@gmail.com'>
 			</label>
 		</div>
 	</div>		
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span><br></span> 
 			<label for='newPassword' ng-style='recruitUsers.securePassword.style'>Password*:
 				<input 	name='newPassword'
 						type="password"
@@ -58,7 +61,7 @@
 						id='newPassword' 
 						ng-model='recruitUsers.inputs.newPassword' 
 						ng-focus='recruitUsers.checkNewPassword()' 
-						ng-keyup='recruitUsers.checkNewPassword()' 
+						ng-keyup='recruitUsers.checkNewPassword()'  
 						ng-blur='recruitUsers.exitPassword()'
 						placeholder='**********'>
 			</label>
@@ -77,10 +80,11 @@
 	</div>		
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span><br></span> 
 			<label for='newSubmit'>
 				<input 	name='newSubmit' 
-						ng-if='recruitUsers.errors.passesAllTests && recruitUsers.inputs.allFieldsDefined'
-						class='col-xs-12 col-sm-12 btn btn-primary' 
+						ng-if='recruitUsers.errors.passesAllTests && recruitUsers.inputs.requiredFieldsDefined'
+						class='col-xs-12 col-sm-12 btn btn-success' 
 						id='newSubmit' 
 						type="submit" 
 						value='Create User Account' 

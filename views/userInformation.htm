@@ -1,4 +1,5 @@
 <div class="container-fluid" ng-controller='UserInformationController as userInformation'>
+	
 	<!--Page Explained-->
 	<div class="row">
 		<div ng-if='userInformation.dataLoaded()' class="col-xs-12 col-sm-12">
@@ -9,40 +10,79 @@
 			<p>If you'd like to tell us a little more about yourself please do, if not just move on with the link at the bottom!</p>
 		</div>
 	</div>
-	<!--Required Data: Name & email-->
-	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<h4>Required</h4>
-			<label for="name">Name:
-				<input type="text" id='name' class='inputText' ng-model='userInformation.user.name' autofocus>
-			</label>
-			<label for="email">E-mail:
-				<input type="email" id='email' class='inputText' ng-model='userInformation.user.email'>
-			</label>
-		</div>
-	</div>
+
 	<!--Gather Optional Data: Work-->
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
 			<h4>Work</h4>
-			<label for="employerName">Employer:
-				<input type="text" id='employerName' class='inputText' ng-model='userInformation.user.employer' ng-change='userInformation.checkValues()' placeholder='e.g. Google, Facebook, etc'>
+			<label for="company">Company:
+				<input 	name='company'
+						type="text" 
+						id='employerName' 
+						class='inputText' 
+						ng-model='userInformation.user.company' 
+						ng-change='userInformation.checkValues()' 
+						placeholder='e.g. Google, Facebook, etc'>
 			</label>
 			<label for="jobTitle">Job Title:
-				<input type="text" id='jobTitle' class='inputText' ng-model='userInformation.user.jobTitle' ng-change='userInformation.checkValues()' placeholder='e.g. Desk Jocky, Dental Hygenist'>
+				<input 	name='jobTitle'
+						type="text" 
+						id='jobTitle' 
+						class='inputText' 
+						ng-model='userInformation.user.title' 
+						ng-change='userInformation.checkValues()' 
+						placeholder='e.g. Desk Jocky, Dental Hygenist'>
 			</label>
 		</div>
 	</div>
+
 	<!--Gather Optional Data: Personal-->
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
 			<h4>Personal</h4>
 			<label for="birthday">Birhtday:
-				<input type="datetime-local" id='birthday' class='inputText' ng-model='userInformation.tempBirthday' ng-change='userInformation.checkValues()' placeholder='Sep. 19, 1983'>
+				<input 	name='birthday'
+						type="datetime-local" 
+						id='birthday' 
+						class='inputText' 
+						ng-model='userInformation.tempBirthday' 
+						ng-blur='userInformation.updateDOB()'
+						ng-change='userInformation.checkValues()' 
+						>
 			</label>
 		</div>
 	</div>
 	<br>
+
 	<!--Move On to user Events-->
-	<div class="row col-xs-12 col-sm-12" ng-class='userInformation.proceedBtn' ng-click='userInformation.saveAndMoveOn()'>{{ userInformation.btnMssg }}</div>
+	<div class="row">
+		<div 	class="col-xs-12 col-sm-12" 
+				ng-class='userInformation.view.proceedBtn' 
+				ng-click='userInformation.saveAndMoveOn()'>
+				{{ userInformation.view.btnMssg }}
+		</div>
+	</div>
+
+	<!--Required Data: Name & email-->
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<h4>Required</h4>
+			<label for="name">Name:
+				<input 	name='name'
+						autofocus
+						type="text" 
+						id='name' 
+						class='inputText' 
+						ng-model='userInformation.user.name' 
+						>
+			</label>
+			<label for="email">E-mail:
+				<input 	name='email'
+						type="email" 
+						id='email' 
+						class='inputText' 
+						ng-model='userInformation.user.email'>
+			</label>
+		</div>
+	</div>
 </div>

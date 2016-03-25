@@ -27,7 +27,8 @@ function authService($log, $q, $location) {
 	function isLoggedIn() {
 		//check the user authenticaion state
 		$log.info('logging from the isLoggedIn Method');
-		ref.onAuth(authDataCallback);
+		//ref.onAuth(authDataCallback);
+		return true;
 	}
 	
 	return allAuthServices;

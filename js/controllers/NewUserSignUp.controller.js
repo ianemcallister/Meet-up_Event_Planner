@@ -2,10 +2,10 @@ angular
     .module('meetUpEventApp')
     .controller('NewUserSignUpController', NewUserSignUpController);
 
-NewUserSignUpController.$inject = ['$scope', '$log', 'validation'];
+NewUserSignUpController.$inject = ['$scope', '$log', 'validation', 'backendServices', 'trafficValet', 'userData'];
 
 /* @ngInject */
-function NewUserSignUpController($scope, $log, validation) {
+function NewUserSignUpController($scope, $log, validation, backendServices, trafficValet, userData) {
 	var vm = this;
 
 	//define vm input variables
@@ -13,7 +13,7 @@ function NewUserSignUpController($scope, $log, validation) {
 		newName: '',
 		newEmail: '',
 		newPassword: '',
-		allFieldsDefined: false
+		requiredFieldsDefined: false
 	}
 	vm.errors = {
 		name: '',
@@ -43,11 +43,9 @@ function NewUserSignUpController($scope, $log, validation) {
 		if( angular.isDefined(vm.inputs.newName) && vm.inputs.newName !== '' &&
 			angular.isDefined(vm.inputs.newEmail) && vm.inputs.newEmail !== '' &&
 			angular.isDefined(vm.inputs.newPassword) && vm.inputs.newPassword !== '') 
-				vm.inputs.allFieldsDefined = true;
-		else vm.inputs.allFieldsDefined = false;
+				vm.inputs.requiredFieldsDefined = true;
+		else vm.inputs.requiredFieldsDefined = false;
 	}
-
-
 
 	//define vm accessible methods
 	vm.checkNewName = function() {
@@ -131,7 +129,39 @@ function NewUserSignUpController($scope, $log, validation) {
 	}
 
 	vm.createNewUser = function () {
-		$log.info('creating a new user');
+		//declare local variables
+		var newUserSherpa = trafficValet;
+
+		//confirm all fields are valid
+		if(vm.errors.passesAllTests && vm.inputs.requiredFieldsDefined) {
+			
+			//declare local variables
+			var createNewUser = backendServices;
+			var newUserData = userData;
+
+			//maintain local values to speed up user experience
+			newUserData.loadPrimaries(vm.inputs.newName, vm.inputs.newEmail);
+
+			//create the new user in the database
+			createNewUser.createNewUser(vm.inputs.newEmail, vm.inputs.newPassword)
+			.then(function(userData) {
+				//add this user to the list of registered users
+				createNewUser.addNewUserToDatabase(userData.uid, vm.inputs.newName, vm.inputs.newEmail)
+				.then(function(message) {
+					$log.info(message);
+					//add this user to the list of registered users
+					createNewUser.addNewUserToRegUsersList(userData.uid, vm.inputs.newEmail)
+					.then(function(message) { $log.info(message); })
+					.catch(function(message) { $log.info(message); })
+				})
+				.catch(function(message) { $log.info(message); })
+			})
+			.catch(function(message) { $log.info(message); })
+			
+			//redirect to the next page 
+			newUserSherpa.redirectTo('/userInformation');
+		}
+
 	}
 	
 	//run time actions
