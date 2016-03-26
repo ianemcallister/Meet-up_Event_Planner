@@ -8,12 +8,14 @@ userData.$inject = ['$log', '$q', 'backendServices'];
 function userData($log, $q, backendServices) {
 	//declare local variables
 	var currentUser = {
-		uid: '',
-		name: '',
-		email: '',
-		company: '',
-		title: '',
-		dob: 0,
+		bio: { 
+			uid: '',
+			name: '',
+			email: '',
+			company: '',
+			title: '',
+			dob: 0
+		},
 		hosting: {},
 		pending: {},
 		attending: {},
@@ -36,6 +38,7 @@ function userData($log, $q, backendServices) {
 		setTitle: setTitle,
 		setDOB: setDOB,
 		updateUserEvents: updateUserEvents,
+		updateAllUserEvents: updateAllUserEvents,
 		updateBio: updateBio,
 
 		removeUserEvents: removeUserEvents,
@@ -105,6 +108,13 @@ function userData($log, $q, backendServices) {
 		currentUser[type][event.id] = event;
 	}
 
+	function updateAllUserEvents(allUserEvents) {
+		currentUser.hosting = allUserEvents.hosting;
+		currentUser.pending = allUserEvents.pending;
+		currentUser.attending = allUserEvents.attending;
+		currentUser.completed = allUserEvents.completed;
+	}
+
 	function updateBio(userBio) {
 		//update local values
 		setName(userBio.name);
@@ -123,9 +133,9 @@ function userData($log, $q, backendServices) {
 	}
 
 	//other Methods
-	function loadPrimaries(name, email) {
-		setName(name);
-		setEmail(email);
+	function loadPrimaries(email, name) {
+		if(angular.isDefined(email)) setEmail(email);
+		if(angular.isDefined(name)) setEmail(name);
 	}
 
 	function writeAllToDatabase() {

@@ -19,7 +19,8 @@
 				<input 	name='company'
 						type="text" 
 						id='employerName' 
-						class='inputText' 
+						class='inputText'
+						autofocus
 						ng-model='userInformation.user.company' 
 						ng-change='userInformation.checkValues()' 
 						placeholder='e.g. Google, Facebook, etc'>
@@ -69,7 +70,6 @@
 			<h4>Required</h4>
 			<label for="name">Name:
 				<input 	name='name'
-						autofocus
 						type="text" 
 						id='name' 
 						class='inputText' 

@@ -140,12 +140,12 @@ function NewUserSignUpController($scope, $log, validation, backendServices, traf
 			var newUserData = userData;
 
 			//maintain local values to speed up user experience
-			newUserData.loadPrimaries(vm.inputs.newName, vm.inputs.newEmail);
+			newUserData.loadPrimaries(vm.inputs.newEmail, vm.inputs.newName);
 
 			//create the new user in the database
 			createNewUser.createNewUser(vm.inputs.newEmail, vm.inputs.newPassword)
 			.then(function(userData) {
-				//add this user to the list of registered users
+				//create a user profile in the database
 				createNewUser.addNewUserToDatabase(userData.uid, vm.inputs.newName, vm.inputs.newEmail)
 				.then(function(message) {
 					$log.info(message);

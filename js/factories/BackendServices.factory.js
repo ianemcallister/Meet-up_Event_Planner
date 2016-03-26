@@ -19,7 +19,8 @@ function backendServices($log, $q, $window) {
 		addNewUserToRegUsersList: addNewUserToRegUsersList,
 		uploadUserData: uploadUserData,
 		downloadUserData: downloadUserData,
-		getUserBio: getUserBio
+		getUserBio: getUserBio,
+		getUserEvents: getUserEvents
 	};
 
 	function utf8_to_b64(str) {
@@ -129,7 +130,36 @@ function backendServices($log, $q, $window) {
 
 	}
 
-	function LoginRegisteredUser(email, password) {}
+	function LoginRegisteredUser(email, password) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		
+		return $q(function(resolve, reject) {
+
+			/*//authenticate the user
+			app.authWithPassword({
+
+				email: email,
+				password: password
+
+			}, function(error, authData) {
+				
+				if(error) {
+					reject('Error Logging In: ' + error);
+				} else {
+					$log.info('Logged In successfully: ' + authData.uid);
+					resolve(authData);
+				}
+
+			});*/
+
+			$window.setTimeout(function() {
+				resolve({ uid: '2098sj-djiso92-sjir' });
+			}, 2000);
+
+		});
+		
+	}
 
 	function uploadUserData(allUserData) {
 		//declare local variables
@@ -155,10 +185,10 @@ function backendServices($log, $q, $window) {
 
 	}
 
-	function getUserBio() {
+	function getUserBio(uid) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		//var userBio = app.child('Users').child(allUserData.uid).child(bio);
+		var userBio = app.child('Users').child(uid).child('bio');
 
 		//return the promise
 		return $q(function(resolve, reject) {
@@ -176,6 +206,28 @@ function backendServices($log, $q, $window) {
 
 		});
 	}
+
+	function getUserEvents(uid) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var userBio = app.child('Users').child(uid).child('bio');
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			//the actual call
+			/*call goes here*/
+			$window.setTimeout(function() {
+				resolve({
+					hosting: { id: '9837423' },
+					pending: { id: '3209742' },
+					attending: { id: '40982' },
+					completed: { id: '32957' }
+				});
+			}, 2000);
+
+		});
+	}
+
 	//return the object
 	return allBackendServices;
 }

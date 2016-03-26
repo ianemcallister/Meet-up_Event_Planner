@@ -1,0 +1,69 @@
+<div id='registeredUserBox' ng-controller='RegUserLoginController as loginUsers'>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<a 	class='pull-right' 
+				id='needAnAccount' 
+				href="#/signup">
+				Need to create an account?
+			</a>
+			<h4>Login</h4>
+			<p>If you're already a user, sign in here!</p>
+		</div>
+	</div>
+
+	<!--Login an Existing user-->
+	<div class="row">		
+		<div class="col-xs-12 col-sm-12">
+			<span 	ng-if="loginUsers.errors.passesAllTests"><br></span> 
+			<span 	ng-if="!loginUsers.errors.passesAllTests" 
+					class="label label-danger">
+					Login Failed: {{loginUsers.errors.message}}
+					<br>
+			</span> 
+			<label 	for="userEmail" ng-style='loginUsers.validUserEmail.style'>Email: 
+				<input 	name='userEmail'
+						type="email" 
+						autofocus='on' 
+						class='col-xs-12 col-sm-12 col-md-12 inputText' 
+						id='userEmail' 
+						ng-model='loginUsers.userEmail' 
+						ng-change='loginUsers.update()' 
+						ng-keyup='loginUsers.update()' 
+						required 
+						autocomplete="email" 
+						placeholder='e.g. MileyCyrus@gmail.com'>
+			</label>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="userPassword" ng-style='loginUsers.validUserPassword.style'>Password:
+				<input 	name='userPassword'
+						type="password" 
+						class='col-xs-12 col-sm-12 col-md-12 inputText' 
+						id='userPassword' 
+						ng-model='loginUsers.userPassword'
+						ng-change='loginUsers.update()' 
+						ng-keyup='loginUsers.update()' 
+						required 
+						autocomplete="password" 
+						placeholder='Your Password Here'>
+			</label>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for='submit'>
+				<input 	name='submit' 
+						ng-class='loginUsers.unclockUserLoginBtn.class' 
+						id='submit' 
+						type="submit"
+						ng-value="loginUsers.unclockUserLoginBtn.message" 
+						ng-click='loginUsers.loginRegisteredUser()' 
+						ng-touch='loginUsers.loginRegisteredUser()'>
+			</label>
+		</div>
+	</div>
+</div>

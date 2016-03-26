@@ -35,6 +35,9 @@ body {
 #haveAnAccount {
   margin-top: 10px; }
 
+#needAnAccount {
+  margin-top: 10px; }
+
 .errorMessages {
   color: white;
   font-weight: normal;

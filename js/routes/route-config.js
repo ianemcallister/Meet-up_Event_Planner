@@ -15,7 +15,7 @@ function config($routeProvider) {
         controllerAs: 'vm'
     })
     .when('/login', {
-        templateUrl: 'views/registeredUserLogin',
+        templateUrl: 'views/registeredUserLogin.htm',
         controller: 'RegUserLoginController',
         controllerAs: 'vm'
     })

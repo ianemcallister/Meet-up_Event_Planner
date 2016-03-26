@@ -5,16 +5,5 @@
 			<h3>Have Fun. Schedule Your Events. Make Memories.</h3>
 		</div>
 	</div>
-	Create a new account
 
-	<!--Login an Existing user-->
-	<div class="row">
-				
-		<div class="col-xs-12 col-sm-12">
-			<h4>Login</h4>
-				<label for="userNameOrEmail" ng-style='recruitUsers.validUserEmail.style'>Email: <input type="email" class='col-xs-12 col-sm-12 col-md-12 inputText' id='userEmail' ng-model='recruitUsers.userEmail' ng-change='recruitUsers.update()' ng-keyup='recruitUsers.checkUserEmail()' required autocomplete="email" placeholder='e.g. MileyCyrus@gmail.com'></label>
-				<label for="userPassword" ng-style='recruitUsers.validUserPassword.style'>Password:<input type="password" class='col-xs-12 col-sm-12 col-md-12 inputText' id='userPassword' ng-model='recruitUsers.userPassword' ng-keyup='recruitUsers.checkUserPasswords()' required autocomplete="password" placeholder='**********' ></label> <br>
-				<label for="userSubmit"><button ng-class='recruitUsers.unclockUserLoginBtn.class' type="submit" value='Login' ng-click='recruitUsers.loginRegisteredUser()' ng-touch='recruitUsers.loginRegisteredUser()'>Login</button></label>
-		</div>	
-	</div>
 </div>
