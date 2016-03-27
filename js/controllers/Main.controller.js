@@ -2,13 +2,18 @@ angular
     .module('meetUpEventApp')
     .controller('MainController', MainController);
 
-MainController.$inject = ['$log', '$location', '$document'];
+MainController.$inject = ['$log', '$location', '$document', '$window'];
 
 /* @ngInject */
-function MainController($log, $location, $document) {
+function MainController($log, $location, $document, $window) {
 	var vm = this;
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var ref = new Firebase(fbURL); 
+
+	function resizeBGImage() {
+		var body = angular.element($document);
+		$document.css('hight', $window.outerHeight)
+	}
 
 	vm.logout = function() {
 		alert('logging you out!');
@@ -16,10 +21,8 @@ function MainController($log, $location, $document) {
 		$location.path('/');
 	};
 
-	if ('addEventListener' in $document) {
-	    $document.addEventListener('DOMContentLoaded', function() {
-	    	$log.info('adding FastClick');
-	        FastClick.attach($document.body);
-	    }, false);
-	}
+	angular.element($document).ready(function() {
+		//FastClick.attach($document.body);
+		resizeBGImage();
+	})
 }

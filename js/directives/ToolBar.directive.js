@@ -26,12 +26,27 @@ function toolBar() {
 	function linkFunc(scope, el, attr, ctrl) {
     }
 
-    ToolBarController.$inject = ['$log'];
+    ToolBarController.$inject = ['$log', 'backendServices'];
     /* @ngInject */
-    function ToolBarController($log) {
+    function ToolBarController($log, backendServices) {
 	    var vm = this;
 
-	    $log.info('directive loading');
+	    //local controler variables
+	    var fbConnect = backendServices;
+
+	    //local view variables
+		fbConnect.checkLoginStatus()
+		.then(function(status) {
+			vm.loggedIn = status;
+		})
+		.catch()
+
+		vm.clicked = function() {
+			$log.info('button clicked');
+		}
+
+		//actions
+		
 	}
 
 	return  directive;

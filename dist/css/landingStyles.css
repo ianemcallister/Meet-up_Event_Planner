@@ -1,5 +1,7 @@
 body {
   width: 100%;
+  height: 773px;
+  background-image: url("../img/mobileBG6.jpg");
   background-color: #5e3131;
   background-repeat: no-repeat;
   background-size: cover;
@@ -37,6 +39,10 @@ body {
 
 #needAnAccount {
   margin-top: 10px; }
+
+.landingCallToAction {
+  margin-left: auto;
+  margin-right: auto; }
 
 .errorMessages {
   color: white;

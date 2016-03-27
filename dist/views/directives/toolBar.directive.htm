@@ -7,25 +7,25 @@
       <div class="navbar-header">
 
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span ng-if='!topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-in"></span>
-          <span ng-if='topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-out" ng-click='topMenuCtrl.logout()'></span> 
+          <span ng-if='!loggedIn' class="glyphicon glyphicon-log-in"></span>
+          <span ng-if='loggedIn' class="glyphicon glyphicon-log-out" ng-click='logout()'></span> 
         </button>
 
-        <a class="navbar-brand" href="#/">Meet-Up Event Planner</a>
+        <a class="navbar-brand" href="#/">Meet-Up Event Planner</a> <!---->
 
       </div>
 
       <div class="collapse navbar-collapse" id="myNavbar">
 
-        <ul class="nav navbar-nav navbar-right" ng-if='!topMenuCtrl.loggedIn'>
+        <ul class="nav navbar-nav navbar-right" ng-if='!loggedIn'>
           <li><label for="navbarUserEmail"><input type="text" class='navbarInputs' id='navbarUserEmail' placeholder="e-mail" ng-model='topMenuCtrl.navbarUserEmail' ng-style='topMenuCtrl.deviceWidth'></label></li>
           <li><label for="navbarUserPass"><input type="password" class='navbarInputs' id='navbarUserPass' placeholder="password" ng-model='topMenuCtrl.navbarUserPass' ng-style='topMenuCtrl.deviceWidth'></label></li>
-          <li><label for="submitUserLogin"><button id='submitUserLogin' class='navbarInputs btn btn-success' ng-click='topMenuCtrl.navBarLoginRegisteredUser()' ng-style='topMenuCtrl.deviceWidth'>Login</button></label></li>
+          <li><label for="submitUserLogin"><button id='submitUserLogin' class='navbarInputs btn btn-success' ng-click='clicked()' ng-style='topMenuCtrl.deviceWidth'>Login</button></label></li>
         </ul>
 
-        <button type="button" id='desktopLogout' class="nav navbar-nav navbar-right" ng-if='topMenuCtrl.loggedIn'>
-          <span ng-if='!topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-in"></span>
-          <span ng-if='topMenuCtrl.loggedIn' class="glyphicon glyphicon-log-out" ng-click='topMenuCtrl.logout()'></span> 
+        <button type="button" id='desktopLogout' class="nav navbar-nav navbar-right" ng-if='loggedIn'>
+          <span ng-if='!loggedIn' class="glyphicon glyphicon-log-in"></span>
+          <span ng-if='loggedIn' class="glyphicon glyphicon-log-out" ng-click='logout()'></span> 
         </button>
         
       </div>

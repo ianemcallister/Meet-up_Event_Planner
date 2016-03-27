@@ -23,167 +23,254 @@ function userData($log, $q, backendServices) {
 	};
 
 	var allUserData = {
-		getUID: getUID,
-		getName: getName,
-		getEmail: getEmail,
-		getCompany: getCompany,
-		getTitle: getTitle,
-		getDOB: getDOB,
-		getUserEvents: getUserEvents,
+		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
+
+		getUIDLocally: getUIDLocally,	//getter Methods
+		getNameLocally: getNameLocally,
+		getEmailLocally: getEmailLocally,
+		getCompanyLocally: getCompanyLocally,
+		getTitleLocally: getTitleLocally,
+		getDOBLocally: getDOBLocally,
+		getFullBioLocally: getFullBioLocally,
+		getUserEventsLocally: getUserEventsLocally,
 		
-		setUID: setUID,
-		setName: setName,
-		setEmail: setEmail,
-		setCompany: setCompany,
-		setTitle: setTitle,
-		setDOB: setDOB,
-		updateUserEvents: updateUserEvents,
-		updateAllUserEvents: updateAllUserEvents,
-		updateBio: updateBio,
+		setUIDLocally: setUIDLocally,	//setter Methods
+		setNameLocally: setNameLocally,
+		setEmailLocally: setEmailLocally,
+		setCompanyLocally: setCompanyLocally,
+		setTitleLocally: setTitleLocally,
+		setDOBLocally: setDOBLocally,
+		setPrimariesLocally: setPrimariesLocally,
+		updateUserEventsLocally: updateUserEventsLocally,
+		updateAllUserEventsLocally: updateAllUserEventsLocally,
+		updateBioLocally: updateBioLocally,
 
-		removeUserEvents: removeUserEvents,
+		removeUserEventsLocally: removeUserEventsLocally, //remove data
+		
+		getFullRemoteDBforLocal: getFullRemoteDBforLocal,	//local-remote interacions
+		getRemoteBioForLocal: getRemoteBioForLocal,			
+		getRemoteEventsForLocal: getRemoteEventsForLocal,
+		setFullRemoteDBfromLocal: setFullRemoteDBfromLocal,
+		setRemoteBioFromLocal: setRemoteBioFromLocal,
+		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
 
-		loadPrimaries: loadPrimaries,
-		writeAllToDatabase: writeAllToDatabase,
-		readAllFromDatabase: readAllFromDatabase,
-		isABio: isABio,
-		loadBio: loadBio
+		loadBio: loadBio	//external methods
 	}
 
-	//read methods
-	function getUID() {
-		return currentUser.uid;
+	//analysis methods
+	function bioPrimariesAreCompleteLocally() {
+		if( currentUser.bio.uid !== '' &&
+			currentUser.bio.name !== '' &&
+			currentUser.bio.email !== ''
+			)
+			return true;
+		else return false;
 	}
 
-	function getName() {
-		return currentUser.name;
+	//getter methods
+	function getUIDLocally() {
+		return currentUser.bio.uid;
 	}
 
-	function getEmail() {
-		return currentUser.email;
+	function getNameLocally() {
+		return currentUser.bio.name;
 	}
 
-	function getCompany() {
-		return currentUser.company;
+	function getEmailLocally() {
+		return currentUser.bio.email;
 	}
 
-	function getTitle() {
-		return currentUser.title;
+	function getCompanyLocally() {
+		return currentUser.bio.company;
+	}
+
+	function getTitleLocally() {
+		return currentUser.bio.title;
 	}
 	
-	function getDOB() {
-		return currentUser.dob;
+	function getDOBLocally() {
+		return currentUser.bio.dob;
 	}
 
-	function getUserEvents(type) {
+	function getFullBioLocally() {
+		return {
+			uid: currentUser.bio.uid,
+			name: currentUser.bio.name,
+			email: currentUser.bio.email,
+			company: currentUser.bio.company,
+			title: currentUser.bio.title,
+			dob: currentUser.bio.dob
+		};
+	}
+
+	function getUserEventsLocally(type) {
 		return currentUser[type];
 	}
 
-	//update methods
-	function setUID(name) {
-		currentUser.uid = uid;
+	//setter methods
+	function setUIDLocally(uid) {
+		currentUser.bio.uid = uid;
 	}
 
-	function setName(name) {
-		currentUser.name = name;
+	function setNameLocally(name) {
+		currentUser.bio.name = name;
 	}
 
-	function setEmail(email) {
-		currentUser.email = email;
+	function setEmailLocally(email) {
+		currentUser.bio.email = email;
 	}
 
-	function setCompany(company) {
-		currentUser.company = company;
+	function setCompanyLocally(company) {
+		currentUser.bio.company = company;
 	}
 	
-	function setTitle(title) {
-		currentUser.title = title;
+	function setTitleLocally(title) {
+		currentUser.bio.title = title;
 	}
 
-	function setDOB(dob) {
-		currentUser.dob = dob;
+	function setDOBLocally(dob) {
+		currentUser.bio.dob = dob;
 	}
 
-	function updateUserEvents(type, event) {
+	function setPrimariesLocally(email, name, uid) {
+		if(angular.isDefined(email)) setEmailLocally(email);
+		if(angular.isDefined(name)) getNameLocally(name);
+		if(angular.isDefined(uid)) setUIDLocally(uid);
+	}
+
+	function updateUserEventsLocally(type, event) {
 		currentUser[type][event.id] = event;
 	}
 
-	function updateAllUserEvents(allUserEvents) {
+	function updateAllUserEventsLocally(allUserEvents) {
 		currentUser.hosting = allUserEvents.hosting;
 		currentUser.pending = allUserEvents.pending;
 		currentUser.attending = allUserEvents.attending;
 		currentUser.completed = allUserEvents.completed;
 	}
 
-	function updateBio(userBio) {
+	function updateBioLocally(userBio) {
 		//update local values
-		setName(userBio.name);
-		setEmail(userBio.email);
-		setCompany(userBio.company);
-		setTitle(userBio.title);
-		setDOB(userBio.dob);
+		setNameLocally(userBio.name);
+		setEmailLocally(userBio.email);
+		setCompanyLocally(userBio.company);
+		setTitleLocally(userBio.title);
+		setDOBLocally(userBio.dob);
 		//save to db
-		writeAllToDatabase();
+		setRemoteBioFromLocal();
 	}
 
 	//delete Methods
-	function removeUserEvents(type, event) {
+	function removeUserEventsLocally(type, event) {
 		//does this work?
 		currentUser[type][event.id].remove();
 	}
 
-	//other Methods
-	function loadPrimaries(email, name) {
-		if(angular.isDefined(email)) setEmail(email);
-		if(angular.isDefined(name)) setEmail(name);
+	//remote-local interaction Methods
+	function getFullRemoteDBforLocal() {
+		//local variables
+		var db = backendServices;
+
+		db.downloadUserData()
+		.then(function(remoteUserData) {
+			currentUser = remoteUserData;
+		})
 	}
 
-	function writeAllToDatabase() {
+	function getRemoteBioForLocal(uid) {
+		//local variables
+		var db = backendServices;
+
+		$log.info('going out to the db for bio');
+				
+		return $q(function(resolve, reject) {
+			//go out to the db before resolving
+			db.getUserBio(uid)
+			.then(function(userBio) {
+				$log.info('found the bio remotly');
+				$log.info(userBio);
+				resolve(userBio);
+			})
+			.catch(function(error) {
+				reject('There was an error reading the user bio: ' + error);
+			})
+		});
+		
+	}
+
+	function getRemoteEventsForLocal() {
+		//local variables
+		var db = backendServices;
+
+		$log.info('going out to the db for events');
+				
+		return $q(function(resolve, reject) {
+			//go out to the db before resolving
+			db.getUserEvents(uid)
+			.then(function(obtainedUserEvents) {
+				//save the results to the local databse
+				obtainedUserEvents.forEach(function(eventType) {
+					//access the event categories, attending, pending, etc...
+					eventType.forEach(function(event) {
+						//save each event to the proper place
+						updateUserEventsLocally(eventType, event);
+					});
+
+				});
+				
+				//return the results to the requesting object
+				resolve(obtainedUserEvents);
+			})
+			.catch(function(error) {
+				reject('There was an error reading the user events: ' + error);
+			})
+		});
+	}
+
+	function setFullRemoteDBfromLocal() {
 		//local variables
 		var db = backendServices;
 
 		db.uploadUserData(currentUser);
 	}
 
-	function readAllFromDatabase() {
+	function setRemoteBioFromLocal() {
 		//local variables
 		var db = backendServices;
 
-		db.downloadUserData()
-		.then(function(userData) {
-			currentUser = userData;
-		})
+		$log.info('from setRemoteBioFromLocal');
+		$log.info(currentUser);
+
+		db.uploadUserBio(currentUser.bio);
 	}
 
-	function isABio() {
-		if( currentUser.uid !== '' &&
-			currentUser.name !== '' &&
-			currentUser.email !== ''
-			)
-			return true;
-		else return false;
-	}
-	function loadBio() {
-		//local variables
-		var db = backendServices;
+	function setRemoteEventsFromLocal() {}
+
+	function loadBio(uid) {
 
 		//might need to go out to the db so return a promise
 		return $q(function(resolve, reject) {
-			//check for bio
-			if(isABio()) {
-				resolve( {
-					name: currentUser.name,
-					email: currentUser.email,
-					company: currentUser.company,
-					title: currentUser.title,
-					dob: currentUser.dob
-				});
+
+			//check for bio locally first
+			if(bioPrimariesAreCompleteLocally()) {
+					
+				//let us know that you'll be passing them back
+				$log.info('returning a local bio');
+				
+				//show us what we'll be returning
+				$log.info(getFullBioLocally());
+				
+				//pass it back as success
+				resolve(getFullBioLocally());
 			} else {
-				//go out to the db before resolving
-				db.getUserBio()
-				.then(function(userBio) {
-					resolve(userBio);
-				});
+				//if they're not complete locally, check the server
+				getRemoteBioForLocal(uid)
+				.then(function(bioFromRemoteDB) {
+					resolve(bioFromRemoteDB);
+				})
+				.catch(function(error) {
+					reject(error);
+				})
 			}
 
 		});

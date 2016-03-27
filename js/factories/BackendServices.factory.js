@@ -9,16 +9,22 @@ function backendServices($log, $q, $window) {
 	//declare local variables
 	var fbURL = 'https://meetupplanner.firebaseio.com/';
 	var allBackendServices = {
-		utf8_to_b64: utf8_to_b64,
+		utf8_to_b64: utf8_to_b64, 						//local functions to convert dates
 		b64_to_utf8: b64_to_utf8,
 		unixTimeToDateTime: unixTimeToDateTime,
-		dateTimeToUnixTime: dateTimeToUnixTime,		
-		createNewUser: createNewUser,
-		LoginRegisteredUser: LoginRegisteredUser,
+		dateTimeToUnixTime: dateTimeToUnixTime,
+
+		LoginRegisteredUser: LoginRegisteredUser,		//authenticaion
+		checkLoginStatus: checkLoginStatus,
+		logUserOut: logUserOut,
+
+		createNewUser: createNewUser,					//setter Methods
 		addNewUserToDatabase: addNewUserToDatabase,
 		addNewUserToRegUsersList: addNewUserToRegUsersList,
 		uploadUserData: uploadUserData,
-		downloadUserData: downloadUserData,
+		uploadUserBio: uploadUserBio,
+
+		downloadUserData: downloadUserData,				//getter methods
 		getUserBio: getUserBio,
 		getUserEvents: getUserEvents
 	};
@@ -46,7 +52,7 @@ function backendServices($log, $q, $window) {
 		//return a promise
 		return $q(function(resolve, reject) {
 			
-			/*fireBaseAccounts.createUser({
+			fireBaseAccounts.createUser({
 				
 				email: email,
 				password: password
@@ -56,24 +62,23 @@ function backendServices($log, $q, $window) {
 				if(error) reject('Error creating user: ' + error);
 
 				else resolve(userData);
-			}*/
-			$window.setTimeout(function() {
-				resolve({uid:1234567 });
-			}, 2000);
+			});
+
 		});
 	}
 
 	function addNewUserToDatabase(uid, name, email) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		var appUsers = app.child('Users/' + uid);
+		var appUsers = app.child('Users').child(uid);
 		var currentDate = new Date();
 
 		//return a promise
 		return $q(function(resolve, reject) {
 			
-			/*appUsers.set({ 
+			appUsers.set({ 
 				'bio': {
+					'uid': uid,
 					'name': name,
 					'email': email
 				},
@@ -99,11 +104,7 @@ function backendServices($log, $q, $window) {
 				
 				else resolve('Data saved successfully.');
 
-			});*/
-
-			$window.setTimeout(function() {
-				resolve('Data saved successfully.');
-			}, 2000);
+			});
 
 		});
 
@@ -112,19 +113,16 @@ function backendServices($log, $q, $window) {
 	function addNewUserToRegUsersList(uid, email) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		var RegisteredUsersList = app.child('Uids').child(utf8_to_b64(email));
+		var b64Email = utf8_to_b64(email);
+		var RegisteredUsersList = app.child('Uids').child(b64Email);
 
 		//return a promise
 		return $q(function(resolve, reject) {
 			
-			/*RegisteredUsersList.set(uid, function(error) {
+			RegisteredUsersList.set(uid, function(error) {
 				if(error) reject("Data could not be saved. " + error);
 				else resolve("uid created sucessfully.");
-			});*/
-
-			$window.setTimeout(function() {
-				resolve("uid created sucessfully.");
-			}, 2000);
+			});
 
 		});
 
@@ -136,7 +134,7 @@ function backendServices($log, $q, $window) {
 		
 		return $q(function(resolve, reject) {
 
-			/*//authenticate the user
+			//authenticate the user
 			app.authWithPassword({
 
 				email: email,
@@ -151,34 +149,75 @@ function backendServices($log, $q, $window) {
 					resolve(authData);
 				}
 
-			});*/
-
-			$window.setTimeout(function() {
-				resolve({ uid: '2098sj-djiso92-sjir' });
-			}, 2000);
+			});
 
 		});
 		
 	}
 
+	function checkLoginStatus() {
+		//declare local variables
+		var app = new Firebase(fbURL);
+
+		return new Promise(function(resolve, reject) {
+			
+			app.onAuth(function(authData) {
+				if (authData) {
+				    $log.info("User " + authData.uid + " is logged in with " + authData.provider);
+				    resolve(true);
+				  } else {
+				    $log.info("User is logged out");
+				    resolve(false);
+				  }
+			});
+
+		});
+	}
+
+	function logUserOut() {
+		//declare local variables
+		var app = new Firebase(fbURL);
+
+		$log.info('logging user out');
+		app.unauth();
+	}
+
 	function uploadUserData(allUserData) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		var currentUser = app.child('Users/' + allUserData.uid);
+		var uid = allUserData.uid;
+		var remoteUser = app.child('Users').child(uid);
 
 		//return the promise
 		return $q(function(resolve, reject) {
 			//the actual call
-			/*currentUser.update(allUserData, function(error) {
+			remoteUser.update(allUserData, function(error) {
 				if(error) reject('There was a problem updating that record: ' + error);
 				else resolve('all user data uploaded successfully');
-			});*/
-			$window.setTimeout(function() {
-				resolve('all user data uploaded successfully');
-			}, 2000);
+			});
 
 		});
 		
+	}
+
+	function uploadUserBio(currentUserBio) {
+		$log.info(currentUserBio);
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var uid = (currentUserBio.uid).toString();
+		var remoteUserBio = app.child('Users').child(uid).child('bio');
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			//call to the db
+			$log.info('uploading this');
+			$log.info(currentUserBio);
+			remoteUserBio.update(currentUserBio, function(error) {
+				if(error) reject('There was a problem updating that record: ' + error);
+				else resolve('all user bio data uploaded successfully');
+			})
+
+		});
 	}
 
 	function downloadUserData() {
@@ -193,16 +232,14 @@ function backendServices($log, $q, $window) {
 		//return the promise
 		return $q(function(resolve, reject) {
 			//the actual call
-			/*call goes here*/
-			$window.setTimeout(function() {
-				resolve({
-					uid: 'soaiu0-9283m-msoSA-2m3-srew',
-					name: 'Ian McAllister',
-					email: 'iemcallister@gmail.com',
-					company: '',
-					title: ''
-				});
-			}, 2000);
+			userBio.once('value', function(snapshot) {
+				//when the call is successful return the data
+				resolve(snapshot.val());
+			}, function(error) {
+				if(error) {
+					reject(error);
+				} 
+			});
 
 		});
 	}
@@ -210,20 +247,27 @@ function backendServices($log, $q, $window) {
 	function getUserEvents(uid) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		var userBio = app.child('Users').child(uid).child('bio');
-
+		var userEvents = app.child('Users').child(uid);
+		
 		//return the promise
 		return $q(function(resolve, reject) {
 			//the actual call
-			/*call goes here*/
-			$window.setTimeout(function() {
-				resolve({
-					hosting: { id: '9837423' },
-					pending: { id: '3209742' },
-					attending: { id: '40982' },
-					completed: { id: '32957' }
-				});
-			}, 2000);
+			userEvents.once('value', function(snapshot) {
+				var userProfile = snapshot.val();
+				//when the call is successful return the data
+				var eventsPackage = {
+					hosting: userProfile.hosting,
+					attending: userProfile.attending,
+					pending: userProfile.pending,
+					completed: userProfile.completed
+				};
+
+				resolve(eventsPackage);
+			}, function(error) {
+				if(error) {
+					reject(error);
+				} 
+			});
 
 		});
 	}

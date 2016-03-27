@@ -62,20 +62,23 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 			var database = backendServices;
 			var registeredUserData = userData;
 
-			//maintain local values to speed up user experience
-			registeredUserData.loadPrimaries(vm.inputs.email);
-
 			//verify users credentials
 			database.LoginRegisteredUser(vm.inputs.email, vm.inputs.password)
 			.then(function(userCredentials) {
 				//if no trouble logging in update error object
 				vm.errors.passesAllTests = true;
 
-				//use uid to collect user bio
-				database.getUserBio(userCredentials.uid)
+				//add primary information to local model
+				registeredUserData.setPrimariesLocally(vm.inputs.email, vm.inputs.name, userCredentials.uid);
+
+			})
+			.then(function() {
+				$log.info("uid is " + registeredUserData.getUIDLocally());
+
+				database.getUserBio(registeredUserData.getUIDLocally())
 				.then(function(userBio) {
 					//update userData model with userBio
-					registeredUserData.updateBio(userBio);
+					registeredUserData.updateBioLocally(userBio);
 
 					//load user events
 					database.getUserEvents(userCredentials.uid)
@@ -88,6 +91,9 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 				})
 				.catch(function(message) { $log.info(message); })
 
+				//redirect to the next page 
+				registeredUserSherpa.redirectTo('/userInformation', registeredUserData.getUIDLocally());
+
 			})
 			.catch(function(message) { 
 				//if there was an error logging in, let the user know
@@ -95,10 +101,16 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 				vm.errors.passesAllTests = false;
 			})
 
-			//redirect to the next page 
-			registeredUserSherpa.redirectTo('/userInformation', '2389473');
+			//use uid to collect user bio
+			
 		}
 
+	}
+
+	vm.clicked = function() {
+		var userAuthentication = backendServices;
+
+		userAuthentication.logUserOut();
 	}
 
 	//run commands

@@ -138,28 +138,38 @@ function NewUserSignUpController($scope, $log, validation, backendServices, traf
 			//declare local variables
 			var createNewUser = backendServices;
 			var newUserData = userData;
-
-			//maintain local values to speed up user experience
-			newUserData.loadPrimaries(vm.inputs.newEmail, vm.inputs.newName);
+			var thisUID;
 
 			//create the new user in the database
 			createNewUser.createNewUser(vm.inputs.newEmail, vm.inputs.newPassword)
-			.then(function(userData) {
+			.then(function(dbUserData) {
+				
+				//maintain local values to speed up user experience
+				newUserData.loadPrimaries(vm.inputs.newEmail, vm.inputs.newName, dbUserData.uid);
+
 				//create a user profile in the database
-				createNewUser.addNewUserToDatabase(userData.uid, vm.inputs.newName, vm.inputs.newEmail)
+				createNewUser.addNewUserToDatabase(dbUserData.uid, vm.inputs.newName, vm.inputs.newEmail)
 				.then(function(message) {
+
 					$log.info(message);
+
 					//add this user to the list of registered users
-					createNewUser.addNewUserToRegUsersList(userData.uid, vm.inputs.newEmail)
-					.then(function(message) { $log.info(message); })
+					createNewUser.addNewUserToRegUsersList(dbUserData.uid, vm.inputs.newEmail)
+					.then(function(message) {
+
+						//redirect using the uid
+						
+						//redirect to the next page 
+						newUserSherpa.redirectTo('/userInformation', dbUserData.uid);
+						 
+						$log.info(message); 
+					})
 					.catch(function(message) { $log.info(message); })
 				})
 				.catch(function(message) { $log.info(message); })
 			})
 			.catch(function(message) { $log.info(message); })
 			
-			//redirect to the next page 
-			newUserSherpa.redirectTo('/userInformation');
 		}
 
 	}
