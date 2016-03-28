@@ -162,14 +162,19 @@ function userData($log, $q, backendServices) {
 	}
 
 	function updateUserEventsLocally(type, event) {
+		$log.info('the event received is:');
+		$log.info(event);
+		//declare local variables
+		var eventID = event.id;
+		$log.info(eventID);
 		//check if the model needs to be cleaned
 		cleanEvents(type);
 		//then load the new event
-		currentUser.events[type][event.id] = event;
+		currentUser.events[type][eventID] = event;
 	}
 
 	function updateAllUserEventsLocally(allUserEvents) {
-		currentUser.events = allEvents;
+		currentUser.events = allUserEvents;
 	}
 
 	function updateBioLocally(userBio) {
@@ -232,21 +237,15 @@ function userData($log, $q, backendServices) {
 			//go out to the db before resolving
 			db.getUserEvents(getUIDLocally())
 			.then(function(obtainedUserEvents) {
-				$log.info('LOOK HERE');
-				$log.info(obtainedUserEvents);
-				//save the results to the local databse
-				//obtainedUserEvents.forEach(function(eventType) {
-				for(eventType in obtainedUserEvents) {
-					//access the event categories, attending, pending, etc...
-					if(angular.isDefined(eventType)) {
-						//if the type has events, save them
-						for(event in eventType) {
-							//save each event to the proper place
-							updateUserEventsLocally(eventType, event);
-						}
-					}
 
-				};
+				//save the results to the local databse
+				Object.keys(obtainedUserEvents).forEach(function(eventType) {
+					//within each event type iterate through the actual events
+					Object.keys(obtainedUserEvents[eventType]).forEach(function(event) {
+						//once we see the events, save them to the local model
+						updateUserEventsLocally(eventType, obtainedUserEvents[eventType][event]);
+					});
+				});
 				
 				//return the results to the requesting object
 				resolve(obtainedUserEvents);

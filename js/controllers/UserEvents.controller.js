@@ -13,6 +13,12 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 	vm.showDecline = false;	//what is this being used for?
 	vm.userBio = {}
 	vm.events = {};
+	vm.sectionAvailable = {
+		pending: false,
+		attending: false,
+		hosting: false,
+		completed: false
+	};
 	vm.errors = {};
 
 	//declare local methods
@@ -41,6 +47,27 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		return eventID;
 	}
 
+	function checkForEvents() {
+		$log.info(vm.events);
+		//loop through all the event categories
+		Object.keys(vm.events).forEach(function(category) {
+			
+			//inside each category count the number of event objects...NOT updated placeholder though
+			Object.keys(vm.events[category]).forEach(function(eventID) {
+				//declare local variable
+				var counter = 0;
+				//count events with id's / NOT 'updated' placeholders
+				if(angular.isObject(vm.events[category][eventID])) counter++;
+				
+				//if at least one event id (object) was counted, then show the section
+				if(counter > 0) vm.sectionAvailable[category] = true;
+				else vm.sectionAvailable[category] = false;
+			});
+
+		});
+
+	}
+
 	function initialize() {
 		//make sure the uid is set
 		currentUser.setUIDLocally($routeParams.uid);
@@ -66,6 +93,12 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
+		})
+		.then(function() {
+			//now that events are loaded, reflect it in the view model
+			checkForEvents();
+
+			$log.info(vm.sectionAvailable);
 		})
 
 	}

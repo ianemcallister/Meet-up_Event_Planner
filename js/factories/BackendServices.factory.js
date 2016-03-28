@@ -271,13 +271,16 @@ function backendServices($log, $q, $window) {
 	function getUserEvents(uid) {
 		//declare local variables
 		var app = new Firebase(fbURL);
-		var userEvents = app.child('Users').child(uid);
+		var userEvents = app.child('Users').child(uid).child('events');
 		
 		//return the promise
 		return $q(function(resolve, reject) {
 			//the actual call
 			userEvents.once('value', function(snapshot) {
 				var userProfile = snapshot.val();
+
+				$log.info('the returned User Profile is:');
+				$log.info(userProfile);
 				//when the call is successful return the data
 				var eventsPackage = {
 					hosting: userProfile.hosting,
