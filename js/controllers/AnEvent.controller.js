@@ -2,21 +2,16 @@ angular
     .module('meetUpEventApp')
     .controller('AnEventController', AnEventController);
 
-AnEventController.$inject = ['$scope', '$log', '$location', '$routeParams', '$firebaseObject'];
+AnEventController.$inject = ['$log', '$routeParams', ];
 
 /* @ngInject */
-function AnEventController($scope, $log, $location, $routeParams, $firebaseObject) {
+function AnEventController($log, $routeParams) {
 	var vm = this;
-	var fbURL = 'https://meetupplanner.firebaseio.com/';
-	var ref = new Firebase(fbURL);
-	var userEvents = ref.child('Users').child($routeParams.hostId).child('events').child('hosting').child($routeParams.eventId)
+	
+	//local variables
+	vm.tempTime = {start: '', end: ''};
+	vm.userIsHost = false;
 
-	//binding to the event
-	vm.event = $firebaseObject(userEvents)
-	var registeredUsers = $firebaseObject(ref.child('Uids'));
-
-	//required fields
-	vm.requiredInputs = ['', '', '', '', '', '', '', '', ''];
 
 	//Local Methods
 	function init() {

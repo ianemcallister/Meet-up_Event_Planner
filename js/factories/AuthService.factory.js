@@ -2,33 +2,26 @@ angular
     .module('meetUpEventApp')
     .factory('authService', authService);
 
-authService.$inject = ['$log', '$q', '$location'];
+authService.$inject = ['$log', 'backendServices'];
 
 /* @ngInject */
-function authService($log, $q, $location) {
-	var fbURL = 'https://meetupplanner.firebaseio.com/';
-	var ref = new Firebase(fbURL);
+function authService($log, backendServices) {
 
 	var allAuthServices = {
 		isLoggedIn: isLoggedIn
 	};
 
-	function authDataCallback(authData) {
-	  
-	  if (authData) {
-	    $log.info("User " + authData.uid + " is logged in with " + authData.provider);
-	  } else {
-	    $log.info("User is logged out...dumping them back to landing page");
-	    //dump the user back out
-	    $location.path('/');
-	  }
-	}
-
 	function isLoggedIn() {
 		//check the user authenticaion state
-
-		ref.onAuth(authDataCallback);
-		return true;
+		var dbAuthentication = backendServices;
+		
+		dbAuthentication.checkLoginStatus()
+		.then(function(status) {
+			return status;
+		})
+		.catch(function(status) {
+			return status;
+		})
 	}
 	
 	return allAuthServices;

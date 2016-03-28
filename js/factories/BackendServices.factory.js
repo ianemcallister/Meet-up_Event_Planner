@@ -272,7 +272,7 @@ function backendServices($log, $q, $window) {
 		//return the promise
 		return $q(function(resolve, reject) {
 			//the actual call
-			userEvents.once('value', function(snapshot) {
+			userEvents.orderByKey().once('value', function(snapshot) {
 				var userProfile = snapshot.val();
 
 				//when the call is successful return the data

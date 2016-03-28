@@ -347,8 +347,8 @@ function userData($log, $q, backendServices) {
 			name: '',
 			type: '',
 			host: {
-				name: '',
-				uid: ''
+				name: currentUser.bio.name,
+				uid: currentUser.bio.uid
 			},
 			message: '',
 			eventTimes: {
