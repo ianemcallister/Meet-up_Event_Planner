@@ -2,10 +2,10 @@ angular
     .module('meetUpEventApp')
     .controller('UserEventsController', UserEventsController);
 
-UserEventsController.$inject = ['$log', '$routeParams', 'userData'];
+UserEventsController.$inject = ['$log', '$routeParams', 'userData', 'trafficValet'];
 
 /* @ngInject */
-function UserEventsController($log, $routeParams, userData) {
+function UserEventsController($log, $routeParams, userData, trafficValet) {
 	var vm = this;
 	var currentUser = userData;
 
@@ -74,19 +74,29 @@ function UserEventsController($log, $routeParams, userData) {
 	vm.createNewEvent = function() {
 		//define local variables
 		var eventID = generateEventID();
+		var newEventSherpa = trafficValet;
 
 		$log.info('you\'re creating a new event! ' + eventID);
 
 		//add the event to the modal (locally then on the db)
 		currentUser.createNewEvent(eventID)
-		.then()
-		.catch()
-		//if there was an updated field, remove it
+		.then(function(affirmativeResponse) {
+			//report the success
+			$log.info(affirmativeResponse);
+		})
+		.then(function() {
+			//if there was an updated field, remove it now
+			currentUser.cleanDBEventsCategory('hosting');
+
+		})
+		.catch(function(errorResponse) {
+			//report the error
+			$log.info(errorResponse);
+		})
+		
 
 		//redirect to the new event page		
-
-		//create event model to start with
-
+		newEventSherpa.redirectTo('/event', eventID, currentUser.getUIDLocally(), currentUser.getUIDLocally());
 	}
 
 	//execute scripts

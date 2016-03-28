@@ -27,7 +27,10 @@ function backendServices($log, $q, $window) {
 		addNewUserToRegUsersList: addNewUserToRegUsersList,
 		uploadUserData: uploadUserData,
 		uploadUserBio: uploadUserBio,
-		createHostedEvent: createHostedEvent
+		createHostedEvent: createHostedEvent,
+		deleteUpdateField: deleteUpdateField,
+
+		thereWasAnUpdateField: thereWasAnUpdateField	//model maintainance
 	};
 
 	function utf8_to_b64(str) {
@@ -290,6 +293,43 @@ function backendServices($log, $q, $window) {
 				} 
 			});
 
+		});
+	}
+
+	function deleteUpdateField(category, uid) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var catRemovingFrom = app.child('Users').child(uid).child('events').child(category).child('updated');
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			catRemovingFrom.set(null, function(error) {
+				if(error) reject('There was an error deleting update field: ' + error);
+				else resolve('Deleted update successfully');
+			})
+		});
+
+	}
+
+	function thereWasAnUpdateField(category, uid) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var catToCheck = app.child('Users').child(uid).child('events').child(category);
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			//call the db
+			catToCheck.once('value', function(snapshot) {
+				//save the response
+				var currentCatModel = snapshot.val();
+				//show what was found
+				//look for the update field
+				if(angular.isDefined(currentCatModel['updated'])) resolve(true);
+				else reject(false);
+
+			}, function(error) {
+				if(error) reject(error);
+			})
 		});
 	}
 

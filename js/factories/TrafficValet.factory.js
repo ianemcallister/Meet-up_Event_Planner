@@ -11,13 +11,21 @@ function trafficValet($log, $location) {
 		redirectTo: redirectTo
 	};
 
-	function redirectTo(path, param1, param2) {
+	function redirectTo(path, param1, param2, param3) {
 		if(angular.isDefined(param1)) {
 			path = path + '/' + param1;
 
 			if(angular.isDefined(param2)) {
 				//go to path with 2 params
 				path = path + '/' + param2;
+
+				if(angular.isDefined(param3)) {
+					path = path + '/' + param3;
+
+					$log.info('redirecting now to ' + path);
+					$location.path(path);
+				}
+
 				$log.info('redirecting now to ' + path);
 				$location.path(path);
 			}

@@ -58,6 +58,7 @@ function userData($log, $q, backendServices) {
 		setFullRemoteDBfromLocal: setFullRemoteDBfromLocal,
 		setRemoteBioFromLocal: setRemoteBioFromLocal,
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
+		cleanDBEventsCategory: cleanDBEventsCategory,
 
 		loadBio: loadBio,	//external methods
 		loadEventsProgressively: loadEventsProgressively,
@@ -275,6 +276,29 @@ function userData($log, $q, backendServices) {
 
 	function setRemoteEventsFromLocal() {}
 
+	function cleanDBEventsCategory(category) {
+		//declar local variables
+		var db = backendServices;
+
+		//remove 'updated' object if need be
+		//db call so return a promise
+		return $q(function(resolve, reject) {
+			//check for object
+			db.thereWasAnUpdateField(category, getUIDLocally())
+			.then(function(affirmativeResponse) {
+				//if there was an update field, delete it
+				db.deleteUpdateField(category, getUIDLocally())
+				.then(function(affirmativeResponse) { $log.info(affirmativeResponse); } )
+				.catch(function(errorResponse) { $log.info(errorResponse); } )
+			})
+			.catch(function(errorResponse) {
+				$log.info(errorResponse)
+			})
+
+		});
+		//if it is there, remove it
+	}
+
 	function loadBio(uid) {
 
 		//might need to go out to the db so return a promise
@@ -371,10 +395,10 @@ function userData($log, $q, backendServices) {
 			$log.info('jumping into the promise here');
 			db.createHostedEvent(getUIDLocally(), newEvent)
 			.then(function(message) {
-				$log.info(message);
+				resolve(message);
 			})
 			.catch(function(error) {
-				$log.info(error)
+				reject(error);
 			})
 
 		});
