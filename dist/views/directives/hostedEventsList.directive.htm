@@ -1,0 +1,29 @@
+<div class='eventsList'>
+	<!--Header Row-->
+	<div class="row">
+		<div class="col-xs-2 col-sm-2"><strong>DATE</strong></div>
+		<div class="col-xs-6 col-sm-8"><strong>EVENT</strong></div>
+		<div class="col-xs-4 col-sm-2"><strong>RSVPs</strong></div>
+	</div>
+	<!--Data Rows-->
+	<div class="row" ng-repeat='event in vm.hostedEvents'>
+		<div class="col-xs-2 col-sm-2">
+			<strong>{{ vm.formatDate(event.eventTimes.start) | date: 'MMM' }}</strong> <br> 
+			{{ vm.formatDate(event.eventTimes.start) | date: 'd' }} 
+		</div>
+		<div class="col-xs-6 col-sm-8" ng-click='vm.eventClicked({{ event.id }})'>
+			<strong>{{ event.name }}</strong> <br>
+			({{ vm.formatDate(event.eventTimes.start) | date: 'h:mm a' }}) <br>
+			<i>{{ event.message }}</i>
+		</div>
+		<div class="col-xs-4 col-sm-2">
+			<div ng-if='!vm.guestsAreInvited'>
+				<a href="">Invite Guests</a>
+			</div>
+			<div ng-if='vm.guestsAreInvited'>
+				{{ vm.guestsAttending(event.guestList) }} / {{ vm.guestsInvited(event.guestList) }} <br>
+				({{ vm.percentageAttending(event.guestList) }}%)
+			</div>
+		</div>
+	</div>
+</div>

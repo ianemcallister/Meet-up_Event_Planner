@@ -48,7 +48,7 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 	}
 
 	function checkForEvents() {
-		$log.info(vm.events);
+		
 		//loop through all the event categories
 		Object.keys(vm.events).forEach(function(category) {
 			
@@ -87,18 +87,12 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		currentUser.getRemoteEventsForLocal()
 		.then(function(obtainedUserEvents) {
 
-			//log what was found
-			$log.info('got this from the db');
-			$log.info(obtainedUserEvents);
-
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
 		})
 		.then(function() {
 			//now that events are loaded, reflect it in the view model
 			checkForEvents();
-
-			$log.info(vm.sectionAvailable);
 		})
 
 	}
@@ -108,8 +102,6 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		//define local variables
 		var eventID = generateEventID();
 		var newEventSherpa = trafficValet;
-
-		$log.info('you\'re creating a new event! ' + eventID);
 
 		//add the event to the modal (locally then on the db)
 		currentUser.createNewEvent(eventID)

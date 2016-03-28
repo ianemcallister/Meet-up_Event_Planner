@@ -205,7 +205,6 @@ function backendServices($log, $q, $window) {
 	}
 
 	function uploadUserBio(currentUserBio) {
-		$log.info(currentUserBio);
 		//declare local variables
 		var app = new Firebase(fbURL);
 		var uid = (currentUserBio.uid).toString();
@@ -213,9 +212,8 @@ function backendServices($log, $q, $window) {
 
 		//return the promise
 		return $q(function(resolve, reject) {
+
 			//call to the db
-			$log.info('uploading this');
-			$log.info(currentUserBio);
 			remoteUserBio.update(currentUserBio, function(error) {
 				if(error) reject('There was a problem updating that record: ' + error);
 				else resolve('all user bio data uploaded successfully');
@@ -254,12 +252,10 @@ function backendServices($log, $q, $window) {
 		var eventID = newEvent.id;
 		var newHostedEvent = app.child('Users').child(uid).child('events').child('hosting').child(eventID);
 
-		$log.info(newHostedEvent);
 		//return the promise
 		return $q(function(resolve, reject) {
+			
 			//call to firebase
-			$log.info('uploading this event:');
-			$log.info(newEvent);
 			newHostedEvent.set(newEvent, function(error) {
 				if(error) reject('There was an error: ' + error);
 				else resolve('New event saved to DB successfully');
@@ -279,8 +275,6 @@ function backendServices($log, $q, $window) {
 			userEvents.once('value', function(snapshot) {
 				var userProfile = snapshot.val();
 
-				$log.info('the returned User Profile is:');
-				$log.info(userProfile);
 				//when the call is successful return the data
 				var eventsPackage = {
 					hosting: userProfile.hosting,

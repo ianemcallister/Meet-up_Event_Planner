@@ -162,11 +162,9 @@ function userData($log, $q, backendServices) {
 	}
 
 	function updateUserEventsLocally(type, event) {
-		$log.info('the event received is:');
-		$log.info(event);
 		//declare local variables
 		var eventID = event.id;
-		$log.info(eventID);
+
 		//check if the model needs to be cleaned
 		cleanEvents(type);
 		//then load the new event
@@ -208,15 +206,12 @@ function userData($log, $q, backendServices) {
 	function getRemoteBioForLocal(uid) {
 		//local variables
 		var db = backendServices;
-
-		$log.info('going out to the db for bio');
 				
 		return $q(function(resolve, reject) {
 			//go out to the db before resolving
 			db.getUserBio(uid)
 			.then(function(userBio) {
-				$log.info('found the bio remotly');
-				$log.info(userBio);
+
 				resolve(userBio);
 			})
 			.catch(function(error) {
@@ -229,11 +224,9 @@ function userData($log, $q, backendServices) {
 	function getRemoteEventsForLocal() {
 		//local variables
 		var db = backendServices;
-
-		$log.info('going out to the db for events');
 				
 		return $q(function(resolve, reject) {
-			$log.info(getUIDLocally());
+
 			//go out to the db before resolving
 			db.getUserEvents(getUIDLocally())
 			.then(function(obtainedUserEvents) {
@@ -243,6 +236,7 @@ function userData($log, $q, backendServices) {
 					//within each event type iterate through the actual events
 					Object.keys(obtainedUserEvents[eventType]).forEach(function(event) {
 						//once we see the events, save them to the local model
+
 						updateUserEventsLocally(eventType, obtainedUserEvents[eventType][event]);
 					});
 				});
@@ -266,9 +260,6 @@ function userData($log, $q, backendServices) {
 	function setRemoteBioFromLocal() {
 		//local variables
 		var db = backendServices;
-
-		$log.info('from setRemoteBioFromLocal');
-		$log.info(currentUser);
 
 		db.uploadUserBio(currentUser.bio);
 	}
@@ -305,12 +296,6 @@ function userData($log, $q, backendServices) {
 
 			//check for bio locally first
 			if(bioPrimariesAreCompleteLocally()) {
-					
-				//let us know that you'll be passing them back
-				$log.info('returning a local bio');
-				
-				//show us what we'll be returning
-				$log.info(getFullBioLocally());
 				
 				//pass it back as success
 				resolve(getFullBioLocally());
@@ -344,9 +329,6 @@ function userData($log, $q, backendServices) {
 
 			//build the local model
 			allEvents = getUserEventsLocally(type);
-			
-			//show what was built
-			$log.info(allEvents);
 
 			//first return whatever event info is stored locally
 			resolve(allEvents);
@@ -390,8 +372,8 @@ function userData($log, $q, backendServices) {
 		//then create it on the server
 		//will go out to the db so return a promise
 		return $q(function(resolve, reject) {
+			
 			//manage the promise responses
-			$log.info('jumping into the promise here');
 			db.createHostedEvent(getUIDLocally(), newEvent)
 			.then(function(message) {
 				resolve(message);
