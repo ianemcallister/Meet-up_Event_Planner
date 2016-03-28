@@ -81,10 +81,10 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 					registeredUserData.updateBioLocally(userBio);
 
 					//load user events
-					database.getUserEvents(userCredentials.uid)
+					database.getUserEvents(registeredUserData.getUIDLocally())
 					.then(function(allEventsForThisUser) {
 						//update userData model with userEvents
-						registeredUserData.updateAllUserEvents(allEventsForThisUser);
+						registeredUserData.updateAllUserEventsLocally(allEventsForThisUser);
 					})
 					.catch(function(message) { $log.info(message); })
 

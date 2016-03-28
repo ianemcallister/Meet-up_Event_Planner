@@ -19,7 +19,7 @@ function config($routeProvider) {
         controller: 'RegUserLoginController',
         controllerAs: 'vm'
     })
-    .when('/userInformation/:uid?/:token?', {
+    .when('/userInformation/:uid?', {
         templateUrl: 'views/userInformation.htm',
         controller: 'UserInformationController',
         controllerAs: 'vm',
@@ -27,7 +27,7 @@ function config($routeProvider) {
             userAuthenticationService: userAuthenticationService
         }
     })
-    .when('/userEvents/:uid?/:token?', {
+    .when('/userEvents/:uid?', {
         templateUrl: 'views/userEvents.htm',
         controller: 'UserEventsController',
         controllerAs: 'vm',
@@ -35,7 +35,7 @@ function config($routeProvider) {
             userAuthenticationService: userAuthenticationService
         }
     })
-    .when('/event/:eventId?/:hostId?/:uid?/:token?', {
+    .when('/event/:eventId?/:hostId?/:uid?', {
         templateUrl: 'views/anEvent.htm',
         controller: 'AnEventController',
         controllerAs: 'vm',

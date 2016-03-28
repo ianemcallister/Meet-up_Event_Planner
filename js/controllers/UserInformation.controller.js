@@ -51,9 +51,7 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 	}
 
 	vm.updateDOB = function() {
-		$log.info("the temp birthday is" + vm.tempBirthday);
 		vm.user.dob = dateTimeToUnixTime(vm.tempBirthday);
-		$log.info('now dob is ' + vm.user.dob);
 		vm.checkValues();
 	}
 
@@ -70,9 +68,6 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 			currentUser.setUIDLocally($routeParams.uid);
 		}
 
-		$log.info('looking for the dob');
-		$log.info(vm.user);
-
 		//if there is new data, save it
 		if(vm.view.isData) {
 			$log.info('saving the new data');
@@ -86,7 +81,6 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 	function initialize() {
 		//load FastClick
 		//FastClick.attach($document.body);
-		$log.info($routeParams.uid);
 		
 		//load userData locally or from db
 		currentUser.loadBio($routeParams.uid)
@@ -95,22 +89,13 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 			vm.user = obtainedUserData;
 
 			//build tempBirthday
-			if(angular.isDefined(userData.dob) && userData.dob !== '') {
-				vm.tempBirthday = unixTimeToDateTime(userData.dob)
+			if(angular.isDefined(obtainedUserData.dob) && obtainedUserData.dob !== '') {
+				vm.tempBirthday = unixTimeToDateTime(obtainedUserData.dob)
 			}
 
 		});
 	
 	}
-
-	//event Listeners
-	/*if ('addEventListener' in $document) {
-	    $document.addEventListener('DOMContentLoaded', function() {
-	    	//on page load
-	    	initialize();
-	        
-	    }, false);
-	}*/
 
 	//run processes
 	initialize(); //with internet use the event listener instead

@@ -18,15 +18,16 @@ function backendServices($log, $q, $window) {
 		checkLoginStatus: checkLoginStatus,
 		logUserOut: logUserOut,
 
+		downloadUserData: downloadUserData,				//getter methods
+		getUserBio: getUserBio,
+		getUserEvents: getUserEvents,
+
 		createNewUser: createNewUser,					//setter Methods
 		addNewUserToDatabase: addNewUserToDatabase,
 		addNewUserToRegUsersList: addNewUserToRegUsersList,
 		uploadUserData: uploadUserData,
 		uploadUserBio: uploadUserBio,
-
-		downloadUserData: downloadUserData,				//getter methods
-		getUserBio: getUserBio,
-		getUserEvents: getUserEvents
+		createHostedEvent: createHostedEvent
 	};
 
 	function utf8_to_b64(str) {
@@ -242,6 +243,26 @@ function backendServices($log, $q, $window) {
 			});
 
 		});
+	}
+
+	function createHostedEvent(uid, newEvent) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var eventID = newEvent.id;
+		var newHostedEvent = app.child('Users').child(uid).child('events').child('hosting').child(eventID);
+
+		$log.info(newHostedEvent);
+		//return the promise
+		return $q(function(resolve, reject) {
+			//call to firebase
+			$log.info('uploading this event:');
+			$log.info(newEvent);
+			newHostedEvent.set(newEvent, function(error) {
+				if(error) reject('There was an error: ' + error);
+				else resolve('New event saved to DB successfully');
+			})
+		});
+
 	}
 
 	function getUserEvents(uid) {

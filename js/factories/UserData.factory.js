@@ -16,14 +16,18 @@ function userData($log, $q, backendServices) {
 			title: '',
 			dob: 0
 		},
-		hosting: {},
-		pending: {},
-		attending: {},
-		completed: {}
+		events: {
+			hosting: {},
+			pending: {},
+			attending: {},
+			completed: {}
+		}
 	};
 
 	var allUserData = {
 		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
+
+		cleanEvents: cleanEvents,		//model maintainance
 
 		getUIDLocally: getUIDLocally,	//getter Methods
 		getNameLocally: getNameLocally,
@@ -33,7 +37,8 @@ function userData($log, $q, backendServices) {
 		getDOBLocally: getDOBLocally,
 		getFullBioLocally: getFullBioLocally,
 		getUserEventsLocally: getUserEventsLocally,
-		
+		getAllUserEventsLocally: getAllUserEventsLocally,
+
 		setUIDLocally: setUIDLocally,	//setter Methods
 		setNameLocally: setNameLocally,
 		setEmailLocally: setEmailLocally,
@@ -54,7 +59,9 @@ function userData($log, $q, backendServices) {
 		setRemoteBioFromLocal: setRemoteBioFromLocal,
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
 
-		loadBio: loadBio	//external methods
+		loadBio: loadBio,	//external methods
+		loadEventsProgressively: loadEventsProgressively,
+		createNewEvent: createNewEvent
 	}
 
 	//analysis methods
@@ -65,6 +72,17 @@ function userData($log, $q, backendServices) {
 			)
 			return true;
 		else return false;
+	}
+
+	//model maintainance
+	function cleanEvents(type) {
+		//iterate through objects in object
+		Object.keys(currentUser.events[type]).forEach(function(key) {
+			//if any are non-objects, delete them
+			if(!angular.isObject(currentUser.events[type][key])) {
+				delete currentUser.events[type][key];
+			}
+		});
 	}
 
 	//getter methods
@@ -104,7 +122,11 @@ function userData($log, $q, backendServices) {
 	}
 
 	function getUserEventsLocally(type) {
-		return currentUser[type];
+		return currentUser.events[type];
+	}
+
+	function getAllUserEventsLocally() {
+		return currentUser.events;
 	}
 
 	//setter methods
@@ -139,14 +161,14 @@ function userData($log, $q, backendServices) {
 	}
 
 	function updateUserEventsLocally(type, event) {
-		currentUser[type][event.id] = event;
+		//check if the model needs to be cleaned
+		cleanEvents(type);
+		//then load the new event
+		currentUser.events[type][event.id] = event;
 	}
 
 	function updateAllUserEventsLocally(allUserEvents) {
-		currentUser.hosting = allUserEvents.hosting;
-		currentUser.pending = allUserEvents.pending;
-		currentUser.attending = allUserEvents.attending;
-		currentUser.completed = allUserEvents.completed;
+		currentUser.events = allEvents;
 	}
 
 	function updateBioLocally(userBio) {
@@ -163,7 +185,7 @@ function userData($log, $q, backendServices) {
 	//delete Methods
 	function removeUserEventsLocally(type, event) {
 		//does this work?
-		currentUser[type][event.id].remove();
+		delete currentUser.events[type][event.id];
 	}
 
 	//remote-local interaction Methods
@@ -205,18 +227,25 @@ function userData($log, $q, backendServices) {
 		$log.info('going out to the db for events');
 				
 		return $q(function(resolve, reject) {
+			$log.info(getUIDLocally());
 			//go out to the db before resolving
-			db.getUserEvents(uid)
+			db.getUserEvents(getUIDLocally())
 			.then(function(obtainedUserEvents) {
+				$log.info('LOOK HERE');
+				$log.info(obtainedUserEvents);
 				//save the results to the local databse
-				obtainedUserEvents.forEach(function(eventType) {
+				//obtainedUserEvents.forEach(function(eventType) {
+				for(eventType in obtainedUserEvents) {
 					//access the event categories, attending, pending, etc...
-					eventType.forEach(function(event) {
-						//save each event to the proper place
-						updateUserEventsLocally(eventType, event);
-					});
+					if(angular.isDefined(eventType)) {
+						//if the type has events, save them
+						for(event in eventType) {
+							//save each event to the proper place
+							updateUserEventsLocally(eventType, event);
+						}
+					}
 
-				});
+				};
 				
 				//return the results to the requesting object
 				resolve(obtainedUserEvents);
@@ -272,6 +301,81 @@ function userData($log, $q, backendServices) {
 					reject(error);
 				})
 			}
+
+		});
+
+	}
+
+	function loadEventsProgressively(uid) {
+		var eventTypes = ['attending', 'pending', 'hosting', 'completed'];
+		var allEvents = {};
+
+		//will go out to the db so return a promise
+		return $q(function(resolve, reject) {
+
+			getRemoteEventsForLocal()
+			.then(function(obtainedUserEvents) {
+				//when the db results come back, return those
+				resolve(obtainedUserEvents);
+			})
+
+			//build the local model
+			allEvents = getUserEventsLocally(type);
+			
+			//show what was built
+			$log.info(allEvents);
+
+			//first return whatever event info is stored locally
+			resolve(allEvents);
+		});
+
+	}
+
+	function createNewEvent(eventID) {
+		//declar local variables
+		var db = backendServices;
+		var newEvent = {};
+
+		//first create the object
+		newEvent = {
+			id: eventID,
+			name: '',
+			type: '',
+			host: {
+				name: '',
+				uid: ''
+			},
+			message: '',
+			eventTimes: {
+				start: 0,
+				end: 0
+			},
+			address: {
+				street01: '',
+				street02: '',
+				street03: '',
+				city: '',
+				state: '',
+				zip: 0
+			},
+			guestList: {}
+		};
+
+		//save it locally
+		updateUserEventsLocally('hosting', newEvent);
+
+		//then create it on the server
+		//will go out to the db so return a promise
+		return $q(function(resolve, reject) {
+			//manage the promise responses
+			$log.info('jumping into the promise here');
+			db.createHostedEvent(getUIDLocally(), newEvent)
+			.then(function(message) {
+				$log.info(message);
+			})
+			.catch(function(error) {
+				$log.info(error)
+			})
 
 		});
 
