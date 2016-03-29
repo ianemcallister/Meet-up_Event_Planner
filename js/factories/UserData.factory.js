@@ -26,6 +26,7 @@ function userData($log, $q, backendServices) {
 
 	var allUserData = {
 		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
+		eventExistsLocally: eventExistsLocally,
 
 		cleanEvents: cleanEvents,		//model maintainance
 
@@ -36,6 +37,7 @@ function userData($log, $q, backendServices) {
 		getTitleLocally: getTitleLocally,
 		getDOBLocally: getDOBLocally,
 		getFullBioLocally: getFullBioLocally,
+		getOneUserEventLocally: getOneUserEventLocally,
 		getUserEventsLocally: getUserEventsLocally,
 		getAllUserEventsLocally: getAllUserEventsLocally,
 
@@ -55,6 +57,7 @@ function userData($log, $q, backendServices) {
 		getFullRemoteDBforLocal: getFullRemoteDBforLocal,	//local-remote interacions
 		getRemoteBioForLocal: getRemoteBioForLocal,			
 		getRemoteEventsForLocal: getRemoteEventsForLocal,
+		getOneRemoteEventForLocal: getOneRemoteEventForLocal,
 		setFullRemoteDBfromLocal: setFullRemoteDBfromLocal,
 		setRemoteBioFromLocal: setRemoteBioFromLocal,
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
@@ -62,6 +65,7 @@ function userData($log, $q, backendServices) {
 
 		loadBio: loadBio,	//external methods
 		loadEventsProgressively: loadEventsProgressively,
+		loadAnEventProgressively: loadAnEventProgressively,
 		createNewEvent: createNewEvent
 	}
 
@@ -72,6 +76,12 @@ function userData($log, $q, backendServices) {
 			currentUser.bio.email !== ''
 			)
 			return true;
+		else return false;
+	}
+
+	function eventExistsLocally(type, eventId) {
+		$log.info('checking if the event exits');
+		if(angular.isDefined(currentUser.events[type][eventId])) return true;
 		else return false;
 	}
 
@@ -120,6 +130,10 @@ function userData($log, $q, backendServices) {
 			title: currentUser.bio.title,
 			dob: currentUser.bio.dob
 		};
+	}
+
+	function getOneUserEventLocally(type, eventId) {
+		return currentUser.events[type][eventID];
 	}
 
 	function getUserEventsLocally(type) {
@@ -250,6 +264,27 @@ function userData($log, $q, backendServices) {
 		});
 	}
 
+	function getOneRemoteEventForLocal(eventId) {
+		//local variables
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			
+			//going to backend services
+			db.getAHostedEvent(getUIDLocally(), eventId)
+			.then(function(obtainedEvent) {
+
+				//save the result to the local model
+				$log.info(obtainedEvent);
+				//return the result to the requesting object
+				resolve(obtainedEvent);
+			})
+			.catch(function(error) {
+				reject('There was an error reading the user event: ' + error);
+			})
+		});
+	}
+
 	function setFullRemoteDBfromLocal() {
 		//local variables
 		var db = backendServices;
@@ -310,6 +345,28 @@ function userData($log, $q, backendServices) {
 				})
 			}
 
+		});
+
+	}
+
+	function loadAnEventProgressively(uid, eventId) {
+		//update uid if need be
+		setUIDLocally(uid);
+
+		//going out the the db so return a promise
+		return $q(function(resolve, reject) {
+
+			//reach out to db
+			getOneRemoteEventForLocal(eventId)
+			.then(function(obtainedUserEvent) {
+				//when the db results come back, return it
+				resolve(obtainedUserEvent)
+			})
+			.catch()
+
+			//first return whatever event info is stored locally
+			//check if the event is available locally
+			if(eventExistsLocally('hosting', eventId)) resolve(getOneUserEventLocally('hosting', eventId));
 		});
 
 	}

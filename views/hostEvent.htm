@@ -33,7 +33,7 @@
 							id='eventName' 
 							type="text"  
 							class='inputField' 
-							ng-model='anEvent.event.name' 
+							ng-model='hostingThisEvent.tempEvent.name' 
 							ng-blur='anEvent.checkInputFieldValidity("inputEventName", anEvent.event.name)' placeholder='My Cool Event' 
 							autofocus 
 							required>
@@ -52,7 +52,7 @@
 							id='eventHost' 
 							name='eventHost' 
 							class='inputField' 
-							ng-model='anEvent.event.host.name' 
+							ng-model='hostingThisEvent.tempEvent.host.name'
 							ng-change='' 
 							placeholder="e.g. Will Smith" 
 							required>
@@ -115,7 +115,7 @@
 							type="text" 
 							id='eventMessage' 
 							class='inputField' 
-							ng-model='anEvent.event.message' 
+							ng-model='hostingThisEvent.tempEvent.message'
 							ng-change=''  
 							placeholder="This'll be the best event!">
 				</label>
@@ -134,7 +134,7 @@
 							id='eventStreet01' 
 							name='eventStreet01' 
 							class='inputField' 
-							ng-model='anEvent.event.address.street01' 
+							ng-model='hostingThisEvent.tempEvent.address.street01'
 							ng-change=''  
 							placeholder="e.g. 4928 Bronx Ave." 
 							required
@@ -151,7 +151,7 @@
 					<input 	type="text" 
 							id='eventStreet02' 
 							class='inputField' 
-							ng-model='anEvent.event.address.street02' 
+							ng-model='hostingThisEvent.tempEvent.address.street02'
 							ng-change=''  
 							placeholder="3rd Floor">
 				</label>
@@ -160,7 +160,12 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
 				<label for="eventStreet03">
-					<input type="text" id='eventStreet03' class='inputField' ng-model='anEvent.event.address.street03' ng-change=''  placeholder="Unit 11">
+					<input 	type="text" 
+							id='eventStreet03' 
+							class='inputField' 
+							ng-model='hostingThisEvent.tempEvent.address.street03' 
+							ng-change=''  
+							placeholder="Unit 11">
 				</label>
 			</div>
 		</div>
@@ -171,7 +176,7 @@
 							id='eventCity' 
 							name='eventCity' 
 							class='inputField' 
-							ng-model='anEvent.event.address.city' 
+							ng-model='hostingThisEvent.tempEvent.address.city'
 							ng-change=''  
 							placeholder="New York" 
 							required>
@@ -186,7 +191,7 @@
 							id='eventState' 
 							name='eventState' 
 							class='inputField' 
-							ng-model='anEvent.event.address.state' 
+							ng-model='hostingThisEvent.tempEvent.address.state'
 							ng-change=''  
 							placeholder='NY' 
 							required>
@@ -203,7 +208,7 @@
 							id='eventZip' 
 							name='eventZip' 
 							class='inputField' 
-							ng-model='anEvent.event.address.zip' 
+							ng-model='hostingThisEvent.tempEvent.address.zip'
 							ng-change=''  
 							placeholder="012345" 
 							required=''>
@@ -221,44 +226,10 @@
 		<h4>Who should come?</h4>
 		<!--Guest list: Invite a Guest-->
 		<p><strong>Invite a Guest</strong></p>
-		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="inviteeName">Name:
-					<input 	type="text" 
-							id='inviteeName' 
-							class='inputField' 
-							ng-model='anEvent.newGuest.name' 
-							placeholder='F. Scott Fitzgerald'>
-				</label>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="inviteeEmail">Email:
-					<input 	type="email" 
-							ng-model='anEvent.newGuest.email.address' 
-							class='inputField' 
-							ng-change='anEvent.validateGuestEmail()' 
-							ng-style='anEvent.newGuest.email.style' 
-							placeholder='f.scott@fitzgerald.com'>
-				</label>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToHostsList()'>
-					Add Recipient
-				</div>
-			</div>
-		</div>
+		<add-a-guest></add-a-guest>
 		<!--Guest list: Who's attending-->
 		<h4>Guest List:</h4>
-		<div class="row">
-			<div class="col-xs-2 col-sm-2">STAT</div>
-			<div class="col-xs-5 col-sm-5">NAME</div>
-			<div class="col-xs-5 col-sm-5">EMAIL</div>
-		</div>
-
+		<hosted-guest-list guest-list='hostingThisEvent.tempEvent.guestList'></hosted-guest-list>
 		<!--Call to Action: Save & return to userEvents OR invite guest to RSVP-->
 	</div>
 

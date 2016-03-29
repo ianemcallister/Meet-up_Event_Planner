@@ -21,6 +21,8 @@ function backendServices($log, $q, $window) {
 		downloadUserData: downloadUserData,				//getter methods
 		getUserBio: getUserBio,
 		getUserEvents: getUserEvents,
+		getAHostedEvent: getAHostedEvent,
+		getAnInvitedEvent: getAnInvitedEvent,
 
 		createNewUser: createNewUser,					//setter Methods
 		addNewUserToDatabase: addNewUserToDatabase,
@@ -292,6 +294,27 @@ function backendServices($log, $q, $window) {
 
 		});
 	}
+
+	function getAHostedEvent(uid, eventId) {
+
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var hostedEvent = app.child('Users').child(uid).child('events').child('hosting').child(eventId);
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			//the actual call
+			hostedEvent.once('value', function(snapshot) {
+				var selectEvent = snapshot.val();
+
+				resolve(selectEvent);
+			}, function(error) {
+				if(error) reject(error);
+			})
+		})
+	}
+
+	function getAnInvitedEvent(hostId, uid, eventId) {}
 
 	function deleteUpdateField(category, uid) {
 		//declare local variables

@@ -1,0 +1,29 @@
+<div>
+	<!--Placeholder Row-->
+	<div class="row" ng-if='!vm.isAGuestList'>
+		<div class="col-xs-12 col-sm-12">
+			No Guests Invited Yet
+		</div>
+	</div>
+	<!--Header Row-->
+	<div class="row" ng-if='vm.isAGuestList'>
+		<div class="col-xs-2 col-sm-2">STAT</div>
+		<div class="col-xs-5 col-sm-5">NAME</div>
+		<div class="col-xs-5 col-sm-5">EMAIL</div>
+	</div>
+	<!--Data Row-->
+	<div class="row" ng-if='vm.isAGuestList' ng-repeat='guest in vm.guestList'>
+		<!--State cell-->
+		<div class="col-xs-2 col-sm-2">
+			{{ guest.status }}
+		</div>
+		<!--Name cell-->
+		<div class="col-xs-5 col-sm-5">
+			{{ guest.name }}
+		</div>
+		<!--Email cell-->
+		<div class="col-xs-5 col-sm-5">
+			{{ guest.email }}
+		</div>
+	</div>
+</div>

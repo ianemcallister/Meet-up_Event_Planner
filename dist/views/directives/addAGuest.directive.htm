@@ -1,0 +1,32 @@
+<div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="inviteeName">Name:
+				<input 	type="text" 
+						id='inviteeName' 
+						class='inputField' 
+						ng-model='anEvent.newGuest.name' 
+						placeholder='F. Scott Fitzgerald'>
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<label for="inviteeEmail">Email:
+				<input 	type="email" 
+						ng-model='anEvent.newGuest.email.address' 
+						class='inputField' 
+						ng-change='anEvent.validateGuestEmail()' 
+						ng-style='anEvent.newGuest.email.style' 
+						placeholder='f.scott@fitzgerald.com'>
+			</label>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToHostsList()'>
+				Add Recipient
+			</div>
+		</div>
+	</div>
+</div>
