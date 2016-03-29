@@ -178,7 +178,7 @@ function addAGuest() {
 	    	//if the requirnments are fulfilled...
 	    	if(vm.invitationValidForSubmission) {
 	    		//make sure the invitation is not to the current user
-	    		if(invitationManager.thisIsTheHostEmail(vm.tempGuest.email, $routeParams.uid, $routeParams.eventId)) {
+	    		if(invitationManager.thisIsTheHostEmail(vm.tempGuest.email, $routeParams.eventId)) {
 					vm.validations.invitation.isTheHost = true;
 					vm.validations.invitation.errorMessage = 'No need to invite the host';
 					return 0;
@@ -187,9 +187,56 @@ function addAGuest() {
 	    		}
 	    		
 		    	//make sure this person has not already been invited
-		    	//add this person to the host's guest list
-		    	//is the guest a registered user? If so add to their pending invitations
-		    	//if not a registered user add this to the unregistered users list under their email address
+		    	/*
+		    	if(invitationManager.guestInvitedAlready(vm.tempGuest.email, $routeParams.eventId)) {
+		    		vm.validations.invitation.alreadyInvited = true;
+					vm.validations.invitation.errorMessage = 'This guest has already been invited';
+					return 0;
+	    		} else {
+	    			vm.validations.invitation.alreadyInvited = false;
+	    		}*/
+
+	    		//if this person is a registered user get their user id
+	    		invitationManager.getUserIdForGuest(vm.tempGuest.email)
+	    		.then(function(uid) {
+	    			$log.info('found user with that email: ' + uid);
+	    			return uid;
+	    		})
+	    		.then(function(uid) {
+	    			//use that uid to register the user
+	    			//add this person to the host's guest list
+		    		invitationManager.addGuestToHostGuestList(vm.tempGuest.name, undefined, uid, $routeParams.eventId, $routeParams.uid)
+		    		.then()
+		    		.catch()
+	    		})
+	    		.then(function() {
+	    			//add this event to the users' pending list
+	    			invitationManager.updatePendingEventsListForUser()
+	    		})
+	    		.then(function() {
+	    			//remove the 'updated' field if need be
+	    		})
+	    		.catch(function(errorMessage) {
+	    			//assuming no uid was found just use the email
+	    			$log.info(errorMessage);
+	    			//add this person to the host's guest list
+			    	invitationManager.addGuestToHostGuestList(vm.tempGuest.name, vm.tempGuest.email, undefined, $routeParams.eventId, $routeParams.uid)
+			    	.then(function(positiveResult) {
+			    		$log.info('got this result: ' + positiveResult);
+			    	})
+			    	.then(function() {
+			    		//add this event to the guest's pending list
+			    		invitationManager.updatePendingEventsListForGuest($routeParams.eventId)
+			    	})
+			    	.then(function() {
+	    			//remove the 'updated' field if need be
+	    			})
+			    	.catch(function(negativeResult) {
+			    		$log.info('got this result: ' + positiveResult);
+			    	})
+
+	    		})
+	    		
 	    	}
 	    	
 	    }

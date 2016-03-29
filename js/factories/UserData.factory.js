@@ -24,10 +24,20 @@ function userData($log, $q, backendServices) {
 		}
 	};
 
+	//local functions
+	function utf8_to_b64(str) {
+		return btoa(str);
+	}
+
+	function b64_to_utf8(str) {
+    	return atob(str);
+	}
+
 	var allUserData = {
 		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
 		eventExistsLocally: eventExistsLocally,
 		thisIsTheHostEmail: thisIsTheHostEmail,
+		guestInvitedAlready: guestInvitedAlready,
 
 		cleanEvents: cleanEvents,							//model maintainance
 
@@ -52,6 +62,7 @@ function userData($log, $q, backendServices) {
 		updateUserEventsLocally: updateUserEventsLocally,
 		updateAllUserEventsLocally: updateAllUserEventsLocally,
 		updateBioLocally: updateBioLocally,
+		addGuestToHostGuestList: addGuestToHostGuestList,
 
 		removeUserEventsLocally: removeUserEventsLocally, 	//remove data
 		
@@ -63,11 +74,14 @@ function userData($log, $q, backendServices) {
 		setRemoteBioFromLocal: setRemoteBioFromLocal,
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
 		cleanDBEventsCategory: cleanDBEventsCategory,
+		getUserIdForGuest: getUserIdForGuest,
+		getEventGuestList: getEventGuestList,
 
 		loadBio: loadBio,									//external methods
 		loadEventsProgressively: loadEventsProgressively,
 		loadAnEventProgressively: loadAnEventProgressively,
-		createNewEvent: createNewEvent
+		createNewEvent: createNewEvent,
+		updatePendingEventsListForGuest: updatePendingEventsListForGuest
 	}
 
 	//analysis methods
@@ -86,7 +100,7 @@ function userData($log, $q, backendServices) {
 		else return false;
 	}
 
-	function thisIsTheHostEmail(email, uid, eventId) {
+	function thisIsTheHostEmail(email, eventId) {
 		$log.info('current user bio is:');
 		$log.info(currentUser.bio);
 		//check if a bio is loaded
@@ -117,6 +131,35 @@ function userData($log, $q, backendServices) {
 			return false;
 		}
 		
+	}
+
+	function guestInvitedAlready(email, eventId) {
+		//first check if there is a guest list
+		$log.info(currentUser.events.hosting[eventId]);
+		if(angular.isDefined(currentUser.events.hosting[eventId].guestList)) {
+			//if there is a list, check for the email
+			$log.info('there is a guest list');
+
+			//convert email for evaluation
+			refEmail = utf8_to_b64(email);
+
+			//run through each guest and compare
+			Object.keys(currentUser.events.hosting[eventId].guestList).forEach(function(b64Email) {
+				if(refEmail == b64Email) {
+					$log.info('an email match was found, this guest has been invited already');
+					return true;
+				} else {
+					$log.info('no email match found, ok to invite guest');
+					return false;
+				}
+			})
+
+		} else {
+			//if no guest list than can't already be on it
+			$log.info('no guestlist');
+			return false;
+		}
+
 	}
 
 	//model maintainance
@@ -232,6 +275,46 @@ function userData($log, $q, backendServices) {
 		setDOBLocally(userBio.dob);
 		//save to db
 		setRemoteBioFromLocal();
+	}
+
+	function addGuestToHostGuestList(name, email, guestId, eventId, uid) {
+		//call to the db so return a promise
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			//convert the email if one was passed
+			if(angular.isDefined(email)) {
+				guestId = utf8_to_b64(email);
+			}
+
+			db.addGuestToHostGuestListonDB(name, guestId, eventId, uid)
+			.then(function(positiveResult) {
+				resolve(positiveResult);
+			})
+			.catch(function(negativeResult) {
+				reject(negativeResult);
+			})
+		});
+
+	}
+
+	function getUserIdForGuest(email) {
+		//call to the db so return a promise
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			//convert the email
+			guestEmail = utf8_to_b64(email);
+
+			db.findGuestUID(guestEmail)
+			.then(function(uid) {
+				resolve(uid);
+			})
+			.catch(function(errorResponse) {
+				reject(errorResponse);
+			})
+
+		});
 	}
 
 	//delete Methods
@@ -358,6 +441,22 @@ function userData($log, $q, backendServices) {
 		//if it is there, remove it
 	}
 
+	function getEventGuestList(hostId, eventId) {
+		//declare local variables
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			//get the object
+			db.getGuestListForEvent(hostId, eventId)
+			.then(function(obtainedList) {
+				resolve(obtainedList);
+			})
+			.catch(function(errorResponse) {
+				reject(errorResponse);
+			})
+		})
+	}
+
 	function loadBio(uid) {
 
 		//might need to go out to the db so return a promise
@@ -474,6 +573,18 @@ function userData($log, $q, backendServices) {
 				reject(error);
 			})
 
+		});
+
+	}
+
+	function updatePendingEventsListForGuest(eventId) {
+		//declar local variables
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+
+			//manage the db promise
+			//db.addPendingEventForGuest(currentUser.getUIDLocally(), hostId, eventId, currentUser.getUserEventsLocally('', eventId))
 		});
 
 	}

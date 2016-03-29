@@ -7,23 +7,18 @@
 	</div>
 	<!--Header Row-->
 	<div class="row" ng-if='vm.isAGuestList'>
-		<div class="col-xs-2 col-sm-2">STAT</div>
-		<div class="col-xs-5 col-sm-5">NAME</div>
-		<div class="col-xs-5 col-sm-5">EMAIL</div>
+		<div class="col-xs-4 col-sm-4"><strong>STATUS</strong></div>
+		<div class="col-xs-8 col-sm-8"><strong>NAME</strong></div>
 	</div>
 	<!--Data Row-->
 	<div class="row" ng-if='vm.isAGuestList' ng-repeat='guest in vm.guestList'>
 		<!--State cell-->
-		<div class="col-xs-2 col-sm-2">
+		<div class="col-xs-4 col-sm-4">
 			{{ guest.status }}
 		</div>
 		<!--Name cell-->
-		<div class="col-xs-5 col-sm-5">
+		<div class="col-xs-8 col-sm-8">
 			{{ guest.name }}
-		</div>
-		<!--Email cell-->
-		<div class="col-xs-5 col-sm-5">
-			{{ guest.email }}
 		</div>
 	</div>
 </div>

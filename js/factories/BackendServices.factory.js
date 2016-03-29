@@ -23,6 +23,8 @@ function backendServices($log, $q, $window) {
 		getUserEvents: getUserEvents,
 		getAHostedEvent: getAHostedEvent,
 		getAnInvitedEvent: getAnInvitedEvent,
+		findGuestUID: findGuestUID,
+		getGuestListForEvent: getGuestListForEvent,
 
 		createNewUser: createNewUser,					//setter Methods
 		addNewUserToDatabase: addNewUserToDatabase,
@@ -30,7 +32,11 @@ function backendServices($log, $q, $window) {
 		uploadUserData: uploadUserData,
 		uploadUserBio: uploadUserBio,
 		createHostedEvent: createHostedEvent,
-		deleteUpdateField: deleteUpdateField,
+		addGuestToHostGuestListonDB: addGuestToHostGuestListonDB,
+		//addPendingEventForUser: addPendingEventForUser,
+		//addPendingEventForGuest: addPendingEventForGuest,
+
+		deleteUpdateField: deleteUpdateField,			//delete methods
 
 		thereWasAnUpdateField: thereWasAnUpdateField	//model maintainance
 	};
@@ -266,6 +272,27 @@ function backendServices($log, $q, $window) {
 
 	}
 
+	function addGuestToHostGuestListonDB(name, guiestId, eventId, uid) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var guestList = app.child('Users').child(uid).child('events').child('hosting').child(eventId).child('guestList').child(guiestId);
+
+		//return the promise
+		return $q(function(resolve, reject) {
+
+			//call to the db
+			guestList.set({
+				rsvpd: false,
+				status: 'pending',
+				name: name
+			}, function(error) {
+				if(error) reject('There was an error: ' + error);
+				else resolve('New event saved to DB successfully');
+			})
+
+		});
+	}
+
 	function getUserEvents(uid) {
 		//declare local variables
 		var app = new Firebase(fbURL);
@@ -314,7 +341,104 @@ function backendServices($log, $q, $window) {
 		})
 	}
 
+	function findGuestUID(guestb64Email) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var uids = app.child('Uids');
+
+		//return the promise
+		return $q(function(resolve, reject) {
+			//call to db
+			uids.once('value', function(snapshot) {
+				//distill results
+				var allUsers = snapshot.val();
+
+				Object.keys(allUsers).forEach(function(key) {
+					$log.info('from list: ' + key + ', matching to: ' + guestb64Email);
+					//check each user
+					if(key == guestb64Email) {
+						resolve(allUsers[key]);
+					} else {
+						reject('No user by that email');
+					}
+
+				});
+
+			});
+
+		});
+
+	}
+
+	function getGuestListForEvent(hostId, eventId) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var guestList = app.child('Users').child(hostId).child('events').child('hosting').child(eventId).child('guestList');
+
+		return $q(function(resolve, reject) {
+
+			//call the db
+			guestList.once('value', function(snapshot) {
+				//local variable
+				var theList = snapshot.val();
+
+				resolve(theList);
+			}, function(error) {
+				if(error) reject('There was an error getting the guest list: ' +  error);
+			})
+		})
+	}
+
 	function getAnInvitedEvent(hostId, uid, eventId) {}
+
+	/*
+	function addPendingEventForUser(uid, hostId, eventId, event) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var userPendingList = app.child('Users').child(uid).child('events').child('pending');
+
+		//mange the promise
+		return $q(function(resolve, reject) {
+
+			//call the db
+			userPendingList.set({
+				hostId: {
+					eventId: {
+						event
+					}
+				}
+			}, function(error) {
+				if(error) reject("Error adding to user pending list: " + error);
+				else return resolve('Added to user pending list successfully');
+			})
+
+		});
+
+	}
+
+	function addPendingEventForGuest(uid, hostId, eventId, event) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var guestsPendingList = app.child('Unregistered').child(uid).child('events').child('pending');
+
+		//mange the promise
+		return $q(function(resolve, reject) {
+
+			//call the db
+			userPendingList.set({
+				hostId: {
+					eventId: {
+						event
+					}
+				}
+			}, function(error) {
+				if(error) reject("Error adding to user pending list: " + error);
+				else return resolve('Added to user pending list successfully');
+			})
+
+		});
+
+	}*/
 
 	function deleteUpdateField(category, uid) {
 		//declare local variables
