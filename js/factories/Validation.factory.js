@@ -12,7 +12,7 @@ function validation($log) {
 	var maximumPassLength = 100;
 
 	var allValidations = {
-		required: required,
+		required: required,						//new User validations
 		minNameLength: minNameLength,
 		minPassLength: minPassLength,
 		maxPassLength: maxPassLength,
@@ -22,7 +22,12 @@ function validation($log) {
 		atLeastOneUppercase: atLeastOneUppercase,
 		illegalCharacter: illegalCharacter,
 		email: email,
-		dateOfBirth: dateOfBirth
+		dateOfBirth: dateOfBirth,
+
+		generateEventRequirnments: generateEventRequirnments,		//event requirnments 
+		updateEventReqStatus: updateEventReqStatus,
+		updateEventReqAddressed: updateEventReqAddressed,
+		updateEventReqClass: updateEventReqClass
 	};
 
 	function required(value) {
@@ -153,6 +158,49 @@ function validation($log) {
     }
 
     function dateOfBirth(value) {}
+
+    function generateEventRequirnments() {
+    	//build the object and return it
+    	var eventValidations = {
+    		eventName: { 
+    			completed :false, 
+    			addressed:false, 
+    			row: {
+    				class: {
+    					'col-xs-12': true,
+    					'col-sm-12': true,
+    					'form-group': true,
+    					'has-success': false,
+    					'has-error': false
+    				}
+    			},
+    			label: {
+    				class: {
+    					'control-label': true
+    				}
+    			},
+    			input: {
+    				class: {
+    					'form-control': true
+    				}
+    			}
+    		},
+			eventHost: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventStart: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventEnd: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventStreet01: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventCity: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventState: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventZip: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventGuest: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } }
+    	}
+
+    	return eventValidations;
+    }
+
+	function updateEventReqStatus() {}
+	function updateEventReqAddressed() {} 
+	function updateEventReqClass() {}
 
 	return allValidations;
 }

@@ -15,9 +15,13 @@
 	<!--Progress Bar-->
 	<div class="row" id='eventProgressBar'>
 		<div class="progress">
-		  <div class="progress-bar" role="progressbar" aria-valuenow="70"
-		  aria-valuemin="0" aria-valuemax="100" style="width:70%">
-		    70%
+		  <div 	class="progress-bar" 
+		  		role="progressbar" 
+		  		aria-valuenow="70"
+		  		aria-valuemin="0" 
+		  		aria-valuemax="100" 
+		  		ng-style="hostingThisEvent.progressBar.style">
+		    		{{ hostingThisEvent.progressBar.message }}
 		  </div>
 		</div>
 	</div>
@@ -27,32 +31,36 @@
 		<h4>When is the event?</h4>
 		<!--Name of the event-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventName">Event Name: 
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventName.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventName.label.class" 
+						for="eventName" >Event Name: 
 					<input 	name='eventName'
-							id='eventName' 
+							id='eventName'
 							type="text"  
-							class='inputField' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventName.input.class"
 							ng-model='hostingThisEvent.tempEvent.name' 
-							ng-blur='anEvent.checkInputFieldValidity("inputEventName", anEvent.event.name)' placeholder='My Cool Event' 
+							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.name)'
+							placeholder='My Cool Event' 
 							autofocus 
 							required>
 								<div ng-show='WhenForm.$submitted || WhenForm.eventName.$touched'>
-								<div ng-show='WhenForm.eventName.$error.required'>You need an event name</div>
-					</div>
+									<div ng-show='WhenForm.eventName.$error.required'>You need an event name</div>
+								</div>
 				</label>
 			</div>
 		</div>
 		<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
 		<!--Event host (could be an individual’s name or an organization)-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventHost">Event Host:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventHost.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventHost.label.class"
+						for="eventHost">Event Host:
 					<input 	type="text" 
 							id='eventHost' 
 							name='eventHost' 
-							class='inputField' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventHost.input.class" 
 							ng-model='hostingThisEvent.tempEvent.host.name'
+							ng-blur='hostingThisEvent.verifyRequired("eventHost", hostingThisEvent.tempEvent.host.name)'
 							ng-change='' 
 							placeholder="e.g. Will Smith" 
 							required>
@@ -62,24 +70,20 @@
 				</label>
 			</div>
 		</div>
-		<!--Event Duration-->
-		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<strong>Duration: {{ hostingThisEvent.formatDuration() }}</strong>
-			</div>
-		</div>
 		<!--Event start date and time-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventStart">Start Time:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventStart.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventStart.label.class" 
+						for="eventStart">Start Time:
 					<input 	type="datetime-local"
 							step="60"  
 							id='eventStart' 
 							name='eventStart' 
-							class='inputField' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventStart.input.class"
 							ng-model='hostingThisEvent.tempTime.start' 
 							ng-focus='' 
-							ng-change='hostingThisEvent.settingTempStart()' 
+							ng-change='hostingThisEvent.settingTempStart()'
+							ng-blur= 'hostingThisEvent.validateTime("eventStart")'
 							required>
 								<div ng-show='WhenForm.$submitted || WhenForm.eventStart.$touched'>
 								<div ng-show='WhenForm.eventStart.$error.required'>You need a start time</div>
@@ -89,13 +93,14 @@
 		</div>
 		<!--Event end date and time-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventEnd">Ends At:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.label.class" 
+						for="eventEnd">Ends At: ({{ hostingThisEvent.formatDuration() }})
 					<input 	type="datetime-local"
 							step="60" 
 							id='eventEnd' 
 							name='eventEnd' 
-							class='inputField' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.input.class"
 							ng-model='hostingThisEvent.tempTime.end' 
 							ng-focus=''
 							ng-change='' 
@@ -109,12 +114,12 @@
 		</div>
 		<!--Optional message to the guests with additional information about the event-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventMessage"><i>(Optional)</i> Event Message:
+			<div class="col-xs-12 col-sm-12 form-group">
+				<label class="control-label" for="eventMessage"><i>(Optional)</i> Event Message:
 					<input 	name='eventMessage'
 							type="text" 
 							id='eventMessage' 
-							class='inputField' 
+							class='form-control' 
 							ng-model='hostingThisEvent.tempEvent.message'
 							ng-change=''  
 							placeholder="This'll be the best event!">
@@ -128,13 +133,14 @@
 		<h4>Where is the event?</h4>
 		<!--Location-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventStreet01">Street:
+			<div class="col-xs-12 col-sm-12 form-group">
+				<label class="control-label" for="eventStreet01">Street:
 					<input 	type="text" 
 							id='eventStreet01' 
 							name='eventStreet01' 
-							class='inputField' 
+							class='form-control'
 							ng-model='hostingThisEvent.tempEvent.address.street01'
+							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.street01)'
 							ng-change=''  
 							placeholder="e.g. 4928 Bronx Ave." 
 							required
@@ -146,11 +152,11 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventStreet02">
+			<div class="col-xs-12 col-sm-12 form-group">
+				<label class="control-label" for="eventStreet02">
 					<input 	type="text" 
 							id='eventStreet02' 
-							class='inputField' 
+							class='form-control'
 							ng-model='hostingThisEvent.tempEvent.address.street02'
 							ng-change=''  
 							placeholder="3rd Floor">
@@ -158,11 +164,11 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventStreet03">
+			<div class="col-xs-12 col-sm-12 form-group">
+				<label class="control-label" for="eventStreet03">
 					<input 	type="text" 
 							id='eventStreet03' 
-							class='inputField' 
+							class='form-control'
 							ng-model='hostingThisEvent.tempEvent.address.street03' 
 							ng-change=''  
 							placeholder="Unit 11">
@@ -170,13 +176,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-8 col-sm-8">
-				<label for="eventCity">City:
+			<div class="col-xs-8 col-sm-8 form-group">
+				<label class="control-label" for="eventCity">City:
 					<input 	type="text" 
 							id='eventCity' 
 							name='eventCity' 
-							class='inputField' 
+							class='form-control'
 							ng-model='hostingThisEvent.tempEvent.address.city'
+							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.city)'
 							ng-change=''  
 							placeholder="New York" 
 							required>
@@ -185,13 +192,14 @@
 					</div>
 				</label>
 			</div>
-			<div class="col-xs-4 col-sm-4">
-				<label for="eventState">State:
+			<div class="col-xs-4 col-sm-4 form-group">
+				<label class="control-label" for="eventState">State:
 					<input 	type="text" 
 							id='eventState' 
 							name='eventState' 
-							class='inputField' 
+							class='form-control' 
 							ng-model='hostingThisEvent.tempEvent.address.state'
+							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.state)'
 							ng-change=''  
 							placeholder='NY' 
 							required>
@@ -202,13 +210,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12">
-				<label for="eventZip">Zip:
+			<div class="col-xs-12 col-sm-12 form-group">
+				<label class="control-label" for="eventZip">Zip:
 					<input 	type="text" 
 							id='eventZip' 
 							name='eventZip' 
-							class='inputField' 
+							class='form-control'
 							ng-model='hostingThisEvent.tempEvent.address.zip'
+							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.zip)'
 							ng-change=''  
 							placeholder="012345" 
 							required=''>
