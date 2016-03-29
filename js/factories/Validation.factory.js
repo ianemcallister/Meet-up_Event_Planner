@@ -144,8 +144,11 @@ function validation($log) {
     function email(value) {
     	//define constraints
     	var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
-
-    	if(!constraint.test(value)) return 'Not a valid e-mail address'
+    	
+    	if(angular.isDefined(value) && !constraint.test(value)) {
+    		return 'Not a valid email';
+    	}
+    	//if(!constraint.test(value)) return 'Not a valid e-mail address'
     	
     }
 

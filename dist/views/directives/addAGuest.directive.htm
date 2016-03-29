@@ -1,32 +1,45 @@
 <div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span class="alert alert-danger col-xs-12 col-sm-12 fade in" ng-if='vm.showNameError()'>
+						<strong>Error: </strong>{{ vm.validations.name.errorMessage }}
+			</span>
 			<label for="inviteeName">Name:
 				<input 	type="text" 
 						id='inviteeName' 
 						class='inputField' 
-						ng-model='anEvent.newGuest.name' 
+						ng-model='vm.tempGuest.name' 
+						ng-change='vm.validateName()'
+						ng-blur='vm.validateName()'
 						placeholder='F. Scott Fitzgerald'>
 			</label>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
+			<span class="alert alert-danger col-xs-12 col-sm-12 fade in" ng-if='vm.showEmailError()'>
+				<strong>Error: </strong>{{ vm.validations.email.errorMessage  }}
+			</span>
 			<label for="inviteeEmail">Email:
 				<input 	type="email" 
-						ng-model='anEvent.newGuest.email.address' 
+						ng-model='vm.tempGuest.email' 
 						class='inputField' 
-						ng-change='anEvent.validateGuestEmail()' 
-						ng-style='anEvent.newGuest.email.style' 
+						ng-blur='vm.validateEmail()' 
+						ng-style='' 
 						placeholder='f.scott@fitzgerald.com'>
 			</label>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<div class="col-xs-12 col-sm-12 btn btn-primary" ng-click='anEvent.addGuestToHostsList()'>
-				Add Recipient
+			<div 	ng-class="vm.submissionButton.class" 
+					ng-click='vm.submitGuestInvitation()'>
+						{{ vm.submissionButton.message }}
 			</div>
 		</div>
 	</div>
+	<!--Invitaion Error Message -->
+	<span class="alert alert-danger col-xs-12 col-sm-12 fade in" ng-if='vm.showInvitationError()'>
+		<strong>Error: </strong>{{ vm.validations.invitation.errorMessage  }}
+	</span>
 </div>

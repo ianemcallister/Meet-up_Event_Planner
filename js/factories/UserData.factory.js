@@ -27,10 +27,11 @@ function userData($log, $q, backendServices) {
 	var allUserData = {
 		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
 		eventExistsLocally: eventExistsLocally,
+		thisIsTheHostEmail: thisIsTheHostEmail,
 
-		cleanEvents: cleanEvents,		//model maintainance
+		cleanEvents: cleanEvents,							//model maintainance
 
-		getUIDLocally: getUIDLocally,	//getter Methods
+		getUIDLocally: getUIDLocally,						//getter Methods
 		getNameLocally: getNameLocally,
 		getEmailLocally: getEmailLocally,
 		getCompanyLocally: getCompanyLocally,
@@ -41,7 +42,7 @@ function userData($log, $q, backendServices) {
 		getUserEventsLocally: getUserEventsLocally,
 		getAllUserEventsLocally: getAllUserEventsLocally,
 
-		setUIDLocally: setUIDLocally,	//setter Methods
+		setUIDLocally: setUIDLocally,						//setter Methods
 		setNameLocally: setNameLocally,
 		setEmailLocally: setEmailLocally,
 		setCompanyLocally: setCompanyLocally,
@@ -52,7 +53,7 @@ function userData($log, $q, backendServices) {
 		updateAllUserEventsLocally: updateAllUserEventsLocally,
 		updateBioLocally: updateBioLocally,
 
-		removeUserEventsLocally: removeUserEventsLocally, //remove data
+		removeUserEventsLocally: removeUserEventsLocally, 	//remove data
 		
 		getFullRemoteDBforLocal: getFullRemoteDBforLocal,	//local-remote interacions
 		getRemoteBioForLocal: getRemoteBioForLocal,			
@@ -63,7 +64,7 @@ function userData($log, $q, backendServices) {
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
 		cleanDBEventsCategory: cleanDBEventsCategory,
 
-		loadBio: loadBio,	//external methods
+		loadBio: loadBio,									//external methods
 		loadEventsProgressively: loadEventsProgressively,
 		loadAnEventProgressively: loadAnEventProgressively,
 		createNewEvent: createNewEvent
@@ -83,6 +84,39 @@ function userData($log, $q, backendServices) {
 		$log.info('checking if the event exits');
 		if(angular.isDefined(currentUser.events[type][eventId])) return true;
 		else return false;
+	}
+
+	function thisIsTheHostEmail(email, uid, eventId) {
+		$log.info('current user bio is:');
+		$log.info(currentUser.bio);
+		//check if a bio is loaded
+		if(angular.isDefined(currentUser.bio.email)) {
+			$log.info('email is defined');
+			if(currentUser.bio.email != '') {
+				//check for a match
+				if(email == currentUser.bio.email) {
+					$log.info('email matches');
+					return true;
+				} else {
+					$log.info('email does not match');
+					return false;
+				}
+
+			} 
+			
+		} 
+		
+		//if that didn't work check the current event
+		$log.info('current event is:');
+		$log.info(currentUser.events.hosting[eventId]);
+		if(currentUser.events.hosting[eventId].host.email == email) {
+			$log.info('event host email matches');
+			return true;
+		} else {
+			$log.info('event host email DOESN\'T not match');
+			return false;
+		}
+		
 	}
 
 	//model maintainance
@@ -133,7 +167,7 @@ function userData($log, $q, backendServices) {
 	}
 
 	function getOneUserEventLocally(type, eventId) {
-		return currentUser.events[type][eventID];
+		return currentUser.events[type][eventId];
 	}
 
 	function getUserEventsLocally(type) {
@@ -405,7 +439,8 @@ function userData($log, $q, backendServices) {
 			type: '',
 			host: {
 				name: currentUser.bio.name,
-				uid: currentUser.bio.uid
+				uid: currentUser.bio.uid,
+				email: currentUser.bio.email
 			},
 			message: '',
 			eventTimes: {
