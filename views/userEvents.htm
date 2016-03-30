@@ -70,18 +70,6 @@
 				user-id='theUserEvents.userBio.uid'>
 			</hosted-events-list>
 		</div>
-		<table class="table table-striped table-hover table-border eventSnapshot" ng-if='theUserEvents.eventsAreBeingHosted()'>
-			<tr>
-				<th class="col-xs-3 col-sm-3">DATE</th>
-				<th class="col-xs-6 col-sm-6">EVENT</th>
-				<th class="col-xs-3 col-sm-3">ATTENDING</th>
-			</tr>
-			<tr ng-repeat='hostedEvent in theUserEvents.events.hosting' >
-				<td>{{hostedEvent.eventTimes.start | date: 'MMM, d' }}</td>
-				<td ng-click='theUserEvents.redirectToHostedEvent(hostedEvent.id)'>{{hostedEvent.eventTimes.start | date: 'h:mm a'}} - {{hostedEvent.name}}</td>
-				<td>{{theUserEvents.percentRSVPed(hostedEvent.guestList)}}% ({{theUserEvents.totalAttending(hostedEvent.guestList)}}/{{theUserEvents.totalInvited(hostedEvent.guestList)}})</td>
-			</tr>
-		</table>
 	</div>
 </div>
 </div>

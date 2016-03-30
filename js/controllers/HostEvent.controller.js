@@ -26,6 +26,23 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		},
 		message: (vm.percentComplete + '%')
 	}
+	vm.actionBtn = {
+		div: {
+			class: {
+				'col-xs-6': true,
+				'col-sm-6': true,
+			}
+		},
+		btn: {
+			class: {
+				'btn': true,
+				'btn-success': false,
+				'btn-warning': true,
+				'pull-right': true,
+			},
+			message: 'Add Info'
+		}
+	}
 	vm.tempEvent = {};
 	vm.requiredFieldComplete = requirnmentsFactory.generateEventRequirnments();
 
@@ -42,11 +59,25 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		return (dateTimeToUnixTime(end) - dateTimeToUnixTime(start)) / (60*1000);
 	}
 
+	function changeSaveBtn(direction) {
+		if(direction == 'open') {
+			vm.actionBtn.btn.class['btn-success'] = true;
+			vm.actionBtn.btn.class['btn-warning'] = false;
+			vm.actionBtn.btn.message = 'Save Event';
+		} else if(direction == 'close') {
+			vm.actionBtn.btn.class['btn-success'] = false;
+			vm.actionBtn.btn.class['btn-warning'] = true;
+			vm.actionBtn.btn.message = 'Add Info';
+		}
+	}
+
 	function updateProgressBar(units) {
 		percentComplete += units;
 		vm.progressBar.complete = percentComplete;
 		vm.progressBar.style.width = (percentComplete + '%');
-		vm.progressBar.message = (percentComplete + '%');		
+		vm.progressBar.message = (percentComplete + '%');
+		if(percentComplete > 99) changeSaveBtn('open');	
+		if(percentComplete < 99) changeSaveBtn('close');		
 	}
 
 	function initEventTimes() {
@@ -77,19 +108,33 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	}
 
 	function init() {
-		
-		//load event details
-		thisEventManager.loadAnEventProgressively($routeParams.uid, $routeParams.eventId)
-		.then(function(theEvent) {
-			//add this event model to the view model event
-			vm.tempEvent = theEvent;
+		$log.info(thisEventManager.getActiveEvent());
+		//if there is an active event, load it
+		if(thisEventManager.thereIsAnActiveEvent()) {
+			$log.info('loading the active event');
+			var activePackage = thisEventManager.getActiveEvent();
 
-			//update tempTime
-			updateTempTimeFromModel();
-		})
-		.catch(function(error) {
-			$log('the error is: ' + error);
-		})
+			vm.progressBar = activePackage.progressBar;
+			percentComplete = activePackage.percentComplete
+			vm.tempEvent = activePackage.event;
+			vm.requiredFieldComplete = activePackage.requiredFields;
+
+			$log.info(vm.progressBar);
+
+		} else {
+			//load event details
+			thisEventManager.loadAnEventProgressively($routeParams.uid, $routeParams.eventId)
+			.then(function(theEvent) {
+				//add this event model to the view model event
+				vm.tempEvent = theEvent;
+
+				//update tempTime
+				updateTempTimeFromModel();
+			})
+			.catch(function(error) {
+				$log('the error is: ' + error);
+			})
+		}
 
 		//load specified section
 		vm.activeSection = parseInt($routeParams.section);
@@ -110,19 +155,24 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		return (hours+fraction) + ' h';
 	}
 
-	vm.validateTime = function(startOrEnd) {
-		$log.info('validating ' + startOrEnd);
+	vm.validateTime = function(startOrEnd) {	
+
+		if(vm.tempTime.duration > 24) vm.settingTempStart();
+
+		//local variables
 		var times = {
 			'eventStart': vm.tempTime.start,
 			'eventEnd': vm.tempTime.end
 		};
 
 		if(angular.isDefined(times[startOrEnd]) && times[startOrEnd] != '' && vm.tempTime.duration > 0) {
+			if(vm.requiredFieldComplete[startOrEnd].completed == false) updateProgressBar(11);
 			vm.requiredFieldComplete[startOrEnd].completed = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-success'] = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-feedback'] = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-error'] = false;
 		} else {
+			if(vm.requiredFieldComplete[startOrEnd].completed == true) updateProgressBar(-11);
 			vm.requiredFieldComplete[startOrEnd].completed = false;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-success'] = false;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-feedback'] = false;
@@ -131,9 +181,19 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	}
 
 	vm.settingTempStart = function() {
-		vm.tempTime.end = vm.tempTime.start;
 
-		vm.validateTime('eventStart');
+		$log.info(dateTimeToUnixTime(vm.tempTime.end) - dateTimeToUnixTime(vm.tempTime.start)/(1000*60*60*24));
+
+		if((dateTimeToUnixTime(vm.tempTime.end) <= dateTimeToUnixTime(vm.tempTime.start)) || 
+			(dateTimeToUnixTime(vm.tempTime.end) - dateTimeToUnixTime(vm.tempTime.start) > (1000*60*60*24))) {
+			oldStart = dateTimeToUnixTime(vm.tempTime.start);
+			oldEnd = dateTimeToUnixTime(vm.tempTime.end);
+
+			newEnd = oldStart + (60*60*1000);
+
+			vm.tempTime.end = unixTimeToDateTime(newEnd);
+		}
+		
  	}
 
 	vm.settingTempEnd = function() {
@@ -145,20 +205,61 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 
 		//calc duration
 		vm.tempTime.duration = calculateDuration(vm.tempTime.start, vm.tempTime.end);
+
+		
 	}
 
 	vm.backToUserEvents = function() {
+		//if the event is completed, save to the db
+		//check that the event is complete
+		if(percentComplete > 99) {
+			//if so save the event locally
+			thisEventManager.saveNewHostingEvent('hosting', vm.tempEvent);
+			//then sync the local with the db
+			thisEventManager.setRemoteEventsFromLocal('hosting', vm.tempEvent)
+			.then(function(succesMessage) {
+				$log.info(succesMessage);
+			})
+			.catch(function(erroMessage) {
+				$log.info(erroMessage);
+			})
+		}
+
+		//if not completed, delete the event entirely
+		//thisEventManager.removeIncompleteEventFromDB(vm.tempEvent.id);
+
 		//send the user back to the page they came from
 		hostedEventSherpa.redirectTo('/userEvents', $routeParams.uid);
 	}
 
 	vm.sectionBack = function() {
+		//save temp event package
+		var eventPackage = {
+			event: vm.tempEvent,
+			progressBar: vm.progressBar,
+			percentComplete: percentComplete,
+			requiredFields: vm.requiredFieldComplete
+		};
+
+		thisEventManager.setActiveEvent(eventPackage)
+
 		//move back
 		targetSection = vm.activeSection - 1;
 		hostedEventSherpa.redirectTo('/event/host', $routeParams.eventId, $routeParams.uid, targetSection);
 	}	
 
 	vm.sectionForward = function() {
+		//if all required fields have been entered
+		//save temp event package
+		var eventPackage = {
+			event: vm.tempEvent,
+			progressBar: vm.progressBar,
+			percentComplete: percentComplete,
+			requiredFields: vm.requiredFieldComplete
+		};
+
+		thisEventManager.setActiveEvent(eventPackage)
+
 		//move forward
 		targetSection = vm.activeSection + 1;
 		hostedEventSherpa.redirectTo('/event/host', $routeParams.eventId, $routeParams.uid, targetSection);
@@ -188,6 +289,35 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		
 	}
 
+	vm.saveEventToDB = function() {
+		//check that the event is complete
+		if(percentComplete > 99) {
+			//if so save the event locally
+			thisEventManager.saveNewHostingEvent('hosting', vm.tempEvent);
+			//then sync the local with the db
+			thisEventManager.setRemoteEventsFromLocal($routeParams.uid, vm.tempEvent)
+			.then(function(succesMessage) {
+				$log.info(succesMessage);
+			})
+			.catch(function(erroMessage) {
+				$log.info(erroMessage);
+			})
+
+			//redirect back to events
+			hostedEventSherpa.redirectTo('/userEvents', $routeParams.uid);
+		}
+		
+	}
+
+	//watchers
+	$scope.$watch('vm.tempEvent.guestList', function(current, original) {
+		//if a guest is added to the list update the progress bar
+        if(angular.isObject(vm.tempEvent.guestList)) {
+        	updateProgressBar(12);
+        }
+	});
+
 	//take action
 	init();
+
 }

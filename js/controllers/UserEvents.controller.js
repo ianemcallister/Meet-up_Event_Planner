@@ -69,6 +69,7 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 	}
 
 	function initialize() {
+		$log.info(currentUser.getAllUserEventsLocally());
 		//make sure the uid is set
 		currentUser.setUIDLocally($routeParams.uid);
 
@@ -86,7 +87,7 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		//then call to the db and get the most up to date info
 		currentUser.getRemoteEventsForLocal()
 		.then(function(obtainedUserEvents) {
-
+			$log.info('checking the db for events');
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
 		})
@@ -103,9 +104,9 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		var eventID = generateEventID();
 		var newEventSherpa = trafficValet;
 
-		//add the event to the modal (locally then on the db)
+		//add the event to the modal (locally ONLY)
 		currentUser.createNewEvent(eventID)
-		.then(function(affirmativeResponse) {
+		/*.then(function(affirmativeResponse) {
 			//report the success
 			$log.info(affirmativeResponse);
 		})
@@ -117,7 +118,7 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		.catch(function(errorResponse) {
 			//report the error
 			$log.info(errorResponse);
-		})
+		})*/
 		
 
 		//redirect to the new event page		

@@ -1,5 +1,6 @@
 <div class="container-fluid" ng-controller='HostEventController as hostingThisEvent' id='anEvent'>
 	
+	
 	<!--To return to events page-->
 	<div class="row">
 		<div class="col-xs-6 col-sm-6">
@@ -7,8 +8,10 @@
 				ng-click='hostingThisEvent.backToUserEvents()'
 				ng-touch='hostingThisEvent.backToUserEvents()'>< Back to Events</strong>
 		</div>
-		<div class="col-xs-6 col-sm-6">
-			<span class="btn btn-success pull-right">Save Event</span>
+		<div class='hostingThisEvent.actionBtn.div.class'>
+			<span 	ng-class='hostingThisEvent.actionBtn.btn.class'
+					ng-click='hostingThisEvent.saveEventToDB()'>
+					{{ hostingThisEvent.actionBtn.btn.message }}</span>
 		</div>
 	</div>
 
@@ -82,7 +85,8 @@
 							ng-class="hostingThisEvent.requiredFieldComplete.eventStart.input.class"
 							ng-model='hostingThisEvent.tempTime.start' 
 							ng-focus='' 
-							ng-change='hostingThisEvent.settingTempStart()'
+							ng-change="hostingThisEvent.settingTempStart()"
+							ng-keyup="hostingThisEvent.settingTempStart()"
 							ng-blur= 'hostingThisEvent.validateTime("eventStart")'
 							required>
 								<div ng-show='WhenForm.$submitted || WhenForm.eventStart.$touched'>
@@ -103,7 +107,7 @@
 							ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.input.class"
 							ng-model='hostingThisEvent.tempTime.end' 
 							ng-focus=''
-							ng-change='' 
+							ng-change=''
 							ng-blur='hostingThisEvent.settingTempEnd()'
 							required>
 								<div ng-show='WhenForm.$submitted || WhenForm.eventEnd.$touched'>
@@ -133,14 +137,15 @@
 		<h4>Where is the event?</h4>
 		<!--Location-->
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 form-group">
-				<label class="control-label" for="eventStreet01">Street:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventStreet01.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventStreet01.label.class"
+						for="eventStreet01">Street:
 					<input 	type="text" 
 							id='eventStreet01' 
 							name='eventStreet01' 
-							class='form-control'
+							ng-class="hostingThisEvent.requiredFieldComplete.eventStreet01.input.class"
 							ng-model='hostingThisEvent.tempEvent.address.street01'
-							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.street01)'
+							ng-blur='hostingThisEvent.verifyRequired("eventStreet01", hostingThisEvent.tempEvent.address.street01)'
 							ng-change=''  
 							placeholder="e.g. 4928 Bronx Ave." 
 							required
@@ -176,14 +181,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-8 col-sm-8 form-group">
-				<label class="control-label" for="eventCity">City:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventCity.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventCity.label.class"
+						for="eventCity">City:
 					<input 	type="text" 
 							id='eventCity' 
 							name='eventCity' 
-							class='form-control'
+							ng-class="hostingThisEvent.requiredFieldComplete.eventCity.input.class"
 							ng-model='hostingThisEvent.tempEvent.address.city'
-							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.city)'
+							ng-blur='hostingThisEvent.verifyRequired("eventCity", hostingThisEvent.tempEvent.address.city)'
 							ng-change=''  
 							placeholder="New York" 
 							required>
@@ -192,14 +198,15 @@
 					</div>
 				</label>
 			</div>
-			<div class="col-xs-4 col-sm-4 form-group">
-				<label class="control-label" for="eventState">State:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventState.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventState.label.class"
+						for="eventState">State:
 					<input 	type="text" 
 							id='eventState' 
 							name='eventState' 
-							class='form-control' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventState.input.class"
 							ng-model='hostingThisEvent.tempEvent.address.state'
-							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.state)'
+							ng-blur='hostingThisEvent.verifyRequired("eventState", hostingThisEvent.tempEvent.address.state)'
 							ng-change=''  
 							placeholder='NY' 
 							required>
@@ -210,14 +217,15 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 form-group">
-				<label class="control-label" for="eventZip">Zip:
+			<div ng-class="hostingThisEvent.requiredFieldComplete.eventZip.row.class">
+				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventZip.label.class"
+						for="eventZip">Zip:
 					<input 	type="text" 
 							id='eventZip' 
 							name='eventZip' 
-							class='form-control'
+							ng-class="hostingThisEvent.requiredFieldComplete.eventZip.input.class"
 							ng-model='hostingThisEvent.tempEvent.address.zip'
-							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.address.zip)'
+							ng-blur='hostingThisEvent.verifyRequired("eventZip", hostingThisEvent.tempEvent.address.zip)'
 							ng-change=''  
 							placeholder="012345" 
 							required=''>
@@ -235,10 +243,12 @@
 		<h4>Who should come?</h4>
 		<!--Guest list: Invite a Guest-->
 		<p><strong>Invite a Guest</strong></p>
-		<add-a-guest></add-a-guest>
+		<add-a-guest guest-list='hostingThisEvent.tempEvent.guestList'></add-a-guest>
 		<!--Guest list: Who's attending-->
 		<h4>Guest List:</h4>
-		<hosted-guest-list guest-list='hostingThisEvent.tempEvent.guestList' id='guestList'></hosted-guest-list>
+		<hosted-guest-list 	guest-list='hostingThisEvent.tempEvent.guestList'
+							id='guestList'>
+		</hosted-guest-list>
 		<!--Call to Action: Save & return to userEvents OR invite guest to RSVP-->
 	</div>
 
@@ -262,5 +272,4 @@
 			</div>
 		</div>
 	</footer>
-	
 </div>

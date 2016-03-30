@@ -1,17 +1,18 @@
 <div>
 	<!--Placeholder Row-->
-	<div class="row" ng-if='!vm.isAGuestList'>
+	<!--
+	<div class="row" ng-if='!vm.guestList'>
 		<div class="col-xs-12 col-sm-12">
 			No Guests Invited Yet
 		</div>
-	</div>
+	</div>-->
 	<!--Header Row-->
-	<div class="row" ng-if='vm.isAGuestList'>
+	<div class="row" >
 		<div class="col-xs-4 col-sm-4"><strong>STATUS</strong></div>
 		<div class="col-xs-8 col-sm-8"><strong>NAME</strong></div>
 	</div>
 	<!--Data Row-->
-	<div class="row" ng-if='vm.isAGuestList' ng-repeat='guest in vm.guestList'>
+	<div class="row" ng-repeat='guest in vm.guestList'>
 		<!--State cell-->
 		<div class="col-xs-4 col-sm-4">
 			{{ guest.status }}

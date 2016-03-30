@@ -24,6 +24,8 @@ function userData($log, $q, backendServices) {
 		}
 	};
 
+	var activeEvent = {};
+
 	//local functions
 	function utf8_to_b64(str) {
 		return btoa(str);
@@ -33,11 +35,20 @@ function userData($log, $q, backendServices) {
     	return atob(str);
 	}
 
+	function unixTimeToDateTime(unixTime) {
+		return new Date(parseInt(unixTime));
+	};
+
+	function dateTimeToUnixTime(dateTime) {
+		return Date.parse(dateTime);
+	};
+
 	var allUserData = {
 		bioPrimariesAreCompleteLocally: bioPrimariesAreCompleteLocally,		//modal analysis
 		eventExistsLocally: eventExistsLocally,
 		thisIsTheHostEmail: thisIsTheHostEmail,
 		guestInvitedAlready: guestInvitedAlready,
+		thereIsAnActiveEvent: thereIsAnActiveEvent,
 
 		cleanEvents: cleanEvents,							//model maintainance
 
@@ -51,6 +62,7 @@ function userData($log, $q, backendServices) {
 		getOneUserEventLocally: getOneUserEventLocally,
 		getUserEventsLocally: getUserEventsLocally,
 		getAllUserEventsLocally: getAllUserEventsLocally,
+		getActiveEvent: getActiveEvent,
 
 		setUIDLocally: setUIDLocally,						//setter Methods
 		setNameLocally: setNameLocally,
@@ -63,6 +75,9 @@ function userData($log, $q, backendServices) {
 		updateAllUserEventsLocally: updateAllUserEventsLocally,
 		updateBioLocally: updateBioLocally,
 		addGuestToHostGuestList: addGuestToHostGuestList,
+		setActiveEvent: setActiveEvent,
+		addGuestToActiveEvent: addGuestToActiveEvent,
+		saveNewHostingEvent: saveNewHostingEvent,
 
 		removeUserEventsLocally: removeUserEventsLocally, 	//remove data
 		
@@ -72,10 +87,12 @@ function userData($log, $q, backendServices) {
 		getOneRemoteEventForLocal: getOneRemoteEventForLocal,
 		setFullRemoteDBfromLocal: setFullRemoteDBfromLocal,
 		setRemoteBioFromLocal: setRemoteBioFromLocal,
+		setARemoteEventFromLocal: setARemoteEventFromLocal,
 		setRemoteEventsFromLocal: setRemoteEventsFromLocal,
 		cleanDBEventsCategory: cleanDBEventsCategory,
 		getUserIdForGuest: getUserIdForGuest,
 		getEventGuestList: getEventGuestList,
+		removeIncompleteEventFromDB: removeIncompleteEventFromDB,
 
 		loadBio: loadBio,									//external methods
 		loadEventsProgressively: loadEventsProgressively,
@@ -95,24 +112,22 @@ function userData($log, $q, backendServices) {
 	}
 
 	function eventExistsLocally(type, eventId) {
-		$log.info('checking if the event exits');
 		if(angular.isDefined(currentUser.events[type][eventId])) return true;
 		else return false;
 	}
 
 	function thisIsTheHostEmail(email, eventId) {
-		$log.info('current user bio is:');
-		$log.info(currentUser.bio);
+		
 		//check if a bio is loaded
 		if(angular.isDefined(currentUser.bio.email)) {
-			$log.info('email is defined');
+			
 			if(currentUser.bio.email != '') {
 				//check for a match
 				if(email == currentUser.bio.email) {
-					$log.info('email matches');
+					
 					return true;
 				} else {
-					$log.info('email does not match');
+					
 					return false;
 				}
 
@@ -121,13 +136,12 @@ function userData($log, $q, backendServices) {
 		} 
 		
 		//if that didn't work check the current event
-		$log.info('current event is:');
-		$log.info(currentUser.events.hosting[eventId]);
+		
 		if(currentUser.events.hosting[eventId].host.email == email) {
-			$log.info('event host email matches');
+			
 			return true;
 		} else {
-			$log.info('event host email DOESN\'T not match');
+			
 			return false;
 		}
 		
@@ -135,7 +149,6 @@ function userData($log, $q, backendServices) {
 
 	function guestInvitedAlready(email, eventId) {
 		//first check if there is a guest list
-		$log.info(currentUser.events.hosting[eventId]);
 		if(angular.isDefined(currentUser.events.hosting[eventId].guestList)) {
 			//if there is a list, check for the email
 			$log.info('there is a guest list');
@@ -160,6 +173,13 @@ function userData($log, $q, backendServices) {
 			return false;
 		}
 
+	}
+
+	function thereIsAnActiveEvent() {
+		if(angular.isDefined(activeEvent.event)) {
+			return true;
+		}
+		else return false;
 	}
 
 	//model maintainance
@@ -221,6 +241,10 @@ function userData($log, $q, backendServices) {
 		return currentUser.events;
 	}
 
+	function getActiveEvent() {
+		return activeEvent;
+	}
+
 	//setter methods
 	function setUIDLocally(uid) {
 		currentUser.bio.uid = uid;
@@ -248,7 +272,7 @@ function userData($log, $q, backendServices) {
 
 	function setPrimariesLocally(email, name, uid) {
 		if(angular.isDefined(email)) setEmailLocally(email);
-		if(angular.isDefined(name)) getNameLocally(name);
+		if(angular.isDefined(name)) setNameLocally(name);
 		if(angular.isDefined(uid)) setUIDLocally(uid);
 	}
 
@@ -296,6 +320,28 @@ function userData($log, $q, backendServices) {
 			})
 		});
 
+	}
+
+	function setActiveEvent(event) {
+		//
+		activeEvent = event;
+	}
+
+	function addGuestToActiveEvent(newGuest) {
+		//local variables
+		var uid = newGuest.uid;
+
+		//if this is the first guest, create the list object
+		if(!angular.isObject(activeEvent.event.guestList)) {
+			$log.info('creating the object');
+			activeEvent.event.guestList = {};
+		}
+
+		$log.info(activeEvent.event);
+		//add the guest to the list
+		activeEvent.event.guestList[uid] = newGuest.guest;
+
+		$log.info(activeEvent.event.guestList[uid]);
 	}
 
 	function getUserIdForGuest(email) {
@@ -392,7 +438,7 @@ function userData($log, $q, backendServices) {
 			.then(function(obtainedEvent) {
 
 				//save the result to the local model
-				$log.info(obtainedEvent);
+				
 				//return the result to the requesting object
 				resolve(obtainedEvent);
 			})
@@ -416,7 +462,26 @@ function userData($log, $q, backendServices) {
 		db.uploadUserBio(currentUser.bio);
 	}
 
-	function setRemoteEventsFromLocal() {}
+	function setARemoteEventFromLocal() {
+
+	}
+
+	function setRemoteEventsFromLocal(uid, event) {
+		//declar local variables
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			//send the event to the db
+			db.createHostedEvent(uid, event)
+			.then(function(successMessage) {
+				resolve(successMessage);
+			})
+			.catch(function(errorMessage) {
+				reject(errorMessage);
+			})
+		});
+
+	}
 
 	function cleanDBEventsCategory(category) {
 		//declar local variables
@@ -457,6 +522,21 @@ function userData($log, $q, backendServices) {
 		})
 	}
 
+	function removeIncompleteEventFromDB(eventId) {
+		//declare local variables
+		var db = backendServices;
+
+		return $q(function(resolve, reject) {
+			db.removeIncompleteEvent(currentUser.getUIDLocally, eventId)
+			.then(function(successMessage){
+				resolve(successMessage);
+			})
+			.catch(function(errorMessage) {
+				reject(errorMessage);
+			})
+		})
+	}
+
 	function loadBio(uid) {
 
 		//might need to go out to the db so return a promise
@@ -464,13 +544,18 @@ function userData($log, $q, backendServices) {
 
 			//check for bio locally first
 			if(bioPrimariesAreCompleteLocally()) {
-				
+
 				//pass it back as success
 				resolve(getFullBioLocally());
 			} else {
 				//if they're not complete locally, check the server
 				getRemoteBioForLocal(uid)
 				.then(function(bioFromRemoteDB) {
+					
+					//save them locally first
+					setPrimariesLocally(bioFromRemoteDB.email, bioFromRemoteDB.name, bioFromRemoteDB.uid);
+					
+					//return the findings
 					resolve(bioFromRemoteDB);
 				})
 				.catch(function(error) {
@@ -530,6 +615,9 @@ function userData($log, $q, backendServices) {
 		//declar local variables
 		var db = backendServices;
 		var newEvent = {};
+		var dateTime = new Date();
+		dateTime.setMinutes(0, 0, 0);
+		var tempTime = dateTimeToUnixTime(dateTime);
 
 		//first create the object
 		newEvent = {
@@ -543,8 +631,8 @@ function userData($log, $q, backendServices) {
 			},
 			message: '',
 			eventTimes: {
-				start: 0,
-				end: 0
+				start: tempTime,
+				end: (tempTime + (60*60*1000))
 			},
 			address: {
 				street01: '',
@@ -553,19 +641,23 @@ function userData($log, $q, backendServices) {
 				city: '',
 				state: '',
 				zip: 0
-			},
-			guestList: {}
+			}
 		};
 
 		//save it locally
 		updateUserEventsLocally('hosting', newEvent);
 
+		//save it as the active event
+		setActiveEvent(newEvent);
+
 		//then create it on the server
 		//will go out to the db so return a promise
-		return $q(function(resolve, reject) {
+		
+		/*return $q(function(resolve, reject) {
 			
+			$log.info('saved locally, not on the db');
 			//manage the promise responses
-			db.createHostedEvent(getUIDLocally(), newEvent)
+			/*db.createHostedEvent(getUIDLocally(), newEvent)
 			.then(function(message) {
 				resolve(message);
 			})
@@ -573,7 +665,7 @@ function userData($log, $q, backendServices) {
 				reject(error);
 			})
 
-		});
+		});*/
 
 	}
 
@@ -587,6 +679,11 @@ function userData($log, $q, backendServices) {
 			//db.addPendingEventForGuest(currentUser.getUIDLocally(), hostId, eventId, currentUser.getUserEventsLocally('', eventId))
 		});
 
+	}
+
+	function saveNewHostingEvent(category, event) {
+		//
+		updateUserEventsLocally(category, event);
 	}
 	
 	return allUserData;

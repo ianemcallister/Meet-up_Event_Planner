@@ -16,6 +16,7 @@ function addAGuest() {
 		templateUrl: '../views/directives/addAGuest.directive.htm',
 		replace: true,
 		scope: {
+			guestList: '='
 		},
 		link: linkFunc,
 		controller: addAGuestController,
@@ -40,7 +41,8 @@ function addAGuest() {
 	    //vm variables
 	    vm.tempGuest = {
 	    	name: '',
-	    	email: ''
+	    	email: '',
+	    	status: 'pending'
 	    }
 	    vm.validations = {
 	    	name: {
@@ -74,6 +76,10 @@ function addAGuest() {
 	    	message: 'Address Invitation...'
 	    }
 	    //local methods
+	    function utf8_to_b64(str) {
+			return btoa(str);
+		}
+
 	    function validateInvitation() {
 	    	//check if both inputs are valid
 	    	if(vm.validations.name.valid && vm.validations.email.valid) {
@@ -204,14 +210,29 @@ function addAGuest() {
 	    		})
 	    		.then(function(uid) {
 	    			//use that uid to register the user
-	    			//add this person to the host's guest list
-		    		invitationManager.addGuestToHostGuestList(vm.tempGuest.name, undefined, uid, $routeParams.eventId, $routeParams.uid)
-		    		.then()
-		    		.catch()
+	    			//add the person to the host's LOCAL guest list
+	    			$log.info('the guest list is...');
+	    			$log.info(vm.guestList);
+
+	    			if(!angular.isObject(vm.guestList)) {
+						$log.info('creating the object');
+						vm.guestList = {};
+					}
+					//create the guest to save
+					var guestBeingAdded = vm.tempGuest;
+
+	    			vm.guestList[uid] = guestBeingAdded;
+
+	    			vm.tempGuest = {
+				    	name: '',
+				    	email: '',
+				    	status: 'pending'
+				    };
+
 	    		})
 	    		.then(function() {
 	    			//add this event to the users' pending list
-	    			invitationManager.updatePendingEventsListForUser()
+	    			/*invitationManager.updatePendingEventsListForUser()*/
 	    		})
 	    		.then(function() {
 	    			//remove the 'updated' field if need be
@@ -219,8 +240,20 @@ function addAGuest() {
 	    		.catch(function(errorMessage) {
 	    			//assuming no uid was found just use the email
 	    			$log.info(errorMessage);
+	    			
+	    			//create the emailId
+	    			idByEmail = utf8_to_b64(vm.tempGuest.email);
 	    			//add this person to the host's guest list
-			    	invitationManager.addGuestToHostGuestList(vm.tempGuest.name, vm.tempGuest.email, undefined, $routeParams.eventId, $routeParams.uid)
+	    			if(!angular.isObject(vm.guestList)) {
+						$log.info('creating the object');
+						vm.guestList = {};
+					}
+					//create the guest to save
+					var guestBeingAdded = vm.tempGuest;
+
+	    			vm.guestList[idByEmail] = guestBeingAdded;
+
+			    	/*invitationManager.addGuestToHostGuestList(vm.tempGuest.name, vm.tempGuest.email, undefined, $routeParams.eventId, $routeParams.uid)
 			    	.then(function(positiveResult) {
 			    		$log.info('got this result: ' + positiveResult);
 			    	})
@@ -233,7 +266,13 @@ function addAGuest() {
 	    			})
 			    	.catch(function(negativeResult) {
 			    		$log.info('got this result: ' + positiveResult);
-			    	})
+			    	})*/
+
+			    	vm.tempGuest = {
+				    	name: '',
+				    	email: '',
+				    	status: 'pending'
+				    } 
 
 	    		})
 	    		

@@ -37,6 +37,7 @@ function backendServices($log, $q, $window) {
 		//addPendingEventForGuest: addPendingEventForGuest,
 
 		deleteUpdateField: deleteUpdateField,			//delete methods
+		removeIncompleteEvent: removeIncompleteEvent,
 
 		thereWasAnUpdateField: thereWasAnUpdateField	//model maintainance
 	};
@@ -255,6 +256,10 @@ function backendServices($log, $q, $window) {
 	}
 
 	function createHostedEvent(uid, newEvent) {
+		$log.info('got passed...');
+		$log.info(uid);
+		$log.info(newEvent);
+
 		//declare local variables
 		var app = new Firebase(fbURL);
 		var eventID = newEvent.id;
@@ -451,6 +456,26 @@ function backendServices($log, $q, $window) {
 				if(error) reject('There was an error deleting update field: ' + error);
 				else resolve('Deleted update successfully');
 			})
+		});
+
+	}
+
+	function removeIncompleteEvent(uid, eventId) {
+		//declare local variables
+		var app = new Firebase(fbURL);
+		var eventToRemove = app.child('Users').child(uid).child('events').child('hosting').child(eventId);
+
+		return $q(function(resolve, reject) {
+			var onComplete = function(error) {
+				if(error) {
+					reject('Synchronization failed');
+				} else {
+					resolve('Synchronization succeeded');
+				}
+			}
+
+			//call do db
+			eventToRemove.remove(onComplete);
 		});
 
 	}
