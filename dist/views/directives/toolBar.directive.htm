@@ -7,8 +7,8 @@
       <div class="navbar-header">
 
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span ng-if='!loggedIn' class="glyphicon glyphicon-log-in"></span>
-          <span ng-if='loggedIn' class="glyphicon glyphicon-log-out" ng-click='logout()'></span> 
+          <span ng-if='!vm.loggedIn' class="glyphicon glyphicon-log-in"></span>
+          <span ng-if='vm.loggedIn' class="glyphicon glyphicon-log-out" ng-click='vm.logout()'></span> 
         </button>
 
         <a class="navbar-brand" href="#/">Meet-Up Event Planner</a> <!---->
@@ -17,16 +17,45 @@
 
       <div class="collapse navbar-collapse" id="myNavbar">
 
-        <ul class="nav navbar-nav navbar-right" ng-if='!loggedIn'>
-          <li><label for="navbarUserEmail"><input type="text" class='navbarInputs' id='navbarUserEmail' placeholder="e-mail" ng-model='topMenuCtrl.navbarUserEmail' ng-style='topMenuCtrl.deviceWidth'></label></li>
-          <li><label for="navbarUserPass"><input type="password" class='navbarInputs' id='navbarUserPass' placeholder="password" ng-model='topMenuCtrl.navbarUserPass' ng-style='topMenuCtrl.deviceWidth'></label></li>
-          <li><label for="submitUserLogin"><button id='submitUserLogin' class='navbarInputs btn btn-success' ng-click='clicked()' ng-style='topMenuCtrl.deviceWidth'>Login</button></label></li>
+        <ul class="nav navbar-nav navbar-right" ng-if='!vm.loggedIn'>
+          <li>
+            <label for="navbarUserEmail">
+              <input  name='navbarUserEmail'
+                      type="text" 
+                      class='navbarInputs' 
+                      id='navbarUserEmail' 
+                      placeholder="email" 
+                      ng-model='vm.email' 
+                      ng-style=''>
+            </label>
+          </li>
+          <li>
+            <label for="navbarUserPass">
+              <input  name='navbarUserPass'
+                      type="password" 
+                      class='navbarInputs' 
+                      id='navbarUserPass' 
+                      placeholder="password" 
+                      ng-model='vm.password' 
+                      ng-style=''>
+            </label>
+          </li>
+          <li>
+            <label for="submitUserLogin">
+              <button   name='submitUserLogin'
+                        id='submitUserLogin' 
+                        class='navbarInputs btn btn-success' 
+                        ng-click='vm.loginRegisteredUser()' 
+                        ng-style='topMenuCtrl.deviceWidth'>
+                          Login</button>
+            </label>
+          </li>
         </ul>
-
-        <button type="button" id='desktopLogout' class="nav navbar-nav navbar-right" ng-if='loggedIn'>
-          <span ng-if='!loggedIn' class="glyphicon glyphicon-log-in"></span>
-          <span ng-if='loggedIn' class="glyphicon glyphicon-log-out" ng-click='logout()'></span> 
-        </button>
+        <!--
+        <button type="button" id='desktopLogout' class="nav navbar-nav navbar-right" ng-if='vm.loggedIn'>
+          <span ng-if='!vm.loggedIn' class="glyphicon glyphicon-log-in"></span>
+          <span ng-if='vm.loggedIn' class="glyphicon glyphicon-log-out" ng-click='vm.logout()'></span> 
+        </button>-->
         
       </div>
 
