@@ -12,7 +12,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var ngAnnotate = require('gulp-ng-annotate');
 //var karma = require('karma').server;
 
-var testFiles = [
+/*var testFiles = [
 	'js/controllers/AccontSettings.controller.spec.js',
 	'js/controllers/Login.controller.spec.js',
 	'js/controllers/NewVisitorConversions.controller.spec.js',
@@ -20,7 +20,7 @@ var testFiles = [
 	'js/controllers/UserEvents.controller.spec.js',
 	'js/controllers/UsersContacts.controller.spec.js',
 	//'js/controllers/Firebase.factory.spec.js'
-];
+];*/
 
 gulp.task('default', ['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist'], function() {
 	gulp.watch('sass/**/*.scss', ['styles']);
@@ -57,7 +57,7 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('bundle', function() {
-	gulp.src([
+	/*gulp.src([
 		'lib/jquery.min.js'
 		])
 		.pipe(gulp.dest('dist/js/lib'));
@@ -96,7 +96,7 @@ gulp.task('bundle', function() {
 	gulp.src([
 		'lib/bootstrap.min.css'
 		])
-		.pipe(gulp.dest('dist/css/lib'));
+		.pipe(gulp.dest('dist/css/lib'));*/
 	gulp.src([
 		'lib/glyphicons-halflings-regular.ttf'
 		])
@@ -160,14 +160,15 @@ gulp.task('lint', function () {
 });
 
 //testings file
+/*
 gulp.task('tests', function() {
 	gulp.src(testFiles)
 		.pipe(jasmine({
 			integration: true,
 			vendor: [
 				'plugins/angular.js',
-				'plugins/angular-mocks.js',
-				'js/**/*.js'
-			]
+				'plugins/angular-mocks.js',*/
+				//'js/**/*.js'
+			/*]
 		}));
-});
+});*/

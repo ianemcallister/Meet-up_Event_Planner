@@ -35,17 +35,17 @@ ___________________________________
 __________________________
 I used the following tools on this project
 
-*[npm](https://www.npmjs.com/package/npm) - package manager
-*AngularJs - routing, MV*, event listeners, directives, factories
-*Firebase - storage
-*Angularfire - to connect Angular with Firebase
-*ESLint - linter
-*bootstrap - for styles
+* [npm](https://www.npmjs.com/package/npm) - package manager
+* AngularJs - routing, MV*, event listeners, directives, factories
+* Firebase - storage
+* Angularfire - to connect Angular with Firebase
+* ESLint - linter
+* bootstrap - for styles
 
 ## Credits
 ___________________________
-*I relied heavily on [John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md). 
-*Thank you to rszczypka for posting your [swd-p1-meetup](https://github.com/rszczypka/swd-p1-meetup) in the slack forum, it was a helpful reference point.
-*This [Markdown Cheetsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) really came in handy.
-*All the stackoverflow info I referenced.
+* I relied heavily on [John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md). 
+* Thank you to rszczypka for posting your [swd-p1-meetup](https://github.com/rszczypka/swd-p1-meetup) in the slack forum, it was a helpful reference point.
+* This [Markdown Cheetsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) really came in handy.
+* All the stackoverflow info I referenced.
 
