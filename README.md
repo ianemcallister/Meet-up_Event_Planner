@@ -1,31 +1,51 @@
-## Meet-Up Event Planner
+# Project 1: Meet-Up Event Planner
+______________________________________________
 
 This is my first project as part of the Senior Web Developer Nano Degree through Udacity.
 
 To test on mobile I've uploaded this project to my temporary web server, the project can be found here: http://79.170.44.81/ianemcallister.com/eventPlanner/index.html#/
 
-**Requirnments**
+## Features
 
-* Must provide users with a form to create a user account.
-* Should allow users to create a new event.
-* Should display events that have been created.
-* Should respond to touches naturally.
-* The form is understandable while using a screen reader.
-* Should be responsive (equally functional on mobile and desktop).
+* Account creation, event creation and event display
+* All forms are fully functional and react to touches naturally on mobile or desktop
+* The app is accessible (all forms are understandable while using a screen reader)
+* The user experience is enhanced with prompts (labels, placeholders, error messages, etc) that appear in logical order and are phrased in friendly, human language
+* The inputs are kept to minimum to keep the end user happy and they are instantly validated (not later than on blur) keeping the user informed and avoiding submitting invalid information
+* Forms can be prefilled with existing user data
+* All input have appropriate types and are labeled (even if only for screen readers)
+* The autofocus is applied to the first field above-the-fold
+* The required fields are kept to minimum
 
-**Build Steps**
-* `npm install`
-* `gulp`
-* Serve files via static fileserver (or run `gulp serve` to open up browsersync)
+## Instructions
+___________________________________	
+1. **Clone the repository**
 
-**Front End**
+	`git clone <https://github.com/ianemcallister/Meet-up_Event_Planner.git>
 
-I've used AngularJS as my front end framework.  It handles my routes and MV* structure for this single-page application.
+2. **Install the dependencies**
+	
+	To install the required dependencies call `npm install` from the root directory.
 
-**Back End**
+3. **Run the build and launch the development server
 
-Instead of writing a backend I'm utilizing Firebase to store objects in the cloud.
+	Serve the files via a static fileserver.  Or to build the files and launch the project call `gulp` or `gulp serve` to open up browsersync.
 
-**Development Environment**
+## Dependencies
+__________________________
+I used the following tools on this project
 
-I like the responsive feedback that gulp and browser-sync provide.  I used eslint for linting.  I hoped to play with sass for styles, but didn't get around to it.  I used sourcemaps and uglify to prepare the application for production.
+*[npm](https://www.npmjs.com/package/npm) - package manager
+*AngularJs - routing, MV*, event listeners, directives, factories
+*Firebase - storage
+*Angularfire - to connect Angular with Firebase
+*ESLint - linter
+*bootstrap - for styles
+
+## Credits
+___________________________
+*I relied heavily on [John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md). 
+*Thank you to rszczypka for posting your [swd-p1-meetup](https://github.com/rszczypka/swd-p1-meetup) in the slack forum, it was a helpful reference point.
+*This [Markdown Cheetsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) really came in handy.
+*All the stackoverflow info I referenced.
+
