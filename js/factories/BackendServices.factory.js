@@ -158,7 +158,7 @@ function backendServices($log, $q, $window) {
 				if(error) {
 					reject('Error Logging In: ' + error);
 				} else {
-					$log.info('Logged In successfully: ' + authData.uid);
+					//$log.info('Logged In successfully: ' + authData.uid);
 					resolve(authData);
 				}
 
@@ -172,14 +172,14 @@ function backendServices($log, $q, $window) {
 		//declare local variables
 		var app = new Firebase(fbURL);
 
-		return new Promise(function(resolve, reject) {
+		return $q(function(resolve, reject) {
 			
 			app.onAuth(function(authData) {
 				if (authData) {
-				    $log.info("User " + authData.uid + " is logged in with " + authData.provider);
+				    //$log.info("User " + authData.uid + " is logged in with " + authData.provider);
 				    resolve(true);
 				  } else {
-				    $log.info("User is logged out");
+				    //$log.info("User is logged out");
 				    resolve(false);
 				  }
 			});
@@ -256,9 +256,6 @@ function backendServices($log, $q, $window) {
 	}
 
 	function createHostedEvent(uid, newEvent) {
-		$log.info('got passed...');
-		$log.info(uid);
-		$log.info(newEvent);
 
 		//declare local variables
 		var app = new Firebase(fbURL);
@@ -359,7 +356,6 @@ function backendServices($log, $q, $window) {
 				var allUsers = snapshot.val();
 
 				Object.keys(allUsers).forEach(function(key) {
-					$log.info('from list: ' + key + ', matching to: ' + guestb64Email);
 					//check each user
 					if(key == guestb64Email) {
 						resolve(allUsers[key]);

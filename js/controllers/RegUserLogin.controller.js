@@ -20,7 +20,13 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 	}
 	vm.unclockUserLoginBtn = {
 		'usable':false, 
-		'class':'btn btn-warning',
+		'class': {
+			'btn': true,
+			'btn-warning': true,
+			'btn-success': false,
+			'col-xs-12': true,
+			'col-sm-12': true,
+		},
 		message: 'Need Email & Pass'
 	}
 
@@ -31,12 +37,14 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 			angular.isDefined(vm.inputs.password) && vm.inputs.password !== '') 
 		{
 			vm.inputs.requiredFieldsDefined = true;
-			vm.unclockUserLoginBtn.class = 'btn btn-success';
+			vm.unclockUserLoginBtn.class['btn-success'] = true;
+			vm.unclockUserLoginBtn.class['btn-warning'] = false;
 			vm.unclockUserLoginBtn.message = 'Login';
 			vm.unclockUserLoginBtn.usable = true;
 		} else {
 			vm.inputs.requiredFieldsDefined = false;
-			vm.unclockUserLoginBtn.class = 'btn btn-warning';
+			vm.unclockUserLoginBtn.class['btn-success'] = false;
+			vm.unclockUserLoginBtn.class['btn-warning'] = true;
 			vm.unclockUserLoginBtn.message = 'Need Email & Pass';
 			vm.unclockUserLoginBtn.usable = false;
 		}

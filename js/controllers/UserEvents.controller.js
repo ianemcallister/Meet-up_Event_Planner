@@ -69,7 +69,6 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 	}
 
 	function initialize() {
-		$log.info(currentUser.getAllUserEventsLocally());
 		//make sure the uid is set
 		currentUser.setUIDLocally($routeParams.uid);
 
@@ -87,7 +86,7 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		//then call to the db and get the most up to date info
 		currentUser.getRemoteEventsForLocal()
 		.then(function(obtainedUserEvents) {
-			$log.info('checking the db for events');
+			$log.info(obtainedUserEvents);
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
 		})

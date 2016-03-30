@@ -30,6 +30,18 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 		return Date.parse(dateTime);
 	};
 
+	function buildTempBirthday(){
+		var newBirthday = new Date();
+
+		//round to the nearest hour, cut off anything smaller
+		newBirthday.setHours(0);
+		newBirthday.setMinutes(0);
+		newBirthday.setSeconds(0);
+		newBirthday.setMilliseconds(0);
+
+		vm.tempBirthday = newBirthday;
+	}
+
 	//view accessible methods
 	vm.checkValues = function() {
 		//throw the isData flag if something is updated
@@ -81,7 +93,8 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 	function initialize() {
 		//load FastClick
 		//FastClick.attach($document.body);
-		
+		buildTempBirthday();
+
 		//load userData locally or from db
 		currentUser.loadBio($routeParams.uid)
 		.then(function(obtainedUserData) {

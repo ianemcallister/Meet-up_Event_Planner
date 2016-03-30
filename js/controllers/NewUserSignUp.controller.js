@@ -145,7 +145,7 @@ function NewUserSignUpController($scope, $log, validation, backendServices, traf
 			.then(function(dbUserData) {
 				
 				//maintain local values to speed up user experience
-				newUserData.loadPrimaries(vm.inputs.newEmail, vm.inputs.newName, dbUserData.uid);
+				newUserData.setPrimariesLocally(vm.inputs.newEmail, vm.inputs.newName, dbUserData.uid);
 
 				//create a user profile in the database
 				createNewUser.addNewUserToDatabase(dbUserData.uid, vm.inputs.newName, vm.inputs.newEmail)

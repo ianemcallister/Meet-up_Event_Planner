@@ -18,7 +18,7 @@
 		</div>
 		<div class="col-xs-4 col-sm-2">
 			<div ng-if='!vm.guestsAreInvited'>
-				<a href="">Invite Guests</a>
+				<a href="" ng-click='vm.inviteGuests({{ event.id }})'>Invite Guests</a>
 			</div>
 			<div ng-if='vm.guestsAreInvited'>
 				{{ vm.guestsAttending(event.guestList) }} / {{ vm.guestsInvited(event.guestList) }} <br>

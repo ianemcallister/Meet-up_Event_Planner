@@ -13,7 +13,7 @@ angular
 function toolBar() {
 	var directive = {
 		restrict: 'AECM',
-		templateUrl: '../views/directives/toolBar.directive.htm',
+		templateUrl: 'views/directives/toolBar.directive.htm',
 		replace: true,
 		scope: {},
 		link: linkFunc,
@@ -40,7 +40,7 @@ function toolBar() {
 
 			fbConnect.checkLoginStatus()
 			.then(function(status) {
-				$log.info('toolbar checking login: ' + status);
+				
 				vm.loggedIn = status;
 			})
 			.catch()
@@ -48,8 +48,6 @@ function toolBar() {
 
 		//vm methods
 		vm.login = function() {
-			$log.info('button clicked');
-			$log.info(vm.email + ' ' + vm.password);
 
 		}
 
@@ -78,13 +76,12 @@ function toolBar() {
 				.then(function(userCredentials) {
 					//if no trouble logging in update error object
 					//vm.errors.passesAllTests = true;
-					$log.info(userCredentials);
+			
 					//add primary information to local model
 					//registeredUserData.setPrimariesLocally(userCredentials.email, userCredentials.name, userCredentials.uid);
 					return userCredentials.uid
 				})
 				.then(function(uid) {
-					$log.info("uid is " + uid);
 
 					database.getUserBio(uid)
 					.then(function(userBio) {
@@ -123,7 +120,7 @@ function toolBar() {
 
 		//watchers
 		$scope.$on('$routeChangeStart', function(next, current) {
-			$log.info('the route chagned (says the tool bar)');
+			
 			checkLoginStatus();
 		})
 	}

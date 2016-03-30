@@ -186,6 +186,7 @@ function validation($log) {
     			}
     		},
 			eventHost: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
+			eventType: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
 			eventStart: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
 			eventEnd: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },
 			eventStreet01: { completed :false, addressed:false, row: { class: {'col-xs-12': true, 'col-sm-12': true, 'form-group': true, 'has-success': false, 'has-error': false } }, label: { class: { 'control-label': true } }, input: { class: { 'form-control': true } } },

@@ -13,7 +13,7 @@ angular
 function addAGuest() {
 	var directive = {
 		restrict: 'AECM',
-		templateUrl: '../views/directives/addAGuest.directive.htm',
+		templateUrl: 'views/directives/addAGuest.directive.htm',
 		replace: true,
 		scope: {
 			guestList: '='
@@ -83,7 +83,7 @@ function addAGuest() {
 	    function validateInvitation() {
 	    	//check if both inputs are valid
 	    	if(vm.validations.name.valid && vm.validations.email.valid) {
-	    		$log.info('ready to submit');
+	    		
 	    		//set the validity flag
 	    		vm.invitationValidForSubmission = true;
 	    		//update the submission button
@@ -91,7 +91,7 @@ function addAGuest() {
 	    		vm.submissionButton.class['btn-success'] = true;
 	    		vm.submissionButton.message='Invite Guest';
 	    	} else {
-	    		$log.info('not ready to submit');
+	    		
 	    		//set the validity flag
 	    		vm.invitationValidForSubmission = false;
 	    		//update the submission button
@@ -180,7 +180,7 @@ function addAGuest() {
 	    }
 
 	    vm.submitGuestInvitation = function() {
-	    	$log.info('submitting the invitation');
+	    	
 	    	//if the requirnments are fulfilled...
 	    	if(vm.invitationValidForSubmission) {
 	    		//make sure the invitation is not to the current user
@@ -205,17 +205,16 @@ function addAGuest() {
 	    		//if this person is a registered user get their user id
 	    		invitationManager.getUserIdForGuest(vm.tempGuest.email)
 	    		.then(function(uid) {
-	    			$log.info('found user with that email: ' + uid);
+	    			
 	    			return uid;
 	    		})
 	    		.then(function(uid) {
 	    			//use that uid to register the user
 	    			//add the person to the host's LOCAL guest list
-	    			$log.info('the guest list is...');
-	    			$log.info(vm.guestList);
+	    			
 
 	    			if(!angular.isObject(vm.guestList)) {
-						$log.info('creating the object');
+						
 						vm.guestList = {};
 					}
 					//create the guest to save
@@ -245,7 +244,7 @@ function addAGuest() {
 	    			idByEmail = utf8_to_b64(vm.tempGuest.email);
 	    			//add this person to the host's guest list
 	    			if(!angular.isObject(vm.guestList)) {
-						$log.info('creating the object');
+	    				
 						vm.guestList = {};
 					}
 					//create the guest to save

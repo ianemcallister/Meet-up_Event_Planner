@@ -13,7 +13,7 @@ angular
 function hostedEventsList() {
 	var directive = {
 		restrict: 'AECM',
-		templateUrl: '../views/directives/hostedEventsList.directive.htm',
+		templateUrl: 'views/directives/hostedEventsList.directive.htm',
 		replace: true,
 		scope: {
 			hostedEvents: '=',
@@ -27,6 +27,9 @@ function hostedEventsList() {
 
 	/* @ngInject */
 	function linkFunc(scope, el, attr, ctrl) {
+		scope.$watch('hostedEvents', function(next, current) {
+			//something
+		});
     }
 
     hostedEventsListController.$inject = ['$log', 'trafficValet'];
@@ -62,7 +65,7 @@ function hostedEventsList() {
 		//view model methods
 		vm.formatDate = function(unixTime) {
 			//reformat the time
-			$log.info('got thist time: ' + unixTime);
+			
 			return unixTimeToDateTime(unixTime);
 		}
 
@@ -107,8 +110,11 @@ function hostedEventsList() {
 			hostedEventsSherpa.redirectTo('/event', eventID, vm.hostedEvents[eventID].host.uid, vm.userId);
 		}
 
-		//actions
+		vm.inviteGuests = function(eventId) {
+			hostedEventsSherpa.redirectTo('/event/host', eventId, vm.hostedEvents[eventId].host.uid, '3');
+		}
 
+		//actions
 	}
 
 	return  directive;

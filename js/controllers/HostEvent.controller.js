@@ -108,18 +108,15 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	}
 
 	function init() {
-		$log.info(thisEventManager.getActiveEvent());
 		//if there is an active event, load it
 		if(thisEventManager.thereIsAnActiveEvent()) {
-			$log.info('loading the active event');
+			
 			var activePackage = thisEventManager.getActiveEvent();
 
 			vm.progressBar = activePackage.progressBar;
 			percentComplete = activePackage.percentComplete
 			vm.tempEvent = activePackage.event;
 			vm.requiredFieldComplete = activePackage.requiredFields;
-
-			$log.info(vm.progressBar);
 
 		} else {
 			//load event details
@@ -166,13 +163,15 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		};
 
 		if(angular.isDefined(times[startOrEnd]) && times[startOrEnd] != '' && vm.tempTime.duration > 0) {
-			if(vm.requiredFieldComplete[startOrEnd].completed == false) updateProgressBar(11);
+			if(vm.requiredFieldComplete[startOrEnd].completed == false) updateProgressBar(10);
+			vm.tempEvent.eventTimes.start = dateTimeToUnixTime(vm.tempTime.start);
+			vm.tempEvent.eventTimes.end = dateTimeToUnixTime(vm.tempTime.end);
 			vm.requiredFieldComplete[startOrEnd].completed = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-success'] = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-feedback'] = true;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-error'] = false;
 		} else {
-			if(vm.requiredFieldComplete[startOrEnd].completed == true) updateProgressBar(-11);
+			if(vm.requiredFieldComplete[startOrEnd].completed == true) updateProgressBar(-10);
 			vm.requiredFieldComplete[startOrEnd].completed = false;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-success'] = false;
 			vm.requiredFieldComplete[startOrEnd].row.class['has-feedback'] = false;
@@ -181,8 +180,6 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	}
 
 	vm.settingTempStart = function() {
-
-		$log.info(dateTimeToUnixTime(vm.tempTime.end) - dateTimeToUnixTime(vm.tempTime.start)/(1000*60*60*24));
 
 		if((dateTimeToUnixTime(vm.tempTime.end) <= dateTimeToUnixTime(vm.tempTime.start)) || 
 			(dateTimeToUnixTime(vm.tempTime.end) - dateTimeToUnixTime(vm.tempTime.start) > (1000*60*60*24))) {
@@ -241,6 +238,8 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 			requiredFields: vm.requiredFieldComplete
 		};
 
+		$log.info(eventPackage);
+
 		thisEventManager.setActiveEvent(eventPackage)
 
 		//move back
@@ -258,6 +257,8 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 			requiredFields: vm.requiredFieldComplete
 		};
 
+		$log.info(eventPackage);
+
 		thisEventManager.setActiveEvent(eventPackage)
 
 		//move forward
@@ -270,7 +271,7 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 		//check validity
 		if(angular.isDefined(value) && value != '') {
 			if(vm.requiredFieldComplete[field].completed == false) {
-				updateProgressBar(11);
+				updateProgressBar(10);
 			}
 			vm.requiredFieldComplete[field].completed = true;
 			vm.requiredFieldComplete[field].row.class['has-success'] = true;
@@ -278,7 +279,7 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 			vm.requiredFieldComplete[field].row.class['has-error'] = false;
 		} else {
 			if(vm.requiredFieldComplete[field].completed == true) {
-				updateProgressBar(-11);
+				updateProgressBar(-10);
 			}
 			vm.requiredFieldComplete[field].completed = false;
 			vm.requiredFieldComplete[field].row.class['has-success'] = false;
@@ -290,6 +291,7 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	}
 
 	vm.saveEventToDB = function() {
+		$log.info(vm.tempEvent);
 		//check that the event is complete
 		if(percentComplete > 99) {
 			//if so save the event locally
@@ -298,6 +300,15 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 			thisEventManager.setRemoteEventsFromLocal($routeParams.uid, vm.tempEvent)
 			.then(function(succesMessage) {
 				$log.info(succesMessage);
+
+				//in succes make sure to remove the updated field
+				thisEventManager.cleanDBEventsCategory('hosting')
+				.then(function(succesMessage) {
+					$log.info(succesMessage);
+				})
+				.catch(function(erroMessage) {
+					$log.info(erroMessage);
+				})
 			})
 			.catch(function(erroMessage) {
 				$log.info(erroMessage);
@@ -313,7 +324,7 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 	$scope.$watch('vm.tempEvent.guestList', function(current, original) {
 		//if a guest is added to the list update the progress bar
         if(angular.isObject(vm.tempEvent.guestList)) {
-        	updateProgressBar(12);
+        	updateProgressBar(10);
         }
 	});
 

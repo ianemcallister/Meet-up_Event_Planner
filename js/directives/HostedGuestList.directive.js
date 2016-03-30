@@ -13,7 +13,7 @@ angular
 function hostedGuestList() {
 	var directive = {
 		restrict: 'AECM',
-		templateUrl: '../views/directives/hostedGuestList.directive.htm',
+		templateUrl: 'views/directives/hostedGuestList.directive.htm',
 		replace: true,
 		scope: {
 			guestList: '=',

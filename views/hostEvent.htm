@@ -53,6 +53,27 @@
 			</div>
 		</div>
 		<!--Type of the event (birthday party, conference talk, wedding, etc.)-->
+		<div class="row">
+			<div ng-class='hostingThisEvent.requiredFieldComplete.eventType.row.class'>
+				<label for="eventType" ng-class='hostingThisEvent.requiredFieldComplete.eventType.label.class'>Event Type: 
+					<input 	list='typesOfEvents'
+							id='eventType' 
+							name='eventType'
+							ng-model='hostingThisEvent.tempEvent.type' 
+							ng-blur='hostingThisEvent.verifyRequired("eventType", hostingThisEvent.tempEvent.type)'
+							ng-class='hostingThisEvent.requiredFieldComplete.eventType.input.class'
+							placeholder='BirthdayParty'
+							required>
+					<datalist id='typesOfEvents'>
+						<option value="Birthday">Birthday</option>
+						<option value="Conf/Talk">Conf/Talk</option>
+						<option value="Dinner Party">Dinner Party</option>
+						<option value="Hangout">Hangout</option>
+						<option value="Other">Other</option>
+					</datalist>
+				</label>
+			</div>
+		</div>
 		<!--Event host (could be an individual’s name or an organization)-->
 		<div class="row">
 			<div ng-class="hostingThisEvent.requiredFieldComplete.eventHost.row.class">
@@ -201,17 +222,68 @@
 			<div ng-class="hostingThisEvent.requiredFieldComplete.eventState.row.class">
 				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventState.label.class"
 						for="eventState">State:
-					<input 	type="text" 
+					<input 	list='statesInUSA'
 							id='eventState' 
-							name='eventState' 
-							ng-class="hostingThisEvent.requiredFieldComplete.eventState.input.class"
+							name='eventState'
 							ng-model='hostingThisEvent.tempEvent.address.state'
 							ng-blur='hostingThisEvent.verifyRequired("eventState", hostingThisEvent.tempEvent.address.state)'
-							ng-change=''  
-							placeholder='NY' 
+							ng-class="hostingThisEvent.requiredFieldComplete.eventState.input.class"
+							placeholder='NY'
 							required>
+								<datalist id="statesInUSA">
+								  <option value="Maine">
+								  <option value="New Hampshire">
+								  <option value="Vermont">
+								  <option value="Massachusetts">
+								  <option value="Connecticut">
+								  <option value="Rhode Island">
+								  <option value="New York">
+								  <option value="New Jersey">
+								  <option value="Pennsylvania">
+								  <option value="Delaware">
+								  <option value="Maryland">
+								  <option value="Virginia">
+								  <option value="Florida">
+								  <option value="Texas">
+								  <option value="Kentucky">
+								  <option value="Tennessee">
+								  <option value="North Carolina">
+								  <option value="South Carolina">
+								  <option value="Georgia">
+								  <option value="Alabama">
+								  <option value="Mississippi">
+								  <option value="Arkansas">
+								  <option value="Louisiana">
+								  <option value="Missouri">
+								  <option value="Oklahoma">
+								  <option value="Ohio">
+								  <option value="Nebraska">
+								  <option value="Michigan">
+								  <option value="Indiana">
+								  <option value="Wisconsin">
+								  <option value="Illinois">
+								  <option value="Minnesota">
+								  <option value="Iowa">
+								  <option value="North Dakota">
+								  <option value="South Dakota">
+								  <option value="Kansas">
+								  <option value="Colorado">
+								  <option value="New Mexico">
+								  <option value="Arizona">
+								  <option value="Nevada">
+								  <option value="California">
+								  <option value="Wyoming">
+								  <option value="Montana">
+								  <option value="Utah">
+								  <option value="Idaho">
+								  <option value="Washington">
+								  <option value="Oregon">
+								  <option value="Alaska">
+								  <option value="Hawaii">
+								  <option value="West Virginia">
+								</datalist>
 								<div ng-show='WhereForm.$submitted || WhereForm.eventState.$touched'>
-								<div ng-show='WhereForm.eventState.$error.required'>You need a city for this event</div>
+								<div ng-show='WhereForm.eventState.$error.required'>You need a state for this event</div>
 					</div>
 				</label>
 			</div>

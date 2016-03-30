@@ -151,7 +151,6 @@ function userData($log, $q, backendServices) {
 		//first check if there is a guest list
 		if(angular.isDefined(currentUser.events.hosting[eventId].guestList)) {
 			//if there is a list, check for the email
-			$log.info('there is a guest list');
 
 			//convert email for evaluation
 			refEmail = utf8_to_b64(email);
@@ -333,15 +332,12 @@ function userData($log, $q, backendServices) {
 
 		//if this is the first guest, create the list object
 		if(!angular.isObject(activeEvent.event.guestList)) {
-			$log.info('creating the object');
 			activeEvent.event.guestList = {};
 		}
 
-		$log.info(activeEvent.event);
 		//add the guest to the list
 		activeEvent.event.guestList[uid] = newGuest.guest;
 
-		$log.info(activeEvent.event.guestList[uid]);
 	}
 
 	function getUserIdForGuest(email) {
@@ -470,6 +466,9 @@ function userData($log, $q, backendServices) {
 		//declar local variables
 		var db = backendServices;
 
+		$log.info('sending this to the server');
+		$log.info(event);
+		
 		return $q(function(resolve, reject) {
 			//send the event to the db
 			db.createHostedEvent(uid, event)
@@ -682,7 +681,8 @@ function userData($log, $q, backendServices) {
 	}
 
 	function saveNewHostingEvent(category, event) {
-		//
+		$log.info('saving this event locally');
+		$log.info(event);
 		updateUserEventsLocally(category, event);
 	}
 	
