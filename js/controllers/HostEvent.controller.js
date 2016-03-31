@@ -2,10 +2,10 @@ angular
     .module('meetUpEventApp')
     .controller('HostEventController', HostEventController);
 
-HostEventController.$inject = ['$scope', '$log', '$routeParams', 'userData', 'trafficValet', 'validation'];
+HostEventController.$inject = ['$scope', '$log', '$routeParams', '$document', 'userData', 'trafficValet', 'validation'];
 
 /* @ngInject */
-function HostEventController($scope, $log, $routeParams, userData, trafficValet, validation) {
+function HostEventController($scope, $log, $routeParams, $document, userData, trafficValet, validation) {
 	var vm = this;
 	
 	//local variables
@@ -107,6 +107,16 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 
 	}
 
+	function loadExistingValues() {
+
+		//loop through each event object, if it exists credit the progress bar
+		Object.keys(vm.tempEvent).forEach(function(key) {
+			$log.info(vm.tempEvent[key]);
+			//
+		});
+
+	}
+
 	function init() {
 		//if there is an active event, load it
 		if(thisEventManager.thereIsAnActiveEvent()) {
@@ -135,8 +145,12 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
 
 		//load specified section
 		vm.activeSection = parseInt($routeParams.section);
+		
 		//set tempTimes
 		initEventTimes();
+
+		//set the progress bar for existing values
+		loadExistingValues();
 	}
 
 	//view model methods
@@ -326,6 +340,27 @@ function HostEventController($scope, $log, $routeParams, userData, trafficValet,
         if(angular.isObject(vm.tempEvent.guestList)) {
         	updateProgressBar(10);
         }
+	});
+
+	angular.element($document).ready(function() {
+		if(parseInt($routeParams.section) == 1) { 
+			angular.element($document.querySelector('#eventName')).focus()
+			//angular.element($document).find('#eventName').focus();
+			//$log.info('section 1');
+
+		}
+
+		if(parseInt($routeParams.section) == 2) {
+			angular.element($document.querySelector('#eventStreet01')).focus()
+			//angular.element($document).find('#eventStreet01').focus();
+			//$log.info('section 2');
+		}
+
+		if(parseInt($routeParams.section) == 3) {
+			angular.element($document.querySelector('#inviteeName')).focus()
+			//eventStreet01angular.element($document).find('#inviteeName').focus();
+			//$log.info('section 3');
+		}
 	});
 
 	//take action

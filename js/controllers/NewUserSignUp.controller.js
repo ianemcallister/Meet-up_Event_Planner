@@ -22,7 +22,7 @@ function NewUserSignUpController($scope, $log, validation, backendServices, traf
 		passesAllTests: false
 	}
 	vm.passReqs = {
-		0: { id:'', req:'Is at least 16 characters long', fulfilled:false, 'style':{color:'red'}},
+		0: { id:'', req:'Is at least 6 characters long', fulfilled:false, 'style':{color:'red'}},
 		1: { id:'', req:'Is no longer than 100 characters', fulfilled:false, 'style':{color:'red'} },
 		2: { id:'', req:'Contains at least one lowercase letter', fulfilled:false, 'style':{color:'red'} },
 		3: { id:'', req:'Contains at least one uppercase letter', fulfilled:false, 'style':{color:'red'} },
@@ -68,6 +68,7 @@ function NewUserSignUpController($scope, $log, validation, backendServices, traf
 	vm.checkNewEmail = function() {
 		//local variable
 		var errors = [];
+		$log.info('From controller, email is: ' + vm.inputs.newEmail);
 		var hasEmail = signupValidation.required(vm.inputs.newEmail);
 		var isAnEmail = signupValidation.email(vm.inputs.newEmail);
 		

@@ -8,7 +8,7 @@ validation.$inject = ['$log'];
 function validation($log) {
 	//declare local variables
 	var minimumNameLength = 3;
-	var minimumPassLength = 16;
+	var minimumPassLength = 6;
 	var maximumPassLength = 100;
 
 	var allValidations = {
@@ -148,9 +148,20 @@ function validation($log) {
     
     function email(value) {
     	//define constraints
-    	var constraint = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", "");
-    	
-    	if(angular.isDefined(value) && !constraint.test(value)) {
+    	var EMAIL_REGEXP = /[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+    	var constraint = new RegExp(EMAIL_REGEXP);
+
+
+
+    	$log.info('this is an email?: ' + constraint.test(value));
+
+    	if(angular.isDefined(value)) {
+    		//check if it passes constraint
+    		
+    		//if(!constraint.test(value)) {
+    			return 'value was defined';
+    		//}
+    	} else {
     		return 'Not a valid email';
     	}
     	//if(!constraint.test(value)) return 'Not a valid e-mail address'

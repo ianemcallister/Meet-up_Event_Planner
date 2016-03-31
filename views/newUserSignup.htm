@@ -34,13 +34,14 @@
 		<div class="col-xs-12 col-sm-12">
 			<span ng-if="recruitUsers.errors.email == ''"><br></span> 
 			<span ng-if="recruitUsers.errors.email != ''" class="label label-danger">error: {{recruitUsers.errors.email}}<br></span> 
-			<label for='newEmail' ng-style='recruitUsers.validNewEmail.style'>Email*:
+			<label for='newEmail' ng-style=''>Email*:
 				<input 	name='newEmail' 
 						type="email"
-						required 
+						required
 						autocomplete="email" 
 						class='col-xs-12 col-sm-12 col-md-12 inputText' 
 						id='newEmail' 
+						ng-pattern="/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g"
 						ng-model='recruitUsers.inputs.newEmail' 
 						ng-keyup='recruitUsers.checkNewEmail()'
 						ng-change='recruitUsers.checkNewEmail()'
