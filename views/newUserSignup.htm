@@ -8,69 +8,77 @@
 			<p>*Required fields</p>
 		</div>
 	</div>
-	<form name='CreateUserForm' class='css-form' novalidate>
+	<form name='CreateUserForm'>
 	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<span ng-if="recruitUsers.errors.name == ''"><br></span> 
-			<span ng-if="recruitUsers.errors.name != ''" class="label label-danger">error: {{recruitUsers.errors.name}}<br></span> 
-			<label for='newName' ng-style='recruitUsers.validNewName.style'>Your Name*:
-				<input 	required
-						name='newName' 
+		<div ng-class='recruitUsers.name.class.row'>
+			<span ng-if="!recruitUsers.name.hasAnErrorMessage"><br></span> 
+			<span ng-if="recruitUsers.name.hasAnErrorMessage" class="label label-danger">error: {{ recruitUsers.name.errorMessage }}<br></span> 
+			<label 	for='newName'
+					ng-class='recruitUsers.name.class.label'>Your Name*:
+				<input 	name='newName' 
 						autofocus
 						autocomplete="name" 
 						type="text" 
-						class='col-xs-12 col-sm-12 col-md-12 inputText' 
+						ng-class='recruitUsers.name.class.input' 
+						ng-style='recruitUsers.name.style'
+						ng-required='recruitUsers.name.passesAllReqs'
 						id='newName' 
-						ng-model='recruitUsers.inputs.newName' 
-						ng-keyup='recruitUsers.checkNewName()'
-						ng-change='recruitUsers.checkNewName()'
-						ng-blur='recruitUsers.checkNewName()'  
+						ng-model='recruitUsers.name.value' 
+						ng-keyup='recruitUsers.name.postFailReqsTest()'
+						ng-change='recruitUsers.name.postFailReqsTest()'
+						ng-blur='recruitUsers.name.checkAllRequirnments()'  
 						placeholder='e.g. Hugh Jackman' 
 						>
 			</label>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<span ng-if="recruitUsers.errors.email == ''"><br></span> 
-			<span ng-if="recruitUsers.errors.email != ''" class="label label-danger">error: {{recruitUsers.errors.email}}<br></span> 
-			<label for='newEmail' ng-style=''>Email*:
+		<div ng-class='recruitUsers.email.class.row'>
+			<span ng-if="!recruitUsers.email.hasAnErrorMessage"><br></span> 
+			<span ng-if="recruitUsers.email.hasAnErrorMessage" class="label label-danger">error: {{ recruitUsers.email.errorMessage }}<br></span> 
+			<label 	for='newEmail'
+					ng-class='recruitUsers.email.class.label'>Email*:
 				<input 	name='newEmail' 
-						type="email"
+						type="text"
 						required
 						autocomplete="email" 
-						class='col-xs-12 col-sm-12 col-md-12 inputText' 
+						ng-class='recruitUsers.email.class.input'
+						ng-style='recruitUsers.email.style'  
 						id='newEmail' 
 						ng-pattern="/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g"
-						ng-model='recruitUsers.inputs.newEmail' 
-						ng-keyup='recruitUsers.checkNewEmail()'
-						ng-change='recruitUsers.checkNewEmail()'
-						ng-blur='recruitUsers.checkNewEmail()'  
+						ng-model='recruitUsers.email.value'  
+						ng-keyup='recruitUsers.email.postFailReqsTest()'
+						ng-change='recruitUsers.email.postFailReqsTest()'
+						ng-blur='recruitUsers.email.checkAllRequirnments()' 
 						placeholder='e.g. hugh.jackman@gmail.com'>
 			</label>
 		</div>
 	</div>		
 	<div class="row">
-		<div class="col-xs-12 col-sm-12">
-			<span><br></span> 
-			<label for='newPassword' ng-style='recruitUsers.securePassword.style'>Password*:
+		<div ng-class='recruitUsers.pass.class.row'>
+			<span ng-if="!recruitUsers.pass.hasAnErrorMessage"><br></span> 
+			<span ng-if="recruitUsers.pass.hasAnErrorMessage" class="label label-danger">error: {{ recruitUsers.pass.errorMessage }}<br></span>  
+			<label 	for='newPassword' 
+					ng-class='recruitUsers.pass.class.label'>Password*:
 				<input 	name='newPassword'
 						type="password"
 						required 
 						autocomplete="passowrd" 
-						class='col-xs-12 col-sm-12 col-md-12 inputText' 
+						ng-class='recruitUsers.pass.class.input'
+						ng-style='recruitUsers.pass.style'   
 						id='newPassword' 
-						ng-model='recruitUsers.inputs.newPassword' 
-						ng-focus='recruitUsers.checkNewPassword()' 
-						ng-keyup='recruitUsers.checkNewPassword()'  
-						ng-blur='recruitUsers.exitPassword()'
+						ng-model='recruitUsers.pass.value' 
+						ng-focus="recruitUsers.pass.openReqBox()" 
+						ng-keyup='recruitUsers.pass.checkAllRequirnments()'
+						ng-change=''
+						ng-blur='recruitUsers.pass.closeReqBox()' 
 						placeholder='**********'>
 			</label>
 			<!--{{recruitUsers.passReqs }}-->
-			<div ng-if='recruitUsers.showReqsBox' id="passReqs">
+			<div ng-if='recruitUsers.pass.showReqsBox' id="passReqs">
 				<strong>PASSWORD REQUIRNMENTS</strong>
 				<ul>
-					<li ng-repeat="requirnment in recruitUsers.passReqs" 
+					<li ng-repeat="requirnment in recruitUsers.pass.reqBox" 
 						value='{{ requirnment.req }}'
 						ng-style='requirnment.style' 
 						>
@@ -84,7 +92,7 @@
 			<span><br></span> 
 			<label for='newSubmit'>
 				<input 	name='newSubmit' 
-						ng-if='recruitUsers.errors.passesAllTests && recruitUsers.inputs.requiredFieldsDefined'
+						ng-if='recruitUsers.name.passesAllReqs && recruitUsers.email.passesAllReqs && recruitUsers.pass.passesAllReqs'
 						class='col-xs-12 col-sm-12 btn btn-success' 
 						id='newSubmit' 
 						type="submit" 
