@@ -17,14 +17,15 @@ function validation($log) {
 		errorMessage: 'This field is required',
 		test: function(value) {
 			//throw the tested flag
-			this.tested = true;
 			if(angular.isUndefined(value)) {
 				return false;
 			}
 			else if (value == '') {
+				this.tested = true;
 				return false
 			}
 			else {
+				this.tested = true;
 				return true;
 			}
 		}
@@ -34,8 +35,8 @@ function validation($log) {
 		errorMessage: 'Too short (3 chars minimum)',
 		test: function(value) {
 			//throw the tested flag
-			this.tested = true;
 			if(angular.isDefined(value)) {
+				this.tested = true;
 				if(value.length >= 3) {
 					return true;
 				} else return false;
@@ -52,9 +53,12 @@ function validation($log) {
 	    	var constraint = new RegExp(EMAIL_REGEXP);
 
 	    	if(angular.isDefined(value)) {
+	    		var constraintTest = constraint.test(value);
 	    		//if email is defined
-	    		if(constraint.test(value)) {
+	    		if(constraintTest) {
+	    		//if(constraint.test(value)) {
 	    			//if it passes regex
+	    			$log.info('it passed the test');
 	    			return true;
 	    		} else return false;
 	    	} else return false;

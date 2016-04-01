@@ -106,7 +106,7 @@ function hostedEventsList() {
 
 		vm.eventClicked = function(eventID) {
 			//redirect to the event page
-			$log.info('redirecting to: /event/' + eventID + '/' + vm.hostedEvents[eventID].host.uid + '/' + vm.userId);
+			//$log.info('redirecting to: /event/' + eventID + '/' + vm.hostedEvents[eventID].host.uid + '/' + vm.userId);
 			hostedEventsSherpa.redirectTo('/event', eventID, vm.hostedEvents[eventID].host.uid, vm.userId);
 		}
 

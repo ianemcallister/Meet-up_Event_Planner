@@ -58,16 +58,16 @@ function hostedGuestList() {
 	    	//if there isn't a guest list, go out to the db to get it
 
 			if(!thereIsAGuestList()) {
-				$log.info('going after the list');
+				//$log.info('going after the list');
 				listCollector.getEventGuestList($routeParams.uid, $routeParams.eventId)
 				.then(function(returnedList) {
-					$log.info('got the list');
-					$log.info(returnedList);
+					//$log.info('got the list');
+					//$log.info(returnedList);
 					vm.guestList = returnedList;
 					if(angular.isObject(returnedList)) vm.isAGuestList = true;
 				})
 				.catch(function(error) { 
-					$log.info('There was an error: '+ error);
+					//$log.info('There was an error: '+ error);
 				})
 			}
 	    }

@@ -44,7 +44,7 @@
 							ng-model='hostingThisEvent.tempEvent.name' 
 							ng-blur='hostingThisEvent.verifyRequired("eventName", hostingThisEvent.tempEvent.name)'
 							placeholder='My Cool Event' 
-							autofocus 
+							focus-me="true" 
 							required>
 								<div ng-show='WhenForm.$submitted || WhenForm.eventName.$touched'>
 									<div ng-show='WhenForm.eventName.$error.required'>You need an event name</div>

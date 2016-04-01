@@ -52,7 +52,7 @@ function toolBar() {
 		}
 
 		vm.logout = function() {
-			$log.info('logging out');
+			//$log.info('logging out');
 			
 			//logout
 			fbConnect.logUserOut();

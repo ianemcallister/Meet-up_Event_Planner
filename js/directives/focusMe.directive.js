@@ -19,7 +19,7 @@ function focusMe($timeout, $parse, $log) {
 			var model = $parse(attrs.focusMe);
 			
 			scope.$watch(model, function(value) {
-				$log.info('value=',value);
+				//$log.info('value=',value);
 				if(value === true) {
 					$timeout(function() {
 						element[0].focus();
@@ -28,8 +28,8 @@ function focusMe($timeout, $parse, $log) {
 
 			});
 			element.bind('blur',function() {
-				$log.info('blur');
-				scope.$apply(model.assign(scope, false));
+				//$log.info('blur');
+				//scope.$apply(model.assign(scope, false));
 			});
 		}
 	}

@@ -23,13 +23,13 @@
 			<label 	for="userEmail" ng-style='loginUsers.validUserEmail.style'>Email: 
 				<input 	name='userEmail'
 						type="email" 
-						autofocus='on' 
+						focus-me="true"
 						class='col-xs-12 col-sm-12 col-md-12 inputText' 
 						id='userEmail' 
 						ng-model='loginUsers.userEmail' 
 						ng-change='loginUsers.update()' 
 						ng-keyup='loginUsers.update()' 
-						required 
+						required="email" 
 						autocomplete="email" 
 						placeholder='e.g. MileyCyrus@gmail.com'>
 			</label>

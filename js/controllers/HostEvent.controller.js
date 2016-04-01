@@ -111,7 +111,7 @@ function HostEventController($scope, $log, $routeParams, $document, userData, tr
 
 		//loop through each event object, if it exists credit the progress bar
 		Object.keys(vm.tempEvent).forEach(function(key) {
-			$log.info(vm.tempEvent[key]);
+			//$log.info(vm.tempEvent[key]);
 			//
 		});
 
@@ -252,7 +252,7 @@ function HostEventController($scope, $log, $routeParams, $document, userData, tr
 			requiredFields: vm.requiredFieldComplete
 		};
 
-		$log.info(eventPackage);
+		//$log.info(eventPackage);
 
 		thisEventManager.setActiveEvent(eventPackage)
 
@@ -271,7 +271,7 @@ function HostEventController($scope, $log, $routeParams, $document, userData, tr
 			requiredFields: vm.requiredFieldComplete
 		};
 
-		$log.info(eventPackage);
+		//$log.info(eventPackage);
 
 		thisEventManager.setActiveEvent(eventPackage)
 
@@ -305,7 +305,7 @@ function HostEventController($scope, $log, $routeParams, $document, userData, tr
 	}
 
 	vm.saveEventToDB = function() {
-		$log.info(vm.tempEvent);
+		//$log.info(vm.tempEvent);
 		//check that the event is complete
 		if(percentComplete > 99) {
 			//if so save the event locally

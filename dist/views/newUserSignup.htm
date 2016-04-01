@@ -16,7 +16,7 @@
 			<label 	for='newName'
 					ng-class='recruitUsers.name.class.label'>Your Name*:
 				<input 	name='newName' 
-						autofocus
+						focus-me="true"
 						autocomplete="name" 
 						type="text" 
 						ng-class='recruitUsers.name.class.input' 
@@ -28,6 +28,7 @@
 						ng-change='recruitUsers.name.postFailReqsTest()'
 						ng-blur='recruitUsers.name.checkAllRequirnments()'  
 						placeholder='e.g. Hugh Jackman' 
+						required='text'
 						>
 			</label>
 		</div>
@@ -45,7 +46,7 @@
 						ng-class='recruitUsers.email.class.input'
 						ng-style='recruitUsers.email.style'  
 						id='newEmail' 
-						ng-pattern="/[a-z0-9!#$%&'*+=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g"
+						ng-pattern=""
 						ng-model='recruitUsers.email.value'  
 						ng-keyup='recruitUsers.email.postFailReqsTest()'
 						ng-change='recruitUsers.email.postFailReqsTest()'

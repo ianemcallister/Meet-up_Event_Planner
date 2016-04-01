@@ -18,7 +18,7 @@ function topMenuController($scope, $log, $location, $document, $window) {
 	//event listeners
 	if ('addEventListener' in $document) {
 	    $document.addEventListener('DOMContentLoaded', function() {
-	    	$log.info('adding FastClick');
+	    	//$log.info('adding FastClick');
 	        FastClick.attach($document.body);
 	    }, false);
 	}
@@ -45,10 +45,10 @@ function topMenuController($scope, $log, $location, $document, $window) {
 
 	function authDataCallback(authData) {
 	  if (authData) {
-	    $log.info("User " + authData.uid + " is logged in with " + authData.provider);
+	    //$log.info("User " + authData.uid + " is logged in with " + authData.provider);
 	    vm.loggedIn = true;
 	  } else {
-	    $log.info("User is logged out");
+	    //$log.info("User is logged out");
 	    vm.loggedIn = false;
 	  }
 	}
@@ -56,21 +56,21 @@ function topMenuController($scope, $log, $location, $document, $window) {
 	function redirect(path, userData) {
 		var fullPath = path + '/' + userData.uid + '/' + userData.token;
 		//redirect
-		$log.info('redirecting to: ' + fullPath);
+		//$log.info('redirecting to: ' + fullPath);
 		$location.path(fullPath);
 		//$scope.$apply();
 	}
 
 	//vm accessible methods
 	vm.logout = function() {
-		$log.info('logging out!');
+		//$log.info('logging out!');
 		vm.loggedIn = false;
 		ref.unauth();
 		redirect('/', {uid:'', token:''});
 	}
 
 	vm.navBarLoginRegisteredUser = function() {
-		$log.info('launching login');
+		//$log.info('launching login');
 		if(true) {
 		//if(vm.unclockUserLoginBtn.usable) {
 			//define local variable
@@ -85,7 +85,7 @@ function topMenuController($scope, $log, $location, $document, $window) {
 					$log.info('Error Logging In: ' + error);
 				} else {
 					$log.info('Logged In successfully: ' + authData.uid);
-					$log.info(authData);
+					//$log.info(authData);
 					//save all the data
 
 					//load user bio

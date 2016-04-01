@@ -82,7 +82,7 @@ function UserInformationController($log, $document, $routeParams, userData, traf
 
 		//if there is new data, save it
 		if(vm.view.isData) {
-			$log.info('saving the new data');
+			//$log.info('saving the new data');
 			currentUser.updateBioLocally(vm.user);
 		}
 		

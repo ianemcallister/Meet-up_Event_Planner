@@ -150,7 +150,7 @@ function addAGuest() {
 	    			//get the error
 	    			vm.validations.email.valid = false;
 	    			vm.validations.email.errorMessage = emailChecker.email(vm.tempGuest.email);
-	    			$log.info(vm.validations.email.errorMessage);
+	    			//$log.info(vm.validations.email.errorMessage);
 	    		}
 
 	    	} else {

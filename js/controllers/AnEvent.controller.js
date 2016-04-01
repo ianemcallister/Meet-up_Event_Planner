@@ -52,7 +52,7 @@ function AnEventController($log, $routeParams) {
 	}
 
 	function inviteARegisteredUser(uid) {
-		$log.info('adding them to the registered users list ' + uid);
+		//$log.info('adding them to the registered users list ' + uid);
 		//set the new event
 		ref.child('Users').child(uid).child('events').child('pending').child($routeParams.uid).child($routeParams.eventId).set({
 			id: $routeParams.eventId,

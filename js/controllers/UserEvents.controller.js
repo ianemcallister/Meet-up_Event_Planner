@@ -83,11 +83,11 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		//first whatever is in the model already
 		vm.events = currentUser.getAllUserEventsLocally();
 
-		$log.info(vm.events);
+		//$log.info(vm.events);
 		//then call to the db and get the most up to date info
 		currentUser.getRemoteEventsForLocal()
 		.then(function(obtainedUserEvents) {
-			$log.info(obtainedUserEvents);
+			//$log.info(obtainedUserEvents);
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
 

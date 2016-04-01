@@ -81,7 +81,7 @@ function RegUserLoginController($log, $document, backendServices, trafficValet, 
 
 			})
 			.then(function() {
-				$log.info("uid is " + registeredUserData.getUIDLocally());
+				//$log.info("uid is " + registeredUserData.getUIDLocally());
 
 				database.getUserBio(registeredUserData.getUIDLocally())
 				.then(function(userBio) {
