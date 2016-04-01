@@ -443,7 +443,10 @@ function validation($log) {
     			},
     			input: {
     				class: {
-    					'form-control': true
+    					'form-control': true,
+    					'col-xs-12': true,
+    					'col-sm-12':true,
+    					'col-md-12': true
     				}
     			}
     		},
