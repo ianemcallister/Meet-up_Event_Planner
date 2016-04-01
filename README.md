@@ -47,5 +47,5 @@ ___________________________
 * I relied heavily on [John Papa's Angular 1 Style Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md). 
 * Thank you to rszczypka for posting your [swd-p1-meetup](https://github.com/rszczypka/swd-p1-meetup) in the slack forum, it was a helpful reference point.
 * This [Markdown Cheetsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) really came in handy.
-* All the stackoverflow info I referenced.
+* All the stackoverflow info I referenced, particularly this one about focusing inputs in angular [How to set focus on input field?](http://stackoverflow.com/questions/14833326/how-to-set-focus-on-input-field)
 

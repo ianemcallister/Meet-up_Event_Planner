@@ -1,10 +1,8 @@
 <div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<span class="alert alert-danger col-xs-12 col-sm-12 fade in" ng-if='vm.showNameError()'>
-						<strong>Error: </strong>{{ vm.validations.name.errorMessage }}
-			</span>
 			<label for="inviteeName">Name:
+			<span ng-if="vm.showNameError()" style='color: red; background-color: rgba(255,255,255,0.5)'>{{ vm.validations.name.errorMessage }}</span>
 				<input 	type="text" 
 						id='inviteeName' 
 						class='inputField' 
@@ -12,16 +10,15 @@
 						ng-change='vm.validateName()'
 						ng-blur='vm.validateName()'
 						placeholder='F. Scott Fitzgerald'
-						required>
+						required
+						focus-me='true'>
 			</label>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12 col-sm-12">
-			<span class="alert alert-danger col-xs-12 col-sm-12 fade in" ng-if='vm.showEmailError()'>
-				<strong>Error: </strong>{{ vm.validations.email.errorMessage  }}
-			</span>
 			<label for="inviteeEmail">Email:
+				<span ng-if="vm.showEmailError()" style='color: red; background-color: rgba(255,255,255,0.5)'>{{ vm.validations.email.errorMessage }}</span>
 				<input 	type="email" 
 						ng-model='vm.tempGuest.email' 
 						class='inputField' 

@@ -120,7 +120,8 @@
 		<div class="row">
 			<div ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.row.class">
 				<label 	ng-class="hostingThisEvent.requiredFieldComplete.eventEnd.label.class" 
-						for="eventEnd">Ends At: ({{ hostingThisEvent.formatDuration() }})
+						for="eventEnd">Ends At: ({{ hostingThisEvent.formatDuration() }}) 
+						<span ng-if="hostingThisEvent.requiredFieldComplete.eventEnd.row.class['has-error']" style='color: red; background-color: rgba(255,255,255,0.5)'>Please enter a time that is after the event starts</span>
 					<input 	type="datetime-local"
 							step="60" 
 							id='eventEnd' 
@@ -169,7 +170,8 @@
 							ng-blur='hostingThisEvent.verifyRequired("eventStreet01", hostingThisEvent.tempEvent.address.street01)'
 							ng-change=''  
 							placeholder="e.g. 4928 Bronx Ave." 
-							required>
+							required
+							focus-me='true'>
 								<div ng-show='WhereForm.$submitted || WhereForm.eventStreet01.$touched'>
 								<div ng-show='WhereForm.eventStreet01.$error.required'>You need a street address</div>
 					</div>
@@ -227,7 +229,7 @@
 							ng-model='hostingThisEvent.tempEvent.address.state'
 							ng-blur='hostingThisEvent.verifyRequired("eventState", hostingThisEvent.tempEvent.address.state)'
 							ng-class="hostingThisEvent.requiredFieldComplete.eventState.input.class"
-							placeholder='NY'
+							placeholder='New York'
 							required>
 								<datalist id="statesInUSA">
 								  <option value="Maine">

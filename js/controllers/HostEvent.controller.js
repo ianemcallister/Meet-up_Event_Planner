@@ -344,20 +344,21 @@ function HostEventController($scope, $log, $routeParams, $document, userData, tr
 
 	angular.element($document).ready(function() {
 		if(parseInt($routeParams.section) == 1) { 
-			angular.element($document.querySelector('#eventName')).focus()
+			
+			//angular.element($document.querySelector('#eventName')).focus()
 			//angular.element($document).find('#eventName').focus();
 			//$log.info('section 1');
 
 		}
 
 		if(parseInt($routeParams.section) == 2) {
-			angular.element($document.querySelector('#eventStreet01')).focus()
+			//angular.element($document.querySelector('#eventStreet01')).focus()
 			//angular.element($document).find('#eventStreet01').focus();
 			//$log.info('section 2');
 		}
 
 		if(parseInt($routeParams.section) == 3) {
-			angular.element($document.querySelector('#inviteeName')).focus()
+			//angular.element($document.querySelector('#inviteeName')).focus()
 			//eventStreet01angular.element($document).find('#inviteeName').focus();
 			//$log.info('section 3');
 		}
