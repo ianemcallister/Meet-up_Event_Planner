@@ -80,9 +80,10 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 		.catch()
 
 		//load user events progressivley
-		//fist whatever is in the model already
+		//first whatever is in the model already
 		vm.events = currentUser.getAllUserEventsLocally();
 
+		$log.info(vm.events);
 		//then call to the db and get the most up to date info
 		currentUser.getRemoteEventsForLocal()
 		.then(function(obtainedUserEvents) {
@@ -93,6 +94,16 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 			//take out the updated object to clean up for new users
 			delete vm.events.pending.updated;
 			delete vm.events.pending[undefined];
+			
+			var count = 0;
+			Object.keys(vm.events.hosting).forEach(function(key) {
+				count++;
+			});
+			//take away for hosting also
+			if(count > 1) {
+				delete vm.events.hosting.updated;
+				delete vm.events.hosting[undefined];
+			}
 		})
 		.then(function() {
 			//now that events are loaded, reflect it in the view model
