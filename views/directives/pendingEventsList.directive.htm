@@ -1,0 +1,33 @@
+<div class='eventsList'>
+	<!--Header Row-->
+	<div class="row">
+		<div class="col-xs-2 col-sm-2"><strong>DATE</strong></div>
+		<div class="col-xs-6 col-sm-8"><strong>EVENT</strong></div>
+		<div class="col-xs-4 col-sm-2"><strong>ACTION</strong></div>
+	</div>
+	<!--Data Rows-->
+	<div class="row" ng-repeat='event in vm.pendingEvents'>
+		<div class="col-xs-2 col-sm-2">
+			<strong>{{ vm.formatDate(event.eventTimes.start) | date: 'MMM' }}</strong> <br> 
+			{{ vm.formatDate(event.eventTimes.start) | date: 'd' }} 
+		</div>
+		<div class="col-xs-6 col-sm-8" ng-click='vm.eventClicked({{ event.id }})'>
+			<strong>{{ event.name }}</strong> <br>
+			({{ vm.formatDate(event.eventTimes.start) | date: 'h:mm a' }}) <br>
+			<i>{{ event.message }}</i>
+		</div>
+		<div class="col-xs-4 col-sm-2">
+			<div class="row" ng-if='!event.rsvped'>
+				<div 	class='col-xs-10 col-sm-10 btn btn-success'
+						ng-click='event.accept()'>Accept</div>
+			</div>
+			<div class="row" ng-if='!event.rsvped'>
+				<div 	class='col-xs-10 col-sm-10 btn btn-danger'
+						ng-click='event.decline()'>Decline</div>
+			</div>
+			<div class="row" ng-if='event.rsvped'>
+				You have <span ng-if='event.accepted'>accepted!</span><span ng-if='!event.accepted'>declined.</span>
+			</div>
+		</div>
+	</div>
+</div>

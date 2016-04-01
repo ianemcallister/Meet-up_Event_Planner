@@ -89,6 +89,10 @@ function UserEventsController($log, $routeParams, userData, trafficValet) {
 			$log.info(obtainedUserEvents);
 			//update the view model with the updated DB results
 			vm.events = currentUser.getAllUserEventsLocally();
+
+			//take out the updated object to clean up for new users
+			delete vm.events.pending.updated;
+			delete vm.events.pending[undefined];
 		})
 		.then(function() {
 			//now that events are loaded, reflect it in the view model
