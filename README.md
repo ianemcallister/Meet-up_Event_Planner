@@ -21,7 +21,7 @@ To test on mobile I've uploaded this project to my temporary web server, the pro
 ___________________________________	
 1. **Clone the repository**
 
-	`git clone <https://github.com/ianemcallister/Meet-up_Event_Planner.git>
+	`git clone <https://github.com/ianemcallister/Meet-up_Event_Planner.git>`
 
 2. **Install the dependencies**
 	
