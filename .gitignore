@@ -1,5 +1,6 @@
 #ignore config files
 
+
 #ignore any images
 
 #ignore node modules
@@ -13,3 +14,6 @@ lib
 
 #ignore specific files
 js/OLD_Controllers.js
+
+#hidden files
+.eslintrc.json
