@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('NewUserSignUpController', NewUserSignUpController);
+meetUpEventApp.controller('NewUserSignUpController', NewUserSignUpController);
 
 NewUserSignUpController.$inject = ['$scope', '$log', 'validation', 'backendServices', 'trafficValet', 'userData'];
 

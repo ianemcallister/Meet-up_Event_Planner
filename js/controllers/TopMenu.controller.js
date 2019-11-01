@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('topMenuController', topMenuController);
+meetUpEventApp.controller('topMenuController', topMenuController);
 
 topMenuController.$inject = ['$scope', '$log', '$location', '$document', '$window'];
 

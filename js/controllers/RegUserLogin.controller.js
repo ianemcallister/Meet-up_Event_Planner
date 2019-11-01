@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('RegUserLoginController', RegUserLoginController);
+meetUpEventApp.controller('RegUserLoginController', RegUserLoginController);
 
 RegUserLoginController.$inject = ['$log', '$document', 'backendServices', 'trafficValet', 'userData'];
 

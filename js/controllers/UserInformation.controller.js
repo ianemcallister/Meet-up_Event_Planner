@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('UserInformationController', UserInformationController);
+meetUpEventApp.controller('UserInformationController', UserInformationController);
 
 UserInformationController.$inject = ['$log', '$document', '$routeParams','userData', 'trafficValet'];
 

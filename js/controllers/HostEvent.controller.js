@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('HostEventController', HostEventController);
+meetUpEventApp.controller('HostEventController', HostEventController);
 
 HostEventController.$inject = ['$scope', '$log', '$routeParams', '$document', 'userData', 'trafficValet', 'validation'];
 

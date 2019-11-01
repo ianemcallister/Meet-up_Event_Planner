@@ -4,6 +4,9 @@ var gulp 			= require('gulp');
 var less 			= require('gulp-less');
 var babel 			= require('gulp-babel');
 var concat 			= require('gulp-concat');
+var coffee 			= require("gulp-coffee");
+var order 			= require("gulp-order");
+var print			= require('gulp-print').default;
 var uglify 			= require('gulp-uglify');
 var rename 			= require('gulp-rename');
 var cleanCSS 		= require('gulp-clean-css');
@@ -59,8 +62,17 @@ function styles() {
 
 function scripts() {
 	return gulp.src(paths.scripts.src, { sourcemaps: true })
+	  .pipe(order([
+		'js/modules/app.module.js',
+		'js/controllers/*.js',
+		'js/directives/*.js',
+		'js/factories/*.js',
+		'js/routes/*.js'
+	  ], { base: './' }))
+	  .pipe(print())
 	  .pipe(babel())
-	  .pipe(uglify())
+	  .pipe(ngAnnotate())
+	  //.pipe(uglify())
 	  .pipe(concat('main.min.js'))
 	  .pipe(gulp.dest(paths.scripts.dest));
 };

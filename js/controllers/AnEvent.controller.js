@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('AnEventController', AnEventController);
+meetUpEventApp.controller('AnEventController', AnEventController);
 
 AnEventController.$inject = ['$log', '$routeParams', ];
 

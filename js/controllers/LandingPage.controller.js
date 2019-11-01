@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('LandingPageController', LandingPageController);
+meetUpEventApp.controller('LandingPageController', LandingPageController);
 
 LandingPageController.$inject = ['trafficValet'];
 

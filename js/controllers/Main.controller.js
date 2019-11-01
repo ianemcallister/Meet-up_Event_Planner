@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('MainController', MainController);
+meetUpEventApp.controller('MainController', MainController);
 
 MainController.$inject = ['$log', '$location', '$document', '$window'];
 

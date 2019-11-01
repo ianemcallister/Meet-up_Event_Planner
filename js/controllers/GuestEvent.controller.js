@@ -1,6 +1,4 @@
-angular
-    .module('meetUpEventApp')
-    .controller('GuestEventController', GuestEventController);
+meetUpEventApp.controller('GuestEventController', GuestEventController);
 
 GuestEventController.$inject = ['$log'];
 
