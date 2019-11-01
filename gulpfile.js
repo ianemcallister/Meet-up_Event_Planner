@@ -1,174 +1,116 @@
 /*eslint-env node, jasmine, phantomjs, es6, angular/di: [2,"array"] */
 
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var autoprefixer = require('gulp-autoprefixer');
-var browserSync = require('browser-sync').create();
-var eslint = require('gulp-eslint'); 
-var jasmine = require('gulp-jasmine-phantom'); 
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var sourcemaps = require('gulp-sourcemaps');
-var ngAnnotate = require('gulp-ng-annotate');
-//var karma = require('karma').server;
+var gulp 			= require('gulp');
+var less 			= require('gulp-less');
+var babel 			= require('gulp-babel');
+var concat 			= require('gulp-concat');
+var uglify 			= require('gulp-uglify');
+var rename 			= require('gulp-rename');
+var cleanCSS 		= require('gulp-clean-css');
+var del 			= require('del');
+var browserSync 	= require('browser-sync');
+var server 			= browserSync.create();
 
-/*var testFiles = [
-	'js/controllers/AccontSettings.controller.spec.js',
-	'js/controllers/Login.controller.spec.js',
-	'js/controllers/NewVisitorConversions.controller.spec.js',
-	'js/controllers/SelectedEvents.controller.spec.js',
-	'js/controllers/UserEvents.controller.spec.js',
-	'js/controllers/UsersContacts.controller.spec.js',
-	//'js/controllers/Firebase.factory.spec.js'
-];*/
+//	OLD ELEMENTS
+var eslint 			= require('gulp-eslint'); 
+var jasmine 		= require('gulp-jasmine-phantom'); 
+var sourcemaps 		= require('gulp-sourcemaps');
+var ngAnnotate 		= require('gulp-ng-annotate');
+var sass 			= require('gulp-sass');
+var autoprefixer 	= require('gulp-autoprefixer');
 
-gulp.task('default', ['styles', 'lint', 'copy-html', 'copy-images', 'scripts-dist'], function() {
-	gulp.watch('sass/**/*.scss', ['styles']);
-	gulp.watch('js/**/*.js', ['lint'])
-		.on('change', browserSync.reload);
-	gulp.watch('index.html', ['copy-html']);
-	gulp.watch('views/*.htm', ['copy-html']);
-	gulp.watch('./dist/index.html')
-		.on('change', browserSync.reload);
+var paths = {
+	styles: {
+		src: 'sass/**/*.scss',
+		dest: 'dist/css/'
+	},
+	scripts: {
+		src: 'js/**/*.js',
+		dest: 'dist/js/'
+	},
+	index: {
+		src: './index.html',
+		dest: './dist'
+	},
+	html: {
+		src: 'views/**/*.htm',
+		dest: './dist/views'
+	}
+};
 
-	browserSync.init({
-		server: './dist'
-	});
-});
-
-gulp.task('dist', [
-	'copy-html',
-	'copy-images',
-	'styles',
-	'lint',
-	'scripts-dist'
-]);
-
-gulp.task('scripts', function() {
-	gulp.src([
-		'js/modules/app.module.js',
-		'js/factories/*.js',
-		'js/controllers/*.js',
-		'js/routes/*.js',
-		'js/directives/*.js'
-		])
-		.pipe(concat('app.js'))
-		.pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('bundle', function() {
-	/*gulp.src([
-		'lib/jquery.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/angular.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/angular-route.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/angular-touch.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/angular-animate.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/angularfire.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/firebase.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));	
-	gulp.src([
-		'lib/bootstrap.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/fastclick.min.js'
-		])
-		.pipe(gulp.dest('dist/js/lib'));
-	gulp.src([
-		'lib/bootstrap.min.css'
-		])
-		.pipe(gulp.dest('dist/css/lib'));*/
-	gulp.src([
-		'lib/glyphicons-halflings-regular.ttf'
-		])
-		.pipe(gulp.dest('dist/css/fonts'));
-	gulp.src([
-		'lib/glyphicons-halflings-regular.woff'
-		])
-		.pipe(gulp.dest('dist/css/fonts'));
-});
-
-gulp.task('scripts-dist', function() {
-	gulp.src([
-		'js/modules/app.module.js',
-		'js/controllers/*.js',
-		'js/factories/*.js',
-		'js/routes/*.js',
-		'js/directives/*.js'
-		])
-		.pipe(sourcemaps.init())
-		.pipe(concat('app.js'))
-		.pipe(ngAnnotate())
-		.pipe(uglify())
-		.pipe(sourcemaps.write())
-		.pipe(gulp.dest('dist/js'));
-});
-
-gulp.task('copy-html', function() {
-	gulp.src('./index.html')
-		.pipe(gulp.dest('./dist'));
-	gulp.src('views/**/*.htm')
-		.pipe(gulp.dest('./dist/views'));
-});
-
-gulp.task('copy-images', function() {
-	gulp.src('img/*')
-		.pipe(gulp.dest('dist/img'));
-});
-
-gulp.task('styles', function() {
-	gulp.src('sass/**/*.scss')
-		.pipe(sass().on('error', sass.logError))
-		.pipe(autoprefixer({
-			browsers: ['last 2 versions']
-		}))
-		.pipe(gulp.dest('dist/css'))
-		.pipe(browserSync.stream());
-});
-
-//turning this off for the time being
-gulp.task('lint', function () {
-	return gulp.src(['js/**/*.js'])
-		// eslint() attaches the lint output to the eslint property
-		// of the file object so it can be used by other modules.
-		.pipe(eslint())
-		// eslint.format() outputs the lint results to the console.
-		// Alternatively use eslint.formatEach() (see Docs).
-		.pipe(eslint.format())
-		// To have the process exit with an error code (1) on
-		// lint error, return the stream and pipe to failOnError last.
-		.pipe(eslint.failOnError());
-});
-
-//testings file
 /*
-gulp.task('tests', function() {
-	gulp.src(testFiles)
-		.pipe(jasmine({
-			integration: true,
-			vendor: [
-				'plugins/angular.js',
-				'plugins/angular-mocks.js',*/
-				//'js/**/*.js'
-			/*]
-		}));
-});*/
+ * Define our tasks using plain functions
+ */
+function clean() {
+	return del([ 'assets' ]);
+};
+
+function styles() {
+	return gulp.src(paths.styles.src)
+	  .pipe(less())
+	  .pipe(cleanCSS())
+	  // pass in options to the stream
+	  .pipe(rename({
+		basename: 'main',
+		suffix: '.min'
+	  }))
+	  .pipe(gulp.dest(paths.styles.dest));
+};
+
+function scripts() {
+	return gulp.src(paths.scripts.src, { sourcemaps: true })
+	  .pipe(babel())
+	  .pipe(uglify())
+	  .pipe(concat('main.min.js'))
+	  .pipe(gulp.dest(paths.scripts.dest));
+};
+
+function index() {
+	return gulp.src(paths.index.src)
+		.pipe(gulp.dest(paths.index.dest));
+};
+
+function html() {
+	return gulp.src(paths.html.src)
+		.pipe(gulp.dest(paths.html.dest));
+};
+
+function watch() {
+	gulp.watch(paths.index.src, gulp.series(index, reload));	
+	gulp.watch(paths.html.src, gulp.series(html, reload));
+	gulp.watch(paths.scripts.src, gulp.series(scripts, reload));
+	gulp.watch(paths.styles.src, gulp.series(styles, reload));
+};
+
+function reload(done) {
+	server.reload();
+	done();
+};
+
+function serve(done) {
+	server.init({
+	  server: {
+		baseDir: './dist'
+	  }
+	});
+	done();
+};
+
+/*
+ * Specify if tasks run in series or parallel using `gulp.series` and `gulp.parallel`
+ */
+var build 	= gulp.parallel(styles, scripts, index, html);
+var dev 	= gulp.series(styles, scripts, serve, watch);
+/*
+ * You can use CommonJS `exports` module notation to declare tasks
+ */
+exports.clean = clean;
+exports.styles = styles;
+exports.scripts = scripts;
+exports.watch = watch;
+exports.build = build;
+exports.dev = dev;
+/*
+ * Define default task that can be called by just running `gulp` from cli
+ */
+exports.default = build;
